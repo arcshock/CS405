@@ -5,3 +5,10 @@
  * Purpose: Implementation of neural network architecture.
  * Date: 2014-01-27
  */
+
+class InputNeuralNode {
+public:
+private:
+	double m_outputVal;
+	double m_input
+};
