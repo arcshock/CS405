@@ -15,6 +15,7 @@ const unsigned int OUTPUT_NODE_NUM = 1;
 
 class InputNeuralNode {
 public:
+	void setBias(double);
 private:
 	double m_outputVal;
 	double m_input;
