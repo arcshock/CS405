@@ -9,24 +9,31 @@
 
 #include<array>
 #include<ostream>
+#include<iterator>
 #include<cstdlib>
 
-template<typename BidirectionalIterator>
-
+//template<typename T>
+template<class Iter>
 class NeuralNet {
 public:
-//	NeuralNet(int input, std::array<int, SIZE>& layers, int output);
-	NeuralNet(int input, BidirectionalIterator begin, BidirectionalIterator end, int output);
+	NeuralNet();
+	NeuralNet(int input, Iter begin, Iter end, int output);
+	NeuralNet(Iter begin, Iter end);
+//	NeuralNet(int input, int* begin, int* end, int output);
 
 private:
-//	friend std::ostream& operator<< <SIZE>(std::ostream&, const NeuralNet<SIZE> &);
-	int j = 6;
+	
 	
 };
 
-/*
-template<std::size_t SIZE>
-std::ostream& operator<<(std::ostream &stream, const NeuralNet<SIZE> & net) {
-	return stream << "Test(" << net.j << ")";
-}*/
+template<class Iter>
+NeuralNet<Iter>::NeuralNet (Iter begin, Iter output)
+{
+	//TODO
+}
+template<class Iter>
+NeuralNet<Iter>::NeuralNet(int input, Iter begin, Iter end, int output)
+{
+	//TODO
+}
 #endif //NEURAL_NET_H
