@@ -3,7 +3,7 @@
 # Purpose: Makefile for CS 405
 # 
 CC = g++
-CFLAGS = -Wall -g
+CFLAGS = -Wall -g -std=c++11
 INCLUDES = -I ./includes/
 # LFLAGS
 # LIBS
