@@ -2,6 +2,11 @@
 # File: Makefile
 # Purpose: Makefile for CS 405
 # 
-
+CC = g++
+CFLAGS = -Wall -g
+INCLUDES = -I ./includes/
+# LFLAGS
+# LIBS
+SRCS = ./src/*
 all:
-	g++ -I ./includes/ ./src/main.cpp ./src/neuralnet.cpp  -o ./build/test.out
+	$(CC) $(CFLAGS) $(INCLUDES) $(SRCS)  -o ./build/test.out
