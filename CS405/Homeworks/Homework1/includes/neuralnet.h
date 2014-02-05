@@ -7,7 +7,7 @@
  * Purpose: Header of neural network class.
  */
 
-class NerualNet{
+class NeuralNet{
 public:
 private:
 };
