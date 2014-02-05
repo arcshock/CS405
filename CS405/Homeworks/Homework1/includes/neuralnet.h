@@ -9,10 +9,12 @@
 
 #include<vector>
 #include<array>
-//#include<ostream>
 #include<iterator>
 #include<cstdlib>
 #include<iostream>
+#include<random>
+#include<chrono>
+#include<random>
 
 template<class Iter>
 class NeuralNet {
@@ -39,25 +41,30 @@ void NeuralNet<Iter>::printNetwork()
 }
 
 template<class Iter>
+void NeuralNet<Iter>::setWeights()
+{
+	for ( auto iter = network_m.begin(); iter != network_m.end(); ++iter ) {
+	
+		for ( auto iterr = iter->begin(); iterr != iter->end(); ++iterr ) { 
+			unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+			std::mt19937 generator (seed);
+			*iterr = generator();
+		}
+	}
+}	
+
+template<class Iter>
 NeuralNet<Iter>::NeuralNet (Iter begin, Iter end, int size )
 {
 	Iter it = begin;
 	network_m.reserve( size );
+	
 	for (int i = 0; i < size; ++i) {
 		network_m[i].reserve(*it);
 		++it;
 	}
-
-/*
-	network_m.reserve(size);
-	std::vector< std::vector< double >>::iterator network_iter = network_m.begin();
-
-	for ( auto it = begin; it != end; it++ ) {
-//		std::cout << *it << std::endl; //debug output
-		network_iter[].reserve( *it );
-	}
-*/
 }
+
 template<class Iter>
 NeuralNet<Iter>::NeuralNet (int input, Iter begin, Iter end, int output)
 {
