@@ -23,9 +23,9 @@ public:
 	NeuralNet(int input, Iter begin, Iter end, int output);
 	NeuralNet(Iter begin, Iter end, int size);
 	void setWeights();
+	void printNetwork();
 
 private:
-	void printNetwork();
 	std::vector< std::vector< double > > network_m;
 	//TODO: pairs for bias and weight of each node
 };
@@ -35,7 +35,13 @@ void NeuralNet<Iter>::printNetwork()
 {
 	for ( auto iter = network_m.begin(); iter != network_m.end(); ++iter ) {
 		for ( auto iterr = iter->begin(); iterr != iter->end(); ++iterr ) {
-			std::cout << *iterr << std::endl;
+			std::cout << &iterr << std::endl;
+		}
+	}
+
+	for ( int i = 0; i < network_m.size(); ++i ) {
+		for ( int j = 0; j < network_m[i].size(); ++j ) {
+			std::cout << network_m[i][j] << std::endl;
 		}
 	}
 }
@@ -51,6 +57,16 @@ void NeuralNet<Iter>::setWeights()
 			*iterr = generator();
 		}
 	}
+
+	for (int i = 0; i < network_m.size(); ++i)
+	{
+		for ( int j = 0; j < network_m[i].size(); ++j ) {
+			unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+			std::mt19937 generator (seed);
+			network_m[i][j] = generator();
+			std::cout << generator() << std::endl; //debug
+		}
+	}
 }	
 
 template<class Iter>
@@ -58,11 +74,15 @@ NeuralNet<Iter>::NeuralNet (Iter begin, Iter end, int size )
 {
 	Iter it = begin;
 	network_m.reserve( size );
-	
-	for (int i = 0; i < size; ++i) {
-		network_m[i].reserve(*it);
-		++it;
+	for (int i = 0; i < size; ++i )
+	{
+		network_m.push_back(std::vector<double>());
 	}
+	
+	/*for (int i = 0; i < size; ++i) {
+		network_m[i] = new std::vector<double>;
+		++it;
+	}*/
 }
 
 template<class Iter>
