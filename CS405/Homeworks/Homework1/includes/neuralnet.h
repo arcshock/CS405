@@ -19,29 +19,72 @@
 template<class Iter>
 class NeuralNet {
 public:
-	NeuralNet();
 	NeuralNet(int input, Iter begin, Iter end, int output);
 	NeuralNet(Iter begin, Iter end, int size);
 	void setWeights();
 	void printNetwork();
+	void loadInput(); //TODO - add input to func
+	void activateNetwork();
+	double getEvalOutput();
 
 private:
+    int size_m;
+    Iter begin_m;
+    Iter end_m;
+    double evalOutput_m;
+    double squashFunc(double input);
 	std::vector< std::vector< double > > network_m;
+
 	//TODO: pairs for bias and weight of each node
 };
 
 template<class Iter>
-void NeuralNet<Iter>::printNetwork()
+double NeuralNet<Iter>::getEvalOutput()
 {
-	for ( auto iter = network_m.begin(); iter != network_m.end(); ++iter ) {
-		for ( auto iterr = iter->begin(); iterr != iter->end(); ++iterr ) {
-			std::cout << &iterr << std::endl;
+    return evalOutput_m;
+}
+
+template<class Iter>
+void NeuralNet<Iter>::activateNetwork()
+{
+    std::vector< double > tempValues;
+//    double temp = 0;
+    for (int i = 1; i < network_m.size(); ++i){ //starting at the first hidden layer
+		for ( int j = 0; j < network_m[i].size(); ++j ) { //chose node in hiddent layer and apply all of last layer to it
+//                temp =+ network_m[i][j];
+            tempValues.push_back(squashFunc(network_m[i][j]));
 		}
 	}
 
+	for (int i = 0; i < tempValues.size(); ++i ){
+        evalOutput_m =+ tempValues[i];
+	}
+	evalOutput_m = squashFunc(evalOutput_m);
+}
+
+template<class Iter>
+void NeuralNet<Iter>::loadInput()
+{
+    for ( int j = 0; j < network_m[0].size(); ++j ) {
+			unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+			std::mt19937 generator (seed);
+			network_m[0][j] = generator();
+//			std::cout << generator() << std::endl; //debug
+	}
+}
+
+template<class Iter>
+double NeuralNet<Iter>::squashFunc(double input)
+{
+    return input/( 1 + abs(input) );
+}
+
+template<class Iter>
+void NeuralNet<Iter>::printNetwork()
+{
 	for ( int i = 0; i < network_m.size(); ++i ) {
 		for ( int j = 0; j < network_m[i].size(); ++j ) {
-			std::cout << network_m[i][j] << std::endl;
+			std::cout << "Layer: " << i << " Element: " << j << " " << network_m[i][j] << std::endl;
 		}
 	}
 }
@@ -49,45 +92,25 @@ void NeuralNet<Iter>::printNetwork()
 template<class Iter>
 void NeuralNet<Iter>::setWeights()
 {
-	for ( auto iter = network_m.begin(); iter != network_m.end(); ++iter ) {
-	
-		for ( auto iterr = iter->begin(); iterr != iter->end(); ++iterr ) { 
-			unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
-			std::mt19937 generator (seed);
-			*iterr = generator();
-		}
-	}
-
-	for (int i = 0; i < network_m.size(); ++i)
-	{
+	for (int i = 1; i < network_m.size(); ++i){
 		for ( int j = 0; j < network_m[i].size(); ++j ) {
 			unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
 			std::mt19937 generator (seed);
 			network_m[i][j] = generator();
-			std::cout << generator() << std::endl; //debug
+//			std::cout << generator() << std::endl; //debug
 		}
 	}
-}	
+}
 
 template<class Iter>
 NeuralNet<Iter>::NeuralNet (Iter begin, Iter end, int size )
 {
 	Iter it = begin;
 	network_m.reserve( size );
-	for (int i = 0; i < size; ++i )
-	{
-		network_m.push_back(std::vector<double>());
-	}
-	
-	/*for (int i = 0; i < size; ++i) {
-		network_m[i] = new std::vector<double>;
+	for (int i = 0; i < size; ++i ){
+		network_m.push_back(std::vector<double>(*it));
 		++it;
-	}*/
+	}
 }
 
-template<class Iter>
-NeuralNet<Iter>::NeuralNet (int input, Iter begin, Iter end, int output)
-{
-	//TODO
-}
 #endif //NEURAL_NET_H
