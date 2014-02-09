@@ -5,17 +5,25 @@
 CC = g++
 CFLAGS =  -std=c++11 
 CFLAGS_DEBUG = -Wall -g -pg
-LAPTOP_OP = -march=core2 -O3 
 INCLUDES = -I ./includes/
 # LFLAGS
 # LIBS
+
 SRCS = ./src/*
+
+LAPTOP_OPFLAGS = -march=core2 -O3 
+LAPTOP_OP = laptopNeuralNet.out
+
 all:
 	$(CC) $(CFLAGS) $(INCLUDES) $(SRCS)  -o ./build/test.out
+	rm ./build/test.out
 
 build-db:
 	$(CC) $(CFLAGS) $(CFLAGS_DEBUG) $(INCLUDES) $(SRCS) -o ./build/debug/neuralNetDebug.out
 
 build-laptop-op:
-	$(CC) $(CFLAGS) $(LAPTOP_OP) $(INCLUDES) $(SRCS) -o ./build/release/laptopNeuralNet.out
+	$(CC) $(CFLAGS) $(LAPTOP_OPFLAGS) $(INCLUDES) $(SRCS) -o ./build/release/laptopNeuralNet.out
+
+run-laptop-op:
+	./build/release/laptopNeuralNet.out
 	
