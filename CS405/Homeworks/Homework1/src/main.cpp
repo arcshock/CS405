@@ -21,19 +21,7 @@ int main()
 
 	test1.setWeights();
 
-/*	std::chrono::time_point<std::chrono::system_clock> start, end;
-	start = std::chrono::system_clock::now();
-	
-	for (int i = 0; i < 11500; ++i) {
-		test1.loadInput();
-		test1.activateNetwork();
-	}
-
-	end = std::chrono::system_clock::now();
-	std::chrono::duration<double> elapsed_seconds = end-start;
-	std::time_t end_time = std::chrono::system_clock::to_time_t(end);
-
-	std::cout << "Finished 11,500 Boards in " << elapsed_seconds.count() << "s\n";*/
+	std::cout << "Finished 11,500 Boards in " << elapsed_seconds.count() << "s\n";
 	timingFunc( 11500, test1 );
 	return 0;
 }
