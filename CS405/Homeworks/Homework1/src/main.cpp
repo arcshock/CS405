@@ -10,7 +10,7 @@
 #include<chrono>
 #include<ctime>
 
-void timingFunc(int iterations, NeuralNet<std::array<int, 4>::iterator> & neuralNet);
+double timingFunc(int iterations, NeuralNet<std::array<int, 4>::iterator> & neuralNet);
 
 
 int main()
@@ -21,11 +21,26 @@ int main()
 
 	test1.setWeights();
 
-	timingFunc( 11500, test1 );
+	std::vector<double> times;
+	double totalTime = 0;
+
+	for (int i = 0; i < 200; ++i) {
+		times.push_back( timingFunc ( 11500, test1 ) );
+		std::cout << "Evaluating new board " << i << std::endl; // debug
+	}
+
+	for ( auto i : times ) {
+//		std::cout << i << std::endl; // debug
+		totalTime += i;	
+	}
+//	std::cout << "totalTime:" << totalTime << std::endl; // debug
+
+	std::cout << "Finished 11500 evalualuations for 200 boards in an average time of " << totalTime/200 << " seconds." << std::endl;
+//	timingFunc( 11500, test1 );
 	return 0;
 }
 
-void timingFunc(int iterations, NeuralNet<std::array<int, 4>::iterator> & neuralNet)
+double timingFunc(int iterations, NeuralNet<std::array<int, 4>::iterator> & neuralNet)
 {
 	std::chrono::time_point<std::chrono::system_clock> start, end;
 	start = std::chrono::system_clock::now();
@@ -39,5 +54,6 @@ void timingFunc(int iterations, NeuralNet<std::array<int, 4>::iterator> & neural
 	std::chrono::duration<double> elapsed_seconds = end - start;
 	std::time_t end_time = std::chrono::system_clock::to_time_t(end);
 
-	std::cout << "Finished " << iterations << " evaluations in " << elapsed_seconds.count() << " seconds." << std::endl;
+//	std::cout << "Finished " << iterations << " evaluations in " << elapsed_seconds.count() << " seconds." << std::endl;
+	return elapsed_seconds.count();
 }
