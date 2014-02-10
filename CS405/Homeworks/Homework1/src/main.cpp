@@ -24,7 +24,7 @@ int main()
 	std::vector<double> times;
 	double totalTime = 0;
 
-	for (int i = 0; i < 200; ++i) {
+	for (int i = 0; i < 20; ++i) {
 		times.push_back( timingFunc ( 11500, test1 ) );
 		std::cout << "Evaluating new board " << i << std::endl; // debug
 	}
@@ -35,7 +35,8 @@ int main()
 	}
 //	std::cout << "totalTime:" << totalTime << std::endl; // debug
 
-	std::cout << "Finished 11500 evalualuations for 200 boards in an average time of " << totalTime/200 << " seconds." << std::endl;
+	std::cout << "Finished 11500 evalualuations for 20 boards in an average time of " << totalTime/20 << " seconds." << std::endl;
+	std::cout << "There are  " << 11500/(totalTime/20) << " evauations per second." << std::endl;
 //	timingFunc( 11500, test1 );
 	return 0;
 }
