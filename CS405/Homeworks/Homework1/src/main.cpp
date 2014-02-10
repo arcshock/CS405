@@ -21,7 +21,6 @@ int main()
 
 	test1.setWeights();
 
-	std::cout << "Finished 11,500 Boards in " << elapsed_seconds.count() << "s\n";
 	timingFunc( 11500, test1 );
 	return 0;
 }
