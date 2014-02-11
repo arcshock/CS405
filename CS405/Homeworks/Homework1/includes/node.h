@@ -11,12 +11,19 @@
 
 class Node {
 public:
+    Node();
 	void randomInit();
 	void mutateWeight();
+	double getWeight();
 private:
-	double bias_m;
+//	double bias_m;
 	double weight_m;
 };
+
+Node::Node()
+{
+    randomInit();
+}
 
 void Node::randomInit()
 {
@@ -30,7 +37,12 @@ void Node::mutateWeight()
 {
 	std::random_device rd;
 	std::mt19937 gen(rd());
-	std::normal_distribution<> d(0, 0.5);
+	std::normal_distribution<> d(0, 0.25);
 	weight_m += d(gen);
+}
+
+double Node::getWeight()
+{
+    return weight_m;
 }
 #endif
