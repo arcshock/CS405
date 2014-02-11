@@ -24,12 +24,18 @@ int main()
 	NeuralNet < std::array<int, 4>::iterator > test1 ( hidden_layers.begin(), hidden_layers.end(), hidden_layers.size() );
 
 	test1.setWeights();
+	test1.printNetwork();
+    test1.setWeights();
+    test1.printNetwork();
 
-	std::cout << timingManager(20, 11500, test1) << std::endl;
+    test1.mutateNetwork();
+    test1.printNetwork();
+//	std::cout << timingManager(20, 200000000, test1) << std::endl;
 
 	return 0;
 }
 
+/*
 double timingFunc(int iterations, NeuralNet<std::array<int, 4>::iterator> & neuralNet)
 {
 	// setup timing
@@ -37,10 +43,10 @@ double timingFunc(int iterations, NeuralNet<std::array<int, 4>::iterator> & neur
 	start = std::chrono::system_clock::now();
 
 	for (int i = 0; i < iterations; ++i) {
-		neuralNet.loadInput();
+//		neuralNet.loadInput();
 		neuralNet.activateNetwork();
 	}
-	
+
 	// end timer and find duration
 	end = std::chrono::system_clock::now();
 	std::chrono::duration<double> elapsed_seconds = end - start;
@@ -51,7 +57,7 @@ double timingFunc(int iterations, NeuralNet<std::array<int, 4>::iterator> & neur
 
 
 std::string timingManager(int iterations, int numOfBoardEval, NeuralNet<std::array<int, 4>::iterator> & neuralNet)
-{	
+{
 	std::vector<double> times;
 
 	for (int i = 0; i < iterations; ++i) {
@@ -60,13 +66,16 @@ std::string timingManager(int iterations, int numOfBoardEval, NeuralNet<std::arr
 	}
 
 	std::ostringstream timingMessage;
-	timingMessage << "Completed " << iterations << " iterations of " << numOfBoardEval << " board evaluations in average time of " << timeavg(times.begin(), times.end(), iterations) << " seconds.";
+	timingMessage << "Completed " << iterations << " iterations of ";
+	timingMessage << numOfBoardEval << " board evaluations in average time of ";
+	timingMessage << timeavg(times.begin(), times.end(), iterations) << " seconds." << std::endl;
+	timingMessage << "Boards generated on average is " << numOfBoardEval/timeavg(times.begin(), times.end(), iterations) << std::endl;
 
 	return timingMessage.str();
 }
 
 double timeavg(std::vector<double>::iterator begin, std::vector<double>::iterator end, int samples)
-{	
+{
 	double runningTotal = 0;
 
 	for (auto iter = begin; begin != end; ++begin)
@@ -74,3 +83,4 @@ double timeavg(std::vector<double>::iterator begin, std::vector<double>::iterato
 
 	return runningTotal/samples;
 }
+*/
