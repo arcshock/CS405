@@ -26,18 +26,62 @@ public:
 	void printNetwork();
 	void loadInput(); //TODO - add input to func
 	void activateNetwork(); //process input - TODO rename
+	void forwardFeed();
+	void mutateNetwork();
 	double getEvalOutput();
 
 private:
-	int size_m;
+/*	int size_m;
 	Iter begin_m;
-	Iter end_m;
+	Iter end_m; */
 	double evalOutput_m;
 	double squashFunc(double input);
-	std::vector< std::vector< Node > > network_m;
+	std::vector< std::vector<Node> > network_m;
 	//TODO: pairs for bias and weight of each node (class or struct for node?)
 };
 
+template<class Iter>
+NeuralNet<Iter>::NeuralNet (Iter begin, Iter end, int numOfLayers)
+{
+	Iter layerSize = begin;
+	network_m.reserve(numOfLayers);
+	for (int i = 0; i < numOfLayers; ++i) {     //creates each layer
+		network_m.push_back(std::vector<Node>(*layerSize));   //
+		++layerSize;
+	}
+}
+
+template<class Iter>
+void NeuralNet<Iter>::setWeights()
+{
+    for (int i = 1; i < network_m.size(); ++i) {
+		for ( int j = 0; j < network_m[i].size(); ++j) {
+			network_m[i][j].randomInit();
+        }
+    }
+}
+
+template<class Iter>
+void NeuralNet<Iter>::mutateNetwork()
+{
+    for (int i = 1; i < network_m.size(); ++i) {
+		for ( int j = 0; j < network_m[i].size(); ++j) {
+			network_m[i][j].mutateWeight();
+        }
+    }
+}
+
+template<class Iter>
+void NeuralNet<Iter>::printNetwork()
+{
+	for (int i = 1; i < network_m.size(); ++i) {
+		for ( int j = 0; j < network_m[i].size(); ++j ) {
+            std::cout << "On layer " << i << " accessing element " << j << " = ";
+			std::cout << network_m[i][j].getWeight() << std::endl;
+        }
+    }
+}
+/*
 template<class Iter>
 double NeuralNet<Iter>::getEvalOutput()
 {
@@ -57,7 +101,7 @@ void NeuralNet<Iter>::activateNetwork()
 	for (int i = 0; i < tempValues.size(); ++i ){
 		evalOutput_m =+ tempValues[i];
 	}
-	
+
 	evalOutput_m = squashFunc(evalOutput_m);
 }
 
@@ -77,6 +121,7 @@ double NeuralNet<Iter>::squashFunc(double input)
 	return input/( 1 + abs(input) );
 }
 
+
 template<class Iter>
 void NeuralNet<Iter>::printNetwork()
 {
@@ -86,6 +131,7 @@ void NeuralNet<Iter>::printNetwork()
 		}
 	}
 }
+
 
 template<class Iter>
 void NeuralNet<Iter>::setWeights()
@@ -103,11 +149,12 @@ template<class Iter>
 NeuralNet<Iter>::NeuralNet (Iter begin, Iter end, int size )
 {
 	Iter it = begin;
-	network_m.reserve( size );
-	for (int i = 0; i < size; ++i ){
-		network_m.push_back(std::vector<double>(*it));
+	network_m.reserve(size);
+	for (int i = 0; i < size; ++i){
+		network_m.push_back(std::vector<Node>(*it));
 		++it;
 	}
 }
+*/
 
 #endif //NEURAL_NET_H
