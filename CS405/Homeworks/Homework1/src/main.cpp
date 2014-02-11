@@ -21,31 +21,24 @@ int main()
 {
 	std::array<int, 4> hidden_layers = {{ 32, 40, 10, 1 }};
 
-	NeuralNet < std::array<int, 4>::iterator > test1 ( hidden_layers.begin(), hidden_layers.end(), hidden_layers.size() );
-
+	NeuralNet < std::array<int, 4>::iterator > test1 ( hidden_layers.begin(), hidden_layers.end(), hidden_layers.size());
+	test1.loadInput();
 	test1.setWeights();
-	test1.printNetwork();
-    test1.setWeights();
-    test1.printNetwork();
+	test1.forwardFeed();
 
-    test1.mutateNetwork();
-    test1.printNetwork();
-//	std::cout << timingManager(20, 200000000, test1) << std::endl;
-
+	std::cout << timingManager(20, 2000000, test1) << std::endl;
 	return 0;
 }
 
-/*
+
 double timingFunc(int iterations, NeuralNet<std::array<int, 4>::iterator> & neuralNet)
 {
 	// setup timing
 	std::chrono::time_point<std::chrono::system_clock> start, end;
 	start = std::chrono::system_clock::now();
 
-	for (int i = 0; i < iterations; ++i) {
-//		neuralNet.loadInput();
-		neuralNet.activateNetwork();
-	}
+	for (int i = 0; i < iterations; ++i)
+		neuralNet.forwardFeed();
 
 	// end timer and find duration
 	end = std::chrono::system_clock::now();
@@ -83,4 +76,3 @@ double timeavg(std::vector<double>::iterator begin, std::vector<double>::iterato
 
 	return runningTotal/samples;
 }
-*/
