@@ -7,6 +7,7 @@
  * Purpose: Header of neural network class.
  */
 
+#include"node.h"
 #include<vector>
 #include<array>
 #include<iterator>
@@ -33,7 +34,7 @@ private:
 	Iter end_m;
 	double evalOutput_m;
 	double squashFunc(double input);
-	std::vector< std::vector< double > > network_m;
+	std::vector< std::vector< Node > > network_m;
 	//TODO: pairs for bias and weight of each node (class or struct for node?)
 };
 
