@@ -1,5 +1,6 @@
 #ifndef NODE_H
 #define NODE_H
+
 #include <random>
 /*
  * Author: Bucky Frost
@@ -22,7 +23,7 @@ void Node::randomInit()
 	std::random_device rd;
 	std::mt19937 gen(rd());
 	std::uniform_real_distribution<> dis(-1, 1);
-	weight_m = dig(gen);
+	weight_m = dis(gen);
 }
 
 void Node::mutateWeight()
@@ -32,3 +33,4 @@ void Node::mutateWeight()
 	std::normal_distribution<> d(0, 0.5);
 	weight_m += d(gen);
 }
+#endif
