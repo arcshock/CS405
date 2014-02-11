@@ -11,10 +11,10 @@ INCLUDES = -I ./includes/
 
 SRCS = ./src/*
 
-LAPTOP_OPFLAGS = -march=core2 -O3 
+LAPTOP_OPFLAGS = -march=core2 -O2 
 LAPTOP_OP = laptopNeuralNet.out
 
-DESKTOP_OPFLAGS = -march=corei7
+DESKTOP_OPFLAGS = -march=corei7 -02
 DESKTOP_OP = desktopNeuralNet.out
 
 all:
@@ -31,7 +31,7 @@ run-laptop-op:
 	./build/release/laptopNeuralNet.out
 	
 build-desktop-op:
-	$(CC) $(CFLAGS) $(LAPTOP_OPFLAGS) $(INCLUDES) $(SRCS) -o ./build/release/desktopNeuralNet.out
+	$(CC) $(CFLAGS) $(DESKTOP_OPFLAGS) $(INCLUDES) $(SRCS) -o ./build/release/desktopNeuralNet.out
 run-desktop-op:
 	./build/release/desktopNeuralNet.out
 	
