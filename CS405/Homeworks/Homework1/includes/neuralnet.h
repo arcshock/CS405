@@ -95,8 +95,9 @@ void NeuralNet<Iter>::forwardFeed()
 			(network_m[i-1][j].getWeight()*network_m[i-1][j].getOutput()));
 		}
 
-		for ( int j = 0; j < network_m[i].size(); ++j )
+		for ( int j = 0; j < network_m[i].size(); ++j ) {
 			network_m[i][j].squashOutput();
+		}
 	}
 }
 #endif //NEURAL_NET_H
