@@ -32,8 +32,15 @@ public:
 private:
 	double evalOutput_m;
 	double squashFunc(double input);
+	double evalFunc();
 	std::vector< std::vector<Node> > network_m;
 };
+
+template<class Iter>
+double NeuralNet<Iter>::evalFunc()
+{
+	evalOutput_m = (1 - network_m.back().back().getOutput()); // TODO multiply the sigmoid func
+}
 
 template<class Iter>
 void NeuralNet<Iter>::loadInput()
@@ -99,5 +106,7 @@ void NeuralNet<Iter>::forwardFeed()
 			network_m[i][j].squashOutput();
 		}
 	}
+
+
 }
 #endif //NEURAL_NET_H
