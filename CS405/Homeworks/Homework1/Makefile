@@ -36,5 +36,5 @@ run-desktop-op:
 	./build/release/desktopNeuralNet.out
 
 clean:
-	rm -r ./build/debug/*.*
-	rm -r ./build/release/*.*
+	rm -rf ./build/debug/*.*
+	rm -rf ./build/release/*.*
