@@ -72,7 +72,7 @@ void Node::mutateWeight()
 {
 	std::random_device rd;
 	std::mt19937 gen(rd());
-	std::normal_distribution<> d(0, 0.25);
+	std::normal_distribution<> d(0, 0.1);
 	weight_m += d(gen);
 }
 

@@ -27,6 +27,13 @@ int main()
 	test1.forwardFeed();
 
 	std::cout << timingManager(5, 2000, test1) << std::endl;
+
+	test1.printNetwork();
+
+	std::cout << std::endl << "Mutating network" << std::endl;
+	test1.mutateNetwork();
+	test1.printNetwork();
+
 	return 0;
 }
 
