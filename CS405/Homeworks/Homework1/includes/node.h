@@ -20,6 +20,8 @@ public:
 	void setOutput(double input);
 	double randomValue();
 private:
+	static std::mt19937 rng;
+	static std::random_device rd;
 	double sigmoid(double input);
 	double output_m;
 	double weight_m;
@@ -36,8 +38,8 @@ double Node::getOutput()
 }
 double Node::randomValue()
 {
-	std::random_device rd;
-	std::mt19937 gen(rd());
+//	std::random_device rd;
+//	std::mt19937 gen(rd());
 	std::uniform_real_distribution<> dis(-1, 1);
 	return dis(gen);
 }
@@ -59,8 +61,8 @@ void Node::setOutput(double input)
 
 void Node::randomInit()
 {
-	std::random_device rd;
-	std::mt19937 gen(rd());
+//	std::random_device rd;
+//	std::mt19937 gen(rd());
 	std::uniform_real_distribution<> dis(-1, 1);
 	weight_m = dis(gen);
 }

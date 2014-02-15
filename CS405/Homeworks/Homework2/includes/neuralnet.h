@@ -40,6 +40,7 @@ template<class Iter>
 double NeuralNet<Iter>::evalFunc()
 {
 	evalOutput_m = (1 - network_m.back().back().getOutput()); // TODO multiply the sigmoid func
+	return evalOutput_m;
 }
 
 template<class Iter>
@@ -86,10 +87,11 @@ template<class Iter>
 void NeuralNet<Iter>::printNetwork()
 {
 	for (int i = 1; i < network_m.size(); ++i) {
+		std::cout << "Printing layer " << i << std::endl;
 		for ( int j = 0; j < network_m[i].size(); ++j ) {
-			std::cout << "On layer " << i << " accessing element " << j << " = ";
-			std::cout << network_m[i][j].getWeight() << std::endl;
+			std::cout << network_m[i][j].getWeight() << " ";
 		}
+		std::cout << std::endl << std::endl;
 	}
 }
 

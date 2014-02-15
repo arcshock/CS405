@@ -1,13 +1,14 @@
-#ifndef NODE_H
-#define NODE_H
-
-#include <random>
 /*
  * Author: Bucky Frost
  * File: node.h
  * CS 405 Intro to A.I.
  * Purpose: Header file for the node class
  */
+
+#ifndef NODE_H
+#define NODE_H
+
+#include <random>
 
 class Node {
 public:
@@ -20,6 +21,8 @@ public:
 	void setOutput(double input);
 	double randomValue();
 private:
+	static std::mt19937 rng;
+	static std::random_device rd;
 	double sigmoid(double input);
 	double output_m;
 	double weight_m;
@@ -69,7 +72,7 @@ void Node::mutateWeight()
 {
 	std::random_device rd;
 	std::mt19937 gen(rd());
-	std::normal_distribution<> d(0, 0.25);
+	std::normal_distribution<> d(0, 0.1);
 	weight_m += d(gen);
 }
 
