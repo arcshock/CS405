@@ -26,7 +26,7 @@ int main()
 	test1.setWeights();
 	test1.forwardFeed();
 
-	std::cout << timingManager(20, 2000000, test1) << std::endl;
+	std::cout << timingManager(5, 2000, test1) << std::endl;
 	return 0;
 }
 
