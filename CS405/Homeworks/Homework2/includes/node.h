@@ -1,13 +1,14 @@
-#ifndef NODE_H
-#define NODE_H
-
-#include <random>
 /*
  * Author: Bucky Frost
  * File: node.h
  * CS 405 Intro to A.I.
  * Purpose: Header file for the node class
  */
+
+#ifndef NODE_H
+#define NODE_H
+
+#include <random>
 
 class Node {
 public:
