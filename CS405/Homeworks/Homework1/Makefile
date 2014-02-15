@@ -18,7 +18,7 @@ DESKTOP_OPFLAGS = -march=corei7 -02
 DESKTOP_OP = desktopNeuralNet.out
 
 all:
-	$(CC) $(CFLAGS) $(CFLAGS_DEBUG) $(INCLUDES) $(SRCS)  -o ./build/debug/test-build.out
+	$(CC) $(CFLAGS) $(INCLUDES) $(SRCS)  -o ./build/debug/test-build.out
 
 build-db:
 	$(CC) $(CFLAGS) $(CFLAGS_DEBUG) $(INCLUDES) $(SRCS) -o ./build/debug/neuralNetDebug.out
@@ -38,4 +38,3 @@ run-desktop-op:
 clean:
 	rm -r ./build/debug/*.*
 	rm -r ./build/release/*.*
-	
