@@ -19,6 +19,8 @@ DESKTOP_OP = desktopNeuralNet.out
 
 all:
 	$(CC) $(CFLAGS) $(INCLUDES) $(SRCS)  -o ./build/debug/test-build.out
+run:
+	./build/debug/test-build.out
 
 build-db:
 	$(CC) $(CFLAGS) $(CFLAGS_DEBUG) $(INCLUDES) $(SRCS) -o ./build/debug/neuralNetDebug.out
