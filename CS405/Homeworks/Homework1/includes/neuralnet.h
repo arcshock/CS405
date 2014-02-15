@@ -40,6 +40,7 @@ template<class Iter>
 double NeuralNet<Iter>::evalFunc()
 {
 	evalOutput_m = (1 - network_m.back().back().getOutput()); // TODO multiply the sigmoid func
+	return evalOutput_m;
 }
 
 template<class Iter>
