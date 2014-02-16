@@ -3,6 +3,7 @@
 # Purpose: Makefile for CS 405
 # 
 CC = g++
+CC_TAU = tau_cxx.sh
 CFLAGS =  -std=c++11 
 CFLAGS_DEBUG = -Wall -g -pg
 INCLUDES = -I ./includes/
@@ -36,6 +37,12 @@ build-desktop-op:
 
 run-desktop-op:
 	./build/release/desktopNeuralNet.out
+
+tau:
+	$(CC_TAU) $(CFLAGS) $(INCLUDES) $(SRCS)	-o ./build/profiling/tau_build.out
+	./build/profiling/tau_build.out
+	mv main.* ./build/profiling/	# Need to read doc on handling object files
+	mv profile.* ./build/profiling/
 
 clean:
 	rm -rf ./build/debug/*.*
