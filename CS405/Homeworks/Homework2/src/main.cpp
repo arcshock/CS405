@@ -16,7 +16,7 @@
 std::string timingManager(NeuralNet<4> & neuralNet, int iterations, int numOfBoardEval = 1);
 double timingFunc(int iterations, NeuralNet<4> & neuralNet); // used for timing board evals
 double timeavg(std::vector<double>::iterator begin, std::vector<double>::iterator end, int samples);
-
+void messaging(std::string message);
 
 int main()
 {
@@ -27,23 +27,14 @@ int main()
 	test1.setWeights();
 	test1.forwardFeed();
 
+	messaging("Timing");
 	std::cout << timingManager(test1, 100, 60) << std::endl;
 
-	for (int i = 0; i < 160; ++i) {
-		std::cout << "#";
-		if (i == 80)
-			std::cout << std::endl << "Prining network" << std::endl;
-	}
-	std::cout << std::endl;
 
+	messaging("Printing Network");
 	test1.printNetwork();
 
-	for (int i = 0; i < 160; ++i) {
-		std::cout << "#";
-		if (i == 80)
-			std::cout << std::endl << "Mutating network" << std::endl;
-	}
-	std::cout << std::endl;
+	messaging("Mutating Network");
 	
 	test1.mutateNetwork();
 	test1.printNetwork();
@@ -51,19 +42,19 @@ int main()
 	return 0;
 }
 
+void messaging(std::string message)
+{
+	for (int i = 0; i < 120; ++i) {
+		std::cout << "#";
+		if ( i == 60 )
+			std::cout << std::endl << message << std::endl;
+	}
+	std::cout << std::endl;
+}
+
 
 std::string timingManager(NeuralNet<4> & neuralNet, int iterations, int numOfBoardEval)
 {
-
-	for (int i = 0; i < 160; ++i){
-		
-		std::cout << "#";
-		if (i == 80) {
-			std::cout << std::endl << "TIMING" << std::endl;
-		}
-	}
-	std::cout << std::endl;
-
 	std::vector<double> times;
 
 	for (int i = 0; i < iterations; ++i) {
