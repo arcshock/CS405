@@ -10,7 +10,6 @@
 
 #include "node.h"
 #include <vector>
-#include <iterator>
 #include <cstdlib>
 #include <iostream>
 #include <array>
@@ -18,9 +17,6 @@
 template<std::size_t SIZE>
 class NeuralNet {
 public:
-
-//	NeuralNet(int input, SIZE begin, SIZE end, int output);
-//	NeuralNet(SIZE begin, SIZE end, int size);
 	NeuralNet(std::array<int, SIZE>& arr);
 	void setWeights();
 	void printNetwork();
@@ -34,6 +30,7 @@ private:
 	double squashFunc(double input);
 	double evalFunc();
 	std::vector< std::vector<Node> > network_m;
+	std::array< std::array<int, SIZE>, SIZE > exp_network_m;
 };
 
 template<std::size_t SIZE>
@@ -54,10 +51,15 @@ void NeuralNet<SIZE>::loadInput()
 template<std::size_t SIZE>
 NeuralNet<SIZE>::NeuralNet (std::array<int, SIZE>& arr)
 {
+	auto i = 0;
 	auto numberOfLayers = arr.size();
 	network_m.reserve(numberOfLayers);
 
-	for (int i = 0; i < numberOfLayers; ++i){
+	for ( i = 0; i < numberOfLayers; ++i) {
+		network_m[i].reserve(arr[i]);
+	}
+
+	for ( i = 0; i < numberOfLayers; ++i) {
 		network_m.push_back(std::vector<Node>(arr[i]));
 	}
 }
