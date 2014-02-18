@@ -1,10 +1,11 @@
 # File: .gitignore
 # Author: Bucky Frost
 # Purpose: a git ignore file for the cs405 project
-# Ignores: .out .o .a
+# Ignores: binary output from compiler/profiler and swap files from vim
 
 *.out
 *.o
 *.a
 *.swp
 *.gch
+profile.0*

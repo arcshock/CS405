@@ -15,7 +15,7 @@ SRCS = ./src/*
 LAPTOP_OPFLAGS = -march=core2 -O2 
 LAPTOP_OP = laptopNeuralNet.out
 
-DESKTOP_OPFLAGS = -march=corei7 -02
+DESKTOP_OPFLAGS = -march=corei7 -O2
 DESKTOP_OP = desktopNeuralNet.out
 
 all:
@@ -44,6 +44,18 @@ tau:
 	mv main.* ./build/profiling/	# Need to read doc on handling object files
 	mv profile.* ./build/profiling/
 
+tau-feedforward:
+	$(CC_TAU) $(CFLAGS) $(INCLUDES) ./test/feedforward.cpp -o ./build/profiling/tau_feedForward.out #need to read on passing a filename
+	./build/profiling/tau_feedForward.out
+	mv feedforward.* ./build/profiling/	# Need to read doc on handling object files
+	mv profile.* ./build/profiling/
+
+# TODO pass in the test cpp files by cli argument?
+#%: %.cpp
+#	$(CC_TAU) -o $@ $< $(CFLAGS) $(INCLUDES)
+	
 clean:
 	rm -rf ./build/debug/*.*
 	rm -rf ./build/release/*.*
+	rm -rf ./build/profiling/*.*
+	rm -rf ./includes/*.gch

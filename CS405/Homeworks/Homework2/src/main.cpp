@@ -12,33 +12,65 @@
 #include<string>
 #include <sstream>
 
-std::string timingManager(int iterations, int numOfBoardEval, NeuralNet<std::array<int, 4>::iterator> & neuralNet);
-double timingFunc(int iterations, NeuralNet<std::array<int, 4>::iterator> & neuralNet); // used for timing board evals
-double timeavg(std::vector<double>::iterator begin, std::vector<double>::iterator end, int samples);
 
+std::string timingManager(NeuralNet<4> & neuralNet, int iterations, int numOfBoardEval = 1);
+double timingFunc(int iterations, NeuralNet<4> & neuralNet); // used for timing board evals
+double timeavg(std::vector<double>::iterator begin, std::vector<double>::iterator end, int samples);
+void messaging(std::string message);
 
 int main()
 {
 	std::array<int, 4> hidden_layers = {{ 32, 40, 10, 1 }};
 
-	NeuralNet < std::array<int, 4>::iterator > test1 ( hidden_layers.begin(), hidden_layers.end(), hidden_layers.size());
+	NeuralNet < hidden_layers.size() > test1 (hidden_layers);
 	test1.loadInput();
 	test1.setWeights();
 	test1.forwardFeed();
 
-	std::cout << timingManager(5, 2000, test1) << std::endl;
+	messaging("Timing");
+	std::cout << timingManager(test1, 100, 60) << std::endl;
 
+
+	messaging("Printing Network");
 	test1.printNetwork();
 
-	std::cout << std::endl << "Mutating network" << std::endl;
+	messaging("Mutating Network");
+	
 	test1.mutateNetwork();
 	test1.printNetwork();
 
 	return 0;
 }
 
+void messaging(std::string message)
+{
+	for (int i = 0; i < 120; ++i) {
+		std::cout << "#";
+		if ( i == 60 )
+			std::cout << std::endl << message << std::endl;
+	}
+	std::cout << std::endl;
+}
 
-double timingFunc(int iterations, NeuralNet<std::array<int, 4>::iterator> & neuralNet)
+
+std::string timingManager(NeuralNet<4> & neuralNet, int iterations, int numOfBoardEval)
+{
+	std::vector<double> times;
+
+	for (int i = 0; i < iterations; ++i) {
+		times.push_back(timingFunc(numOfBoardEval, neuralNet));
+	}
+
+	std::ostringstream timingMessage;
+	timingMessage << "Completed " << iterations << " iteration(s) of ";
+	timingMessage << numOfBoardEval << " board evaluation(s) in average time of ";
+	timingMessage << timeavg(times.begin(), times.end(), iterations) << " second(s)." << std::endl;
+	timingMessage << "Average time of board evaluation: " << numOfBoardEval/timeavg(times.begin(), times.end(), iterations) << " per second." << std::endl;
+
+	return timingMessage.str();
+}
+
+double timingFunc(int iterations, NeuralNet<4> & neuralNet)
 {
 	// setup timing
 	std::chrono::time_point<std::chrono::system_clock> start, end;
@@ -50,28 +82,8 @@ double timingFunc(int iterations, NeuralNet<std::array<int, 4>::iterator> & neur
 	// end timer and find duration
 	end = std::chrono::system_clock::now();
 	std::chrono::duration<double> elapsed_seconds = end - start;
-	std::time_t end_time = std::chrono::system_clock::to_time_t(end);
 
 	return elapsed_seconds.count();
-}
-
-
-std::string timingManager(int iterations, int numOfBoardEval, NeuralNet<std::array<int, 4>::iterator> & neuralNet)
-{
-	std::vector<double> times;
-
-	for (int i = 0; i < iterations; ++i) {
-		times.push_back(timingFunc(numOfBoardEval, neuralNet));
-		std::cout << "Evaluating new board " << i << std::endl;
-	}
-
-	std::ostringstream timingMessage;
-	timingMessage << "Completed " << iterations << " iterations of ";
-	timingMessage << numOfBoardEval << " board evaluations in average time of ";
-	timingMessage << timeavg(times.begin(), times.end(), iterations) << " seconds." << std::endl;
-	timingMessage << "Boards generated on average is " << numOfBoardEval/timeavg(times.begin(), times.end(), iterations) << std::endl;
-
-	return timingMessage.str();
 }
 
 double timeavg(std::vector<double>::iterator begin, std::vector<double>::iterator end, int samples)
@@ -83,3 +95,4 @@ double timeavg(std::vector<double>::iterator begin, std::vector<double>::iterato
 
 	return runningTotal/samples;
 }
+
