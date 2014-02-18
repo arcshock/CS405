@@ -37,25 +37,6 @@ int main()
 	return 0;
 }
 
-
-double timingFunc(int iterations, NeuralNet<std::array<int, 4>::iterator> & neuralNet)
-{
-	// setup timing
-	std::chrono::time_point<std::chrono::system_clock> start, end;
-	start = std::chrono::system_clock::now();
-
-	for (int i = 0; i < iterations; ++i)
-		neuralNet.forwardFeed();
-
-	// end timer and find duration
-	end = std::chrono::system_clock::now();
-	std::chrono::duration<double> elapsed_seconds = end - start;
-	std::time_t end_time = std::chrono::system_clock::to_time_t(end);
-
-	return elapsed_seconds.count();
-}
-
-
 std::string timingManager(int iterations, int numOfBoardEval, NeuralNet<std::array<int, 4>::iterator> & neuralNet)
 {
 	std::vector<double> times;
@@ -72,6 +53,23 @@ std::string timingManager(int iterations, int numOfBoardEval, NeuralNet<std::arr
 	timingMessage << "Boards generated on average is " << numOfBoardEval/timeavg(times.begin(), times.end(), iterations) << std::endl;
 
 	return timingMessage.str();
+}
+
+double timingFunc(int iterations, NeuralNet<std::array<int, 4>::iterator> & neuralNet)
+{
+	// setup timing
+	std::chrono::time_point<std::chrono::system_clock> start, end;
+	start = std::chrono::system_clock::now();
+
+	for (int i = 0; i < iterations; ++i)
+		neuralNet.forwardFeed();
+
+	// end timer and find duration
+	end = std::chrono::system_clock::now();
+	std::chrono::duration<double> elapsed_seconds = end - start;
+	std::time_t end_time = std::chrono::system_clock::to_time_t(end);
+
+	return elapsed_seconds.count();
 }
 
 double timeavg(std::vector<double>::iterator begin, std::vector<double>::iterator end, int samples)
