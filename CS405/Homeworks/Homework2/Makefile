@@ -44,6 +44,15 @@ tau:
 	mv main.* ./build/profiling/	# Need to read doc on handling object files
 	mv profile.* ./build/profiling/
 
+tau-feedforward:
+	$(CC_TAU) $(CFLAGS) $(INCLUDES) ./test/feedforward.cpp -o ./build/profiling/tau_feedForward.out #need to read on passing a filename
+	./build/profiling/tau_feedForward.out
+#	mv .* ./build/profiling/	# Need to read doc on handling object files
+#	mv profile.* ./build/profiling/
+
+%: %.cpp
+	$(CC_TAU) -o $@ $< $(CFLAGS) $(INCLUDES)
 clean:
 	rm -rf ./build/debug/*.*
 	rm -rf ./build/release/*.*
+	rm -rf ./build/profiling/*.*
