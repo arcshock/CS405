@@ -10,6 +10,12 @@
 
 #include <random>
 
+static std::random_device rd;
+static std::mt19937 rng;
+static std::mt19937 gen(rd());
+static std::uniform_real_distribution<> dis(-1, 1); //interval [-1, 1), need to change?
+static std::normal_distribution<> d(0, 0.12);
+
 class Node {
 public:
 	Node();
@@ -21,8 +27,6 @@ public:
 	void setOutput(double input);
 	double randomValue();
 private:
-	static std::mt19937 rng;
-	static std::random_device rd;
 	double sigmoid(double input);
 	double output_m;
 	double weight_m;
@@ -37,11 +41,9 @@ double Node::getOutput()
 {
 	return output_m;
 }
+
 double Node::randomValue()
 {
-	std::random_device rd;
-	std::mt19937 gen(rd());
-	std::uniform_real_distribution<> dis(-1, 1);
 	return dis(gen);
 }
 
@@ -62,17 +64,11 @@ void Node::setOutput(double input)
 
 void Node::randomInit()
 {
-	std::random_device rd;
-	std::mt19937 gen(rd());
-	std::uniform_real_distribution<> dis(-1, 1);
 	weight_m = dis(gen);
 }
 
 void Node::mutateWeight()
 {
-	std::random_device rd;
-	std::mt19937 gen(rd());
-	std::normal_distribution<> d(0, 0.1);
 	weight_m += d(gen);
 }
 
