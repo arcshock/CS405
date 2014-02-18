@@ -15,7 +15,7 @@ SRCS = ./src/*
 LAPTOP_OPFLAGS = -march=core2 -O2 
 LAPTOP_OP = laptopNeuralNet.out
 
-DESKTOP_OPFLAGS = -march=corei7 -02
+DESKTOP_OPFLAGS = -march=corei7 -O2
 DESKTOP_OP = desktopNeuralNet.out
 
 all:
