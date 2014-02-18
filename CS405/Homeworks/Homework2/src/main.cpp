@@ -11,6 +11,7 @@
 #include<ctime>
 #include<string>
 #include <sstream>
+#include <fstream>
 
 
 std::string timingManager(NeuralNet<4> & neuralNet, int iterations, int numOfBoardEval = 1);
@@ -28,7 +29,8 @@ int main()
 	test1.forwardFeed();
 
 	messaging("Timing");
-	std::cout << timingManager(test1, 100, 60) << std::endl;
+	for(int i = 0; i < 500; ++i)
+		timingManager(test1, i, 5); 
 
 
 	messaging("Printing Network");
@@ -67,6 +69,11 @@ std::string timingManager(NeuralNet<4> & neuralNet, int iterations, int numOfBoa
 	timingMessage << timeavg(times.begin(), times.end(), iterations) << " second(s)." << std::endl;
 	timingMessage << "Average time of board evaluation: " << numOfBoardEval/timeavg(times.begin(), times.end(), iterations) << " per second." << std::endl;
 
+	std::fstream fs;
+	fs.open ("times.csv", std::fstream::out | std::fstream::app);
+	for (auto i : times)
+		fs << i << "," << iterations << std::endl;
+	fs.close();
 	return timingMessage.str();
 }
 
