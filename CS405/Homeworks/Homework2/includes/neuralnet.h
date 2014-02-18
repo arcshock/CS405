@@ -1,5 +1,3 @@
-#ifndef NEURAL_NET_H
-#define NEURAL_NET_H
 /*
  * Author: Bucky Frost
  * File: neuralnet.h
@@ -7,14 +5,15 @@
  * Purpose: Header of neural network class.
  */
 
+#ifndef NEURAL_NET_H
+#define NEURAL_NET_H 
+
 #include"node.h"
 #include<vector>
 #include<array>
 #include<iterator>
 #include<cstdlib>
 #include<iostream>
-#include<random>
-//#include<chrono>
 #include<random>
 
 template<class Iter>
