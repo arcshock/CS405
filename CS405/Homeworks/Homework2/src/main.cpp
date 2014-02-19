@@ -63,13 +63,9 @@ std::string timingManager(NeuralNet<4> & neuralNet, int iterations)
 {
 	std::vector<double> times;
 
-	std::fstream fs;
-	fs.open ("times.csv", std::fstream::out);
 	for (int i = 0; i < iterations; ++i) {
 		times.push_back(timingFunc(iterations*20, neuralNet));
-		fs << times[i] << "," << i*20 << std::endl;
 	}
-	fs.close();
 	
 	// Report string construction.
 	std::ostringstream timingMessage;
