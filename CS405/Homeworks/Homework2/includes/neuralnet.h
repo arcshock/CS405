@@ -33,6 +33,16 @@ private:
 	std::array< std::array<int, SIZE>, SIZE > exp_network_m;
 };
 
+/*******************************
+ * Function evalFunc
+ *
+ * Precondition: The output node of the neural network must must contain
+ * 	the value that must be evaluated of the neural network.
+ *
+ * Post Condition: Sets the evalOutput_m member variable to the output 
+ * 	of the neural net and returns that value.
+ *
+ *****************************/
 template<std::size_t SIZE>
 double NeuralNet<SIZE>::evalFunc()
 {
@@ -40,6 +50,14 @@ double NeuralNet<SIZE>::evalFunc()
 	return evalOutput_m;
 }
 
+/******************************
+ * Function loadInput
+ * 
+ * Precondition: The network_m member variable must be initialized to be a vector of a vector of nodes
+ *
+ * Post Condition: Leaves the input layer of the network with random values for their inputs.
+ *
+ *******************************/
 template<std::size_t SIZE>
 void NeuralNet<SIZE>::loadInput()
 {
@@ -48,6 +66,14 @@ void NeuralNet<SIZE>::loadInput()
 	}
 }
 
+/***************************
+ * Class Constructor
+ *
+ * Precondition: Must be passed an std::array who elements are the length of the layer of the network.
+ *
+ * Post Condition: Initializes the network_m member variable to be a vector of vector of nodes.
+ *
+ ***************************/
 template<std::size_t SIZE>
 NeuralNet<SIZE>::NeuralNet (std::array<int, SIZE>& arr)
 {
@@ -64,6 +90,14 @@ NeuralNet<SIZE>::NeuralNet (std::array<int, SIZE>& arr)
 	}
 }
 
+/**************************
+ * Function setWeights
+ *
+ * Precondition: None
+ *
+ * Post Condition: Calls randomInit on each node in the network.
+ *
+ **************************/
 template<std::size_t SIZE>
 void NeuralNet<SIZE>::setWeights()
 {
@@ -74,20 +108,39 @@ void NeuralNet<SIZE>::setWeights()
 	}
 }
 
+/*************************
+ * Function mutateNetwork
+ *
+ * Precondition: None.
+ *
+ * Post Condition: Calls the mutate function on all the nodes from the hidden layers on.
+ *
+ *************************/
 template<std::size_t SIZE>
 void NeuralNet<SIZE>::mutateNetwork()
 {
-	for (int i = 1; i < network_m.size(); ++i) { // staring at hidden layer
+	auto startOfHiddenLayers = 1; // should all the network be mutated?
+
+	for (int i = startOfHiddenLayers; i < network_m.size(); ++i) { 
 		for ( int j = 0; j < network_m[i].size(); ++j) {
 			network_m[i][j].mutateWeight();
 		}
 	}
 }
 
+/************************
+ * Function printNetwork
+ *
+ * Precondition: None.
+ *
+ * Post Condition: prints out the weights from the network to cout buffer.
+ ************************/
 template<std::size_t SIZE>
 void NeuralNet<SIZE>::printNetwork()
 {
-	for (int i = 1; i < network_m.size(); ++i) {
+	auto startOfHiddenLayers = 1;
+
+	for (int i = startOfHiddenLayers; i < network_m.size(); ++i) {
 		std::cout << "Printing layer " << i << std::endl;
 		for ( int j = 0; j < network_m[i].size(); ++j ) {
 			std::cout << network_m[i][j].getWeight() << " ";
@@ -96,11 +149,22 @@ void NeuralNet<SIZE>::printNetwork()
 	}
 }
 
+/***********************
+ * Function forwardFeed
+ *
+ * Precondition: None
+ *
+ * Post Condition: Takes all the nodes from the previous layer and multiplies 
+ * 	their weights against their input, sums all of those values,
+ * 	and sets that value to the input of the node.
+ ***********************/
 template<std::size_t SIZE>
 void NeuralNet<SIZE>::forwardFeed()
 {
-	for (int i = 1; i < network_m.size(); ++i) { //starting at the first hidden layer
-		for ( int j = 0; j < network_m[i].size(); ++j ) { //chose node in hiddent layer and apply all of last layer to it
+	auto startOfHiddenLayers = 1;
+
+	for (int i = startOfHiddenLayers; i < network_m.size(); ++i) { 
+		for ( int j = 0; j < network_m[i].size(); ++j ) { // chose node in hiddent layer and apply all of last layer to it
 			network_m[i][j].setOutput(network_m[i][j].getOutput() +
 			(network_m[i-1][j].getWeight()*network_m[i-1][j].getOutput()));
 		}
