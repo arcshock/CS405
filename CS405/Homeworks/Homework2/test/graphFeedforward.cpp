@@ -67,7 +67,7 @@ std::string timingManager(NeuralNet<4> & neuralNet, int iterations)
 	fs.open ("times.csv", std::fstream::out);
 	for (int i = 0; i < iterations; ++i) {
 		times.push_back(timingFunc(iterations*20, neuralNet));
-		fs << times[i] << "," << i*20 << std::endl;
+		fs << times[i] << " " << i*20 << std::endl;
 	}
 	fs.close();
 	

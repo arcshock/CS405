@@ -50,6 +50,9 @@ tau-feedforward:
 	mv feedforward.* ./build/profiling/	# Need to read doc on handling object files
 	mv profile.* ./build/profiling/
 
+graph:	
+	$(CC) $(CFLAGS) $(INCLUDES) ./test/graphFeedforward.cpp -o ./build/debug/graphing.out
+	
 # TODO pass in the test cpp files by cli argument?
 #%: %.cpp
 #	$(CC_TAU) -o $@ $< $(CFLAGS) $(INCLUDES)
