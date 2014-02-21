@@ -32,11 +32,11 @@ int main()
 	std::cout << timingManager(test1, 5000) << std::endl; 
 
 	messaging("Printing Network");
-	test1.printNetwork();
+	test1.printNetworkWeights();
 
 	messaging("Mutating Network");
 	test1.mutateNetwork();
-	test1.printNetwork();
+	test1.printNetworkWeights();
 
 	return 0;
 }

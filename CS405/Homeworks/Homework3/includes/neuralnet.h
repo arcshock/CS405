@@ -19,7 +19,7 @@ class NeuralNet {
 public:
 	NeuralNet(std::array<int, SIZE>& arr);
 	void setWeights();
-	void printNetwork();
+	void printNetworkWeights();
 	void loadInput();
 	void forwardFeed();
 	void mutateNetwork();
@@ -129,14 +129,14 @@ void NeuralNet<SIZE>::mutateNetwork()
 }
 
 /************************
- * Function printNetwork
+ * Function printNetworkWeights
  *
  * Precondition: None.
  *
  * Post Condition: prints out the weights from the network to cout buffer.
  ************************/
 template<std::size_t SIZE>
-void NeuralNet<SIZE>::printNetwork()
+void NeuralNet<SIZE>::printNetworkWeights()
 {
 	auto startOfHiddenLayers = 1;
 
