@@ -5,6 +5,7 @@
  * CS 405 Intro to A.I.
  */
 #include "neuralnet.h"
+#include "board.h"
 #include <iostream>
 #include <array>
 #include <chrono>
@@ -23,6 +24,8 @@ int main()
 {
 	std::array<int, 4> hidden_layers = {{ 32, 40, 10, 1 }};
 
+	printBoard();
+/*
 	NeuralNet < hidden_layers.size() > test1 (hidden_layers);
 	test1.loadInput();
 	test1.setWeights();
@@ -37,7 +40,7 @@ int main()
 	messaging("Mutating Network");
 	test1.mutateNetwork();
 	test1.printNetworkWeights();
-
+*/
 	return 0;
 }
 
