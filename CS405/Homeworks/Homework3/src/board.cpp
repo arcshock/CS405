@@ -5,14 +5,14 @@
  */
 
 #include "board.h"
-/* == Function printBoard ==================
- * 
+
+/* == Function printCellTop ===============
+ *
  * Precondition: None.
  *
- * Post Condition: Prints out a checkers board rep to std out.
- * ========================================= */
-
-void printCellTop()
+ * Post Condition: prints out string of '+---+---+'
+ * ======================================== */
+void Board::printCellTop()
 {
 	for (auto i = 0; i < 8; ++i) {
 		std::cout << "+";
@@ -24,7 +24,13 @@ void printCellTop()
 	std::cout << "+" << std::endl;
 }
 
-void printCellSpace()
+/* == Function printCellSpace =============
+ *
+ * Precondition: None.
+ *
+ * Post Condition: prints out string of '|   |   |'
+ * ======================================== */
+void Board::printCellSpace()
 {
 	for (auto i = 0; i < 8; ++i) {
 		std::cout << "|";
@@ -36,13 +42,21 @@ void printCellSpace()
 	std::cout << "|" << std::endl;
 }
 
-void printBoard()
+/* == Function printBoard ==================
+ * 
+ * Precondition: None.
+ *
+ * Post Condition: Prints out a checkers board rep to std out.
+ * ========================================= */
+void Board::printBoard()
 {
 	auto boardHeight = 8;
 
 	for (auto i = 0; i < boardHeight; ++i) {
 		printCellTop();
-		printCellSpace();
+		for (auto j = 0; j < 2; ++j) {
+			printCellSpace();
+		}
 	}
 	printCellTop();
 }
