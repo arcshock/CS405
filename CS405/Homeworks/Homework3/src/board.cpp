@@ -6,6 +6,44 @@
 
 #include "board.h"
 
+/* == Class Board Default CTR =============
+ *
+ * ======================================== */
+Board::Board()
+{
+	for (auto i = 0; i < boardRep_m.size(); ++i) {
+		boardRep_m[0][i] = CellInfo();
+	}
+}
+
+
+/* == Class Board Initilizer CTR ==========
+ *
+ * ======================================== */
+void Board::BoardInit()
+{
+	for (auto i = 0; i < boardRep_m.size(); ++i) {
+		for (auto j = 0; j < boardRep_m[i].size(); ++j) {
+			boardRep_m[i][j] = CellInfo();
+		}
+	}
+
+	for (auto i = 0; i <= 2; ++i) {
+		for (auto j = i%2; j <= 6; j+=2) {
+			boardRep_m[i][j].red = true;
+			boardRep_m[i][j].empty = false;
+		}
+	}
+
+	for (auto i = 5; i <= 7; ++i) {
+		for (auto j = i%2; j <= 6; j+=2) {
+			boardRep_m[i][j].black = true;
+			boardRep_m[i][j].empty = false;
+		}
+	}
+		
+}
+
 /* == Function printCellTop ===============
  *
  * Precondition: None.
