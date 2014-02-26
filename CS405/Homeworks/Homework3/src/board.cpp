@@ -90,7 +90,13 @@ double Board::evalBoard(int color)
 				if (boardRep_m[i][j].king)
 					++numberOfKings;
 			}
-				
+
+			if (color == 2) {
+				if (boardRep_m[i][j].black)
+					++numberOfPieces;
+				if (boardRep_m[i][j].king)
+					++numberOfKings;
+			}	
 		}
 	}
 
