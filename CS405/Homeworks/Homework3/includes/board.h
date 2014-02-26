@@ -29,6 +29,7 @@ public:
 	Board();
 	void BoardInit();
 	void printBoard();
+	void evalBoard();
 private:
 	struct cellInfo {
 		bool red;
