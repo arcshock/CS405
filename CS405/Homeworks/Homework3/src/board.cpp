@@ -66,3 +66,33 @@ void Board::printBoard()
 		std::cout << std::endl;
 	}
 }
+
+/* == Function evalBoard ================== 
+ *
+ * Returns a double that signifies how well the board is in 
+ * favor of the specified color.
+ *
+ * Precondition: color must either be 1 or 2. 1 for red, 2 for black.
+ *
+ * Post Condition: Returns a double for the board standing in the color.
+ * ======================================== */
+double Board::evalBoard(int color) 
+{
+	auto numberOfPieces = 0;
+	auto numberOfKings = 0;
+	auto kingFavor = 1.42;
+
+	for (auto i = 0; i < boardRep_m.size(); ++i) {
+		for (auto j = 0; j < boardRep_m[0].size(); ++j) {
+			if (color == 1) {
+				if (boardRep_m[i][j].red)
+					++numberOfPieces;
+				if (boardRep_m[i][j].king)
+					++numberOfKings;
+			}
+				
+		}
+	}
+
+	return numberOfPieces + numberOfKings*kingFavor;
+}
