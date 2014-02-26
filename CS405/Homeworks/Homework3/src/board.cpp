@@ -45,7 +45,7 @@ void Board::BoardInit()
 }
 
 /* == Function printCellTop ===============
- *
+ * Helper function for printBoard.
  * Precondition: None.
  *
  * Post Condition: prints out string of '+---+---+'
@@ -63,6 +63,7 @@ void Board::printCellTop()
 }
 
 /* == Function printCellSpace =============
+ * Helper function for printBoard.
  *
  * Precondition: None.
  *
@@ -88,13 +89,17 @@ void Board::printCellSpace()
  * ========================================= */
 void Board::printBoard()
 {
-	auto boardHeight = 8;
+	for (auto i = 0; i < boardRep_m.size(); ++i) {
+		for (auto j = 0; j < boardRep_m[0].size(); ++j) {
+			if (boardRep_m[i][j].red) {
+				std::cout << "r";
+			} else if (boardRep_m[i][j].black) {
+				std::cout << "b";
+			} else {
+				std::cout << " ";
+			}
 
-	for (auto i = 0; i < boardHeight; ++i) {
-		printCellTop();
-		for (auto j = 0; j < 2; ++j) {
-			printCellSpace();
 		}
+		std::cout << std::endl;
 	}
-	printCellTop();
 }
