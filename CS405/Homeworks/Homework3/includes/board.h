@@ -15,10 +15,19 @@ struct CellInfo {
 	bool black;
 	bool king;
 	bool empty;
+
+	CellInfo() {
+		red = false;
+		black = false;
+		king = false;
+		empty = true;
+	}
 };
 
 class Board {
 public:
+	Board();
+	void BoardInit();
 	void printBoard();
 private:
 	struct cellInfo {
@@ -30,7 +39,7 @@ private:
 
 	void printCellTop();
 	void printCellSpace();
-	std::array<std::array<cellInfo, 8>, 8> boardRep_m;
+	std::array< std::array<CellInfo, 8>, 8> boardRep_m;
 };
 
 #endif //BOARD_H
