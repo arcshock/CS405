@@ -24,7 +24,11 @@ int main()
 {
 	std::array<int, 4> hidden_layers = {{ 32, 40, 10, 1 }};
 
-	printBoard();
+	Board firstBoard;
+	firstBoard.BoardInit();
+	firstBoard.printBoard();
+	firstBoard.makeMove(0,0);
+	firstBoard.printBoard();
 /*
 	NeuralNet < hidden_layers.size() > test1 (hidden_layers);
 	test1.loadInput();
