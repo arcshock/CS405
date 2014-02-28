@@ -102,3 +102,11 @@ double Board::evalBoard(int color)
 
 	return numberOfPieces + numberOfKings*kingFavor;
 }
+
+void Board::makeMove(unsigned int row, unsigned int column)
+{
+	if (! boardRep_m[row][column].empty)
+		boardRep_m[row][column].emptyCell();
+}
+
+
