@@ -22,6 +22,13 @@ struct CellInfo {
 		king = false;
 		empty = true;
 	}
+
+	void emptyCell() {
+		red = false;
+		black = false;
+		king = false;
+		empty = true;
+	}
 };
 
 class Board {
@@ -30,14 +37,8 @@ public:
 	void BoardInit();
 	void printBoard();
 	double evalBoard(int color);
+	void makeMove(unsigned int row, unsigned int column);
 private:
-	struct cellInfo {
-		bool red;
-		bool black;
-		bool king;
-		bool empty;
-	};
-
 	void printCellTop();
 	void printCellSpace();
 	std::array< std::array<CellInfo, 8>, 8> boardRep_m;
