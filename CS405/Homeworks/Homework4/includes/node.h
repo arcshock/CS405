@@ -10,7 +10,6 @@
 
 #include <random>
 
-
 const double SIGMA = 0.12;
 static std::random_device randomDevice;
 static std::mt19937 generateRandomNumber(randomDevice());
@@ -19,11 +18,12 @@ static std::normal_distribution<> normalDistribution(0, SIGMA);
 
 class Node {
 public:
+	// Implementation TODO: have a function that takes in input from anouther node, have this value stored, then can call output to squash that value.
 	Node();
 	void randomInit();
 	void mutateWeight();
-	double getWeight();
-	double getOutput();
+	double getWeight() const;
+	double getOutput() const;
 	void squashOutput();
 	void setOutput(double input);
 	double randomValue();
