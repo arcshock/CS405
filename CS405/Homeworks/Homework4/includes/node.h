@@ -10,11 +10,12 @@
 
 #include <random>
 
-static std::random_device rd;
-static std::mt19937 rng;
-static std::mt19937 gen(rd());
-static std::uniform_real_distribution<> dis(-1, 1); //interval [-1, 1), need to change?
-static std::normal_distribution<> d(0, 0.12);
+
+const double SIGMA = 0.12;
+static std::random_device randomDevice;
+static std::mt19937 generateRandomNumber(randomDevice());
+static std::uniform_real_distribution<> uniformDistribution(-1, 1); //interval [-1, 1), need to change?
+static std::normal_distribution<> normalDistribution(0, SIGMA);
 
 class Node {
 public:
