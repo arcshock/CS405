@@ -12,7 +12,7 @@ Node::Node()
 	randomInit();
 }
 
-double Node::getOutput()
+double Node::getOutput() const
 {
 	return output_m;
 }
@@ -47,7 +47,7 @@ void Node::mutateWeight()
 	weight_m += normalDistribution(generateRandomNumber);
 }
 
-double Node::getWeight()
+double Node::getWeight() const
 {
 	return weight_m;
 }
