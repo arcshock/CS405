@@ -19,7 +19,7 @@ double Node::getOutput()
 
 double Node::randomValue()
 {
-	return dis(gen);
+	return uniformDistribution(generateRandomNumber);
 }
 
 double Node::sigmoid(double input)
@@ -39,12 +39,12 @@ void Node::setOutput(double input)
 
 void Node::randomInit()
 {
-	weight_m = dis(gen);
+	weight_m = uniformDistribution(generateRandomNumber);
 }
 
 void Node::mutateWeight()
 {
-	weight_m += d(gen);
+	weight_m += normalDistribution(generateRandomNumber);
 }
 
 double Node::getWeight()
