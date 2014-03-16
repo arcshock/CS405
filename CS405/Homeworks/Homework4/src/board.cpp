@@ -118,15 +118,44 @@ void Board::makeMove(coordinate cellLocation)
 			std::swap(boardRep_m[row][column], boardRep_m[row + 1][column - 1]);
 		else if (isEmpty(coordinate(column + 1, row + 1)))
 			std::swap(boardRep_m[row][column], boardRep_m[row + 1][column + 1]);
-	}
+	} else if (!isEmpty(cellLocation)) {
 
+		//increase board indices
+		if (isRed(coordinate(column, row)))
+		{
+			if (isEmpty(coordinate(column + 1, row + 1)))
+				std::swap(boardRep_m[row][column], boardRep_m[row + 1][column + 1]);
+			else if (isEmpty(coordinate(column + 1, row - 1)))
+				std::swap(boardRep_m[row][column], boardRep_m[row + 1][column - 1]);
+
+		} else if (isBlack(coordinate(column, row))) {
+
+			if (isEmpty(coordinate(column - 1, row + 1)))
+				std::swap(boardRep_m[row][column], boardRep_m[row + 1][column - 1]);
+			else if (isEmpty(coordinate(column - 1, row - 1)))
+				std::swap(boardRep_m[row][column], boardRep_m[row - 1][column - 1]);
+		}
 		
+	}
 }
 
+const bool Board::isBlack(coordinate cellLocation) const
+{
+	auto row = cellLocation.second;
+	auto column = cellLocation.first;
 
+	return boardRep_m[row][column].black;
+}
 
+const bool Board::isRed(coordinate cellLocation) const
+{
+	auto row = cellLocation.second;
+	auto column = cellLocation.first;
 
-bool Board::isEmpty(coordinate cellLocation)
+	return boardRep_m[row][column].red;
+}
+
+const bool Board::isEmpty(coordinate cellLocation) const
 {
 	auto row = cellLocation.second;
 	auto column = cellLocation.first;
@@ -134,7 +163,7 @@ bool Board::isEmpty(coordinate cellLocation)
 	return boardRep_m[row][column].empty;
 }
 
-bool Board::isKing(coordinate cellLocation)
+const bool Board::isKing(coordinate cellLocation) const
 {
 	auto row = cellLocation.second;
 	auto column = cellLocation.first;

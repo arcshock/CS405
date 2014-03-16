@@ -46,8 +46,10 @@ private:
 		}
 	};
 
-	bool isEmpty(coordinate cellLocation);
-	bool isKing(coordinate cellLocation);
+	const bool isEmpty(coordinate cellLocation) const;
+	const bool isKing(coordinate cellLocation) const;
+	const bool isRed(coordinate cellLocation) const;
+	const bool isBlack(coordinate cellLocation) const;
 	void printCellTop() const;
 	void printCellSpace() const;
 	std::array< std::array<CellInfo, BOARD_LENGTH>, BOARD_LENGTH> boardRep_m;
