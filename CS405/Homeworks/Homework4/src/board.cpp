@@ -50,7 +50,7 @@ void Board::BoardInit()
  *
  * Post Condition: Prints out a checkers board rep to std out.
  * ========================================= */
-void Board::printBoard()
+void Board::printBoard() const
 {
 	for (auto i = 0; i < boardRep_m.size(); ++i) {
 		for (auto j = 0; j < boardRep_m[0].size(); ++j) {
@@ -103,10 +103,23 @@ double Board::evalBoard(int color)
 	return numberOfPieces + numberOfKings*kingFavor;
 }
 
-void Board::makeMove(unsigned int row, unsigned int column)
+void Board::makeMove(coordinate cellLocation)
 {
-	if (! boardRep_m[row][column].empty)
-		boardRep_m[row][column].emptyCell();
 }
 
 
+bool Board::isEmpty(coordinate cellLocation)
+{
+	auto row = cellLocation.second;
+	auto column = cellLocation.first;
+
+	return boardRep_m[row][column].empty;
+}
+
+bool Board::isKing(coordinate cellLocation)
+{
+	auto row = cellLocation.second;
+	auto column = cellLocation.first;
+
+	return boardRep_m[row][column].king;
+}

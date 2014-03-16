@@ -9,39 +9,50 @@
 
 #include <iostream>
 #include <array>
+#include <utility>
 
-struct CellInfo {
-	bool red;
-	bool black;
-	bool king;
-	bool empty;
-
-	CellInfo() {
-		red = false;
-		black = false;
-		king = false;
-		empty = true;
-	}
-
-	void emptyCell() {
-		red = false;
-		black = false;
-		king = false;
-		empty = true;
-	}
-};
 
 class Board {
 public:
+	typedef std::pair<unsigned int, unsigned int> coordinate;
+
 	Board();
 	void BoardInit();
-	void printBoard();
+	void printBoard() const;
 	double evalBoard(int color);
-	void makeMove(unsigned int row, unsigned int column);
+	void makeMove(coordinate cellLocation);
+
 private:
-	void printCellTop();
-	void printCellSpace();
-	std::array< std::array<CellInfo, 8>, 8> boardRep_m;
+	const static int BOARD_LENGTH = 8;
+	
+	struct CellInfo {
+		bool red;
+		bool black;
+		bool king;
+		bool empty;
+
+		CellInfo() {
+			red = false;
+			black = false;
+			king = false;
+			empty = true;
+		}
+
+		void emptyCell() {
+			red = false;
+			black = false;
+			king = false;
+			empty = true;
+		}
+	};
+
+	bool isEmpty(coordinate cellLocation);
+	bool isKing(coordinate cellLocation);
+	void printCellTop() const;
+	void printCellSpace() const;
+	std::array< std::array<CellInfo, BOARD_LENGTH>, BOARD_LENGTH> boardRep_m;
+
+	
 };
 
-#endif //BOARD_H
+#endif /* BOARD_H */
