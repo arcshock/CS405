@@ -18,7 +18,7 @@ public:
 
 	Board();
 	void BoardInit();
-	void printBoard() const;
+	void printBoard();
 	double evalBoard(int color);
 	void makeMove(coordinate cellLocation);
 

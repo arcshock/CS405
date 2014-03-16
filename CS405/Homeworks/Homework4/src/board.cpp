@@ -11,8 +11,8 @@
  * ======================================== */
 Board::Board()
 {
-	for (auto i = 0; i < boardRep_m.size(); ++i) {
-		boardRep_m[0][i] = CellInfo();
+	for (int ii = boardRep_m.size() - 1; ii >= 0; --ii) {
+		boardRep_m[0][ii] = CellInfo();
 	}
 }
 
@@ -50,14 +50,14 @@ void Board::BoardInit()
  *
  * Post Condition: Prints out a checkers board rep to std out.
  * ========================================= */
-void Board::printBoard() const
+void Board::printBoard() 
 {
-	for (auto i = 0; i < boardRep_m.size(); ++i) {
-		for (auto j = 0; j < boardRep_m[0].size(); ++j) {
-			if (boardRep_m[i][j].red) {
-				std::cout << "r";
-			} else if (boardRep_m[i][j].black) {
-				std::cout << "b";
+	for (int row = boardRep_m.size() - 1; row >= 0; --row) {
+		for (auto column = 0; column < boardRep_m[0].size(); ++column) {
+			if (boardRep_m[row][column].red) {
+				isKing(coordinate(column,row)) ? std::cout << "R" : std::cout << "r";
+			} else if (boardRep_m[row][column].black) {
+				isKing(coordinate(column,row)) ? std::cout << "B" : std::cout << "b";
 			} else {
 				std::cout << " ";
 			}
@@ -67,6 +67,7 @@ void Board::printBoard() const
 	}
 }
 
+// TODO Move to the neuralNetwork
 /* == Function evalBoard ================== 
  *
  * Returns a double that signifies how well the board is in 
@@ -105,7 +106,24 @@ double Board::evalBoard(int color)
 
 void Board::makeMove(coordinate cellLocation)
 {
+	auto row = cellLocation.second;
+	auto column = cellLocation.first;
+
+	if (isKing(cellLocation)) {
+		if (isEmpty(coordinate(column - 1, row - 1)))
+			std::swap(boardRep_m[row][column], boardRep_m[row - 1][column - 1]);
+		else if (isEmpty(coordinate(column - 1, row + 1)))
+			std::swap(boardRep_m[row][column], boardRep_m[row - 1][column + 1]);
+		else if (isEmpty(coordinate(column + 1, row - 1)))
+			std::swap(boardRep_m[row][column], boardRep_m[row + 1][column - 1]);
+		else if (isEmpty(coordinate(column + 1, row + 1)))
+			std::swap(boardRep_m[row][column], boardRep_m[row + 1][column + 1]);
+	}
+
+		
 }
+
+
 
 
 bool Board::isEmpty(coordinate cellLocation)
