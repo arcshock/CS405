@@ -7,7 +7,6 @@
 #include "neuralnet.h"
 #include "timing.h"
 #include <iostream>
-#include <array>
 #include <chrono>
 #include <string>
 #include <future>
@@ -85,4 +84,16 @@ double timeavg(std::vector<double>::iterator begin, std::vector<double>::iterato
 	auto average = runningTotal/samples;
 	
 	return average;
+}
+
+// Precondition:
+// Takes a function pointer.
+//
+// Post Condition:
+// Executes the function 5 times.
+void testFunction(std::function<void()> functionReference)
+{
+	for (auto ii = 0; ii < 5; ++ii) {
+		functionReference();
+	}
 }

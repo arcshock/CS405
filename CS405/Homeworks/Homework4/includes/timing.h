@@ -9,6 +9,7 @@
 #define TIMING_HPP
 
 #include "neuralnet.h"
+#include "board.h"
 #include <iostream>
 #include <array>
 #include <chrono>
@@ -21,4 +22,5 @@ double timingFunc(int iterations, NeuralNet<4> & neuralNet); // used for timing 
 double timeavg(std::vector<double>::iterator begin, std::vector<double>::iterator end, int samples);
 void messaging(std::string message);
 
+void testFunction(std::function<void()> functionReference);
 #endif /*TIMING_HPP*/
