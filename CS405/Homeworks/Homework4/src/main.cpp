@@ -7,13 +7,9 @@
 #include "neuralnet.h"
 #include "board.h"
 #include "timing.h"
-#include <iostream>
 #include <array>
-#include <chrono>
-#include <ctime>
 #include <string>
-#include <sstream>
-#include <fstream>
+#include <functional>
 
 int main()
 {
@@ -21,9 +17,11 @@ int main()
 
 	Board firstBoard;
 	firstBoard.BoardInit();
-	firstBoard.printBoard();
 	firstBoard.makeMove(0,0);
-	firstBoard.printBoard();
 	
+	std::function<void()> functionToTime = std::bind(&Board::printBoard, &firstBoard);
+
+	testFunction(functionToTime);
+
 	return 0;
 }
