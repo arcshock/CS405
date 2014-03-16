@@ -17,8 +17,8 @@
 #include <future>
 #include <functional> 
 
-std::string timingManager(NeuralNet<4> & neuralNet, int iterations);
-double timingFunc(int iterations, NeuralNet<4> & neuralNet); // used for timing board evals
+std::string timingManager(int iterations, std::function<void()> functionReference);
+double timingFunc(int iterations, std::function<void()> functionReference); // used for timing board evals
 double timeavg(std::vector<double>::iterator begin, std::vector<double>::iterator end, int samples);
 void messaging(std::string message);
 

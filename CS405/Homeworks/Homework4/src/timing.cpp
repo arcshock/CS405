@@ -32,20 +32,18 @@ void messaging(std::string message)
 //
 // Post Conditions:
 // Returns a string with relevent timing of the feedForward function.
-std::string timingManager(NeuralNet<4> & neuralNet, int iterations)
+std::string timingManager(int iterations, std::function<void()> functionReference)
 {
 	std::vector<double> times;
 
 	for (int i = 0; i < iterations; ++i) {
-		auto timingIteration1 = std::async(std::launch::async, timingFunc, iterations, std::ref(neuralNet));
-		auto timingIteration2 = std::async(std::launch::async, timingFunc, iterations, std::ref(neuralNet));
-		times.push_back(timingIteration1.get());
-		times.push_back(timingIteration2.get());
+		times.push_back(timingFunc(iterations, functionReference));
 	}
 
 	// Report string construction.
 	auto timeMessage = "Completed " + std::to_string(iterations) + " iterations of feed forward function in average time of " + 
 	std::to_string(timeavg(times.begin(), times.end(), times.size())) + " ms.";
+
 	return timeMessage;
 }
 
@@ -54,12 +52,12 @@ std::string timingManager(NeuralNet<4> & neuralNet, int iterations)
 // 
 // Post Condition:
 // Returns the total time to execute the number of iterations of the feedforward function in ms.
-double timingFunc(int iterations, NeuralNet<4> & neuralNet)
+double timingFunc(int iterations, std::function<void()> functionReference)
 {
 	auto startTime = std::chrono::steady_clock::now();
 
 	for (auto i = 0; i < iterations; ++i)
-		neuralNet.forwardFeed();
+		functionReference();
 
 	auto endTime = std::chrono::steady_clock::now();
 	auto elapsedTime = endTime - startTime;
