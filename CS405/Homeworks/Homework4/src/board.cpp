@@ -41,7 +41,18 @@ void Board::BoardInit()
 			boardRep_m[i][j].empty = false;
 		}
 	}
-		
+
+	for (int row = 0; row < BOARD_LENGTH; ++row) {
+		for (int column = 0; column < BOARD_LENGTH; ++column) {
+
+			if (row == 0 || row == 9) {
+				boardRep_m[row][column].boardEdge = true;
+			}
+
+			if (column == 0 || column == 9)
+				boardRep_m[row][column].boardEdge = true;
+		}
+	}
 }
 
 /* == Function printBoard ==================
@@ -58,6 +69,8 @@ void Board::printBoard()
 				isKing(coordinate(column,row)) ? std::cout << "R" : std::cout << "r";
 			} else if (boardRep_m[row][column].black) {
 				isKing(coordinate(column,row)) ? std::cout << "B" : std::cout << "b";
+			} else if (boardRep_m[row][column].boardEdge) {
+				std::cout << "X";
 			} else {
 				std::cout << " ";
 			}

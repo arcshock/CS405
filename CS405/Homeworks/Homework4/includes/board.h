@@ -23,19 +23,21 @@ public:
 	void makeMove(coordinate cellLocation);
 
 private:
-	const static int BOARD_LENGTH = 8;
-	
+	const static int BOARD_LENGTH = 10;
+
 	struct CellInfo {
 		bool red;
 		bool black;
 		bool king;
 		bool empty;
+		bool boardEdge;
 
 		CellInfo() {
 			red = false;
 			black = false;
 			king = false;
 			empty = true;
+			boardEdge = false;
 		}
 
 		void emptyCell() {
