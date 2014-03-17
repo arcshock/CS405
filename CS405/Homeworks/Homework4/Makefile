@@ -10,7 +10,8 @@ INCLUDES = -I ./includes/
 # LFLAGS
 # LIBS
 
-SRCS = ./src/*
+SRCS = ./src/*.cpp
+TEST = ./src/testSuites/*
 
 LAPTOP_OPFLAGS = -march=core2 -O2 
 LAPTOP_OP = laptopNeuralNet.out
@@ -37,6 +38,12 @@ build-desktop-op:
 
 run-desktop-op:
 	./build/release/desktopNeuralNet.out
+
+testMoves:
+	$(CC) $(CFLAGS) $(CFLAGS_DEBUG) $(INCLUDES) $(SRCS) $(TEST) -o ./build/debug/boardTest.out
+run-testMoves:
+	./build/debug/boardTest.out
+
 
 tau:
 	$(CC_TAU) $(CFLAGS) $(INCLUDES) $(SRCS)	-o ./build/profiling/tau_build.out
