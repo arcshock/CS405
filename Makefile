@@ -4,7 +4,7 @@
 # 
 CC = g++
 CC_TAU = tau_cxx.sh
-CFLAGS =  -std=c++11 
+CFLAGS =  -std=c++11 -pipe
 CFLAGS_DEBUG = -Wall -g -pg
 INCLUDES = -I ./include/
 # LFLAGS
@@ -13,7 +13,7 @@ INCLUDES = -I ./include/
 SRCS = ./src/*.cpp
 TEST = ./test/*
 
-LAPTOP_OPFLAGS = -march=core2 -O2 
+LAPTOP_OPFLAGS = -march=core2 -O2
 LAPTOP_OP = laptopNeuralNet.out
 
 DESKTOP_OPFLAGS = -march=corei7 -O2
@@ -28,7 +28,7 @@ run:
 
 
 tests:
-	$(CC) $(CFLAGS) $(INCLUDES) $(TEST) -o ./build/test/test_suite.out
+	$(CC) $(CFLAGS) $(INCLUDES) $(TEST) $(LAPTOP_OPFLAGS) -o ./build/test/test_suite.out
 	./build/test/test_suite.out
 
 
