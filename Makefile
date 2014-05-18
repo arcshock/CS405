@@ -7,7 +7,7 @@ CC_TAU = tau_cxx.sh
 CFLAGS =  -std=c++11 -pipe
 CFLAGS_DEBUG = -Wall -g -pg
 INCLUDES = -I ./include/
-# LFLAGS
+LFLAGS = -lboost_serialization
 # LIBS
 
 SRCS = ./src/*.cpp
@@ -28,12 +28,12 @@ run:
 
 
 tests:
-	$(CC) $(CFLAGS) $(INCLUDES) $(TEST) $(LAPTOP_OPFLAGS) -o ./build/test/test_suite.out
+	$(CC) $(CFLAGS) $(LFLAGS) $(INCLUDES) $(TEST) $(LAPTOP_OPFLAGS) -o ./build/test/test_suite.out
 	./build/test/test_suite.out
 
 
 debug:
-	$(CC) $(CFLAGS) $(CFLAGS_DEBUG) $(INCLUDES) $(TEST) -o ./build/test/test_suite_debug.out
+	$(CC) $(CFLAGS) $(CFLAGS_DEBUG) $(LFLAGS) $(INCLUDES) $(TEST) -o ./build/test/test_suite_debug.out
 	gdb ./build/test/test_suite_debug.out
 
 
