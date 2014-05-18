@@ -7,30 +7,7 @@
  */
 
 #include <vector>
-#include <random>
-
-static std::random_device randomDevice;
-static std::mt19937 random_value(randomDevice());
-static std::uniform_real_distribution<> uniform_distribution(-1, 1);
-
-
-struct network_node
-{
-	double _input;
-	double _weight;
-
-	network_node()
-	{
-		_input = 1.0;
-		_weight = uniform_distribution(random_value);
-	}
-
-	double node_value()
-	{
-		return _input*_weight;
-	}
-};
-
+#include "network_node.hpp"
 
 class Neural_Network
 {
