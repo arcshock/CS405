@@ -9,7 +9,7 @@
 #include "catch.hpp"
 #include "neural_network.hpp"
 
-TEST_CASE( "Initial Neural Network Class" ) {
+TEST_CASE( "Default Constructed Neural Network Class" ) {
 
 	Neural_Network first_net;
 
@@ -29,4 +29,8 @@ TEST_CASE( "Initial Neural Network Class" ) {
 	REQUIRE( first_net.network_evaluate(full_checker_board) == solution3 );
 }
 
-//TEST_CASE()
+TEST_CASE( "Specified Network Construction" ) {
+	std::vector<int> network_layout = {1, 1, 1, 1};
+
+	Neural_Network first_constructed_network(network_layout);
+}
