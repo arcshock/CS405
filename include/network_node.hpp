@@ -8,6 +8,8 @@
  */
 
 #include <random>
+#include <boost/archive/text_oarchive.hpp>
+#include <boost/archive/text_iarchive.hpp>
 
 static std::random_device randomDevice;
 static std::mt19937 random_value(randomDevice());
@@ -28,6 +30,19 @@ struct network_node
 	double node_value()
 	{
 		return _input*_weight;
+	}
+
+	friend class boost::serialization::access;
+	template<class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		ar & _input;
+		ar & _weight;
+	}
+
+	bool operator==(const network_node & other) const
+	{
+		return (other._input == _input && other._weight == _weight);
 	}
 };
 #endif /*NETWORK_NODE_HPP*/
