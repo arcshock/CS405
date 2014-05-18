@@ -33,7 +33,7 @@ tests:
 
 
 debug:
-	$(CC) $(CFLAGS) $(CFLAGS_DEBUG) $(INCLUDES) $(TEST) $(LAPTOP_OPFLAGS) -o ./build/test/test_suite_debug.out
+	$(CC) $(CFLAGS) $(CFLAGS_DEBUG) $(INCLUDES) $(TEST) -o ./build/test/test_suite_debug.out
 	gdb ./build/test/test_suite_debug.out
 
 
