@@ -33,21 +33,26 @@ public:
 		int network_input_size = _network[0].size();
 		int input_layer = 0;
 
-		if (network_input_size == board_input.size()) {
+		try {
 			for (int ii = 0; ii < network_input_size; ++ii) {
-				_network[input_layer][ii]._input = board_input[ii];
+					_network[input_layer][ii]._input = board_input[ii];
 			}
-		} else {
-			exit(-1); // Input to eval function does not line up with the network
+		} catch (const std::out_of_range & range_error) {
+			std::cerr << "Out of Range error loading input to network: " << range_error.what() << '\n';
 		}
 
-		for (int network_layer = input_layer + 1; network_layer < _network.size(); ++network_layer) {
-			for (int layer_column = 0; layer_column < _network[network_layer].size(); ++layer_column) {
-				for (int ii = 0; ii < _network[network_layer - 1].size(); ++ii)
-					_network[network_layer][layer_column]._input += sigmoid(_network[network_layer - 1][ii].node_value());
+		try { 
+			for (int network_layer = input_layer + 1; network_layer < _network.size(); ++network_layer) {
+				for (int layer_column = 0; layer_column < _network[network_layer].size(); ++layer_column) {
+					for (int ii = 0; ii < _network[network_layer - 1].size(); ++ii)
+						_network[network_layer][layer_column]._input += sigmoid(_network[network_layer - 1][ii].node_value());
+				}
 			}
+		} catch (const std::out_of_range & range_error) {
+			std::cerr << "Out of Range error in feed forward of network: " << range_error.what() << '\n';
 		}
 
+		auto network_output = _network.back();
 		evaluation_value = _network.back().back().node_value();
 		return sigmoid(evaluation_value);
 	}
