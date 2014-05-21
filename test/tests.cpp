@@ -8,6 +8,8 @@
 
 #include "catch.hpp"
 #include "neural_network.hpp"
+#include "checker_board.hpp"
+#include <ostream>
 
 
 std::vector<double> negative_checker_board(32, -1.0);
@@ -26,6 +28,7 @@ TEST_CASE( "Default Constructed Neural Network Class" ) {
 
 }
 
+
 TEST_CASE( "Specified Network Construction" ) {
 	std::vector<double> negative_checker_board(32, -1.0);
 
@@ -37,6 +40,7 @@ TEST_CASE( "Specified Network Construction" ) {
 	REQUIRE( constructed_network.network_evaluate(negative_checker_board) != 0.0 );
 }
 
+
 TEST_CASE( "Network Operators" ) {
 	Neural_Network first_network(standard_network);
 	Neural_Network second_network(standard_network);
@@ -44,6 +48,8 @@ TEST_CASE( "Network Operators" ) {
 	REQUIRE( first_network == first_network);
 
 }
+
+
 TEST_CASE( "Network File I/O" ) {
 	Neural_Network saved_network(standard_network);
 
@@ -66,4 +72,24 @@ TEST_CASE( "Network File I/O" ) {
 
 	restored_network.network_evaluate(negative_checker_board);
 	REQUIRE( restored_network == saved_network );	
+}
+
+
+TEST_CASE( "Checker Board" ) {
+	std::string initial_board = "_w_w_w_w\n"
+					"w_w_w_w_\n"
+					"_w_w_w_w\n"
+					"________\n"
+					"________\n"
+					"r_r_r_r_\n"
+					"_r_r_r_r\n"
+					"r_r_r_r_\n";
+
+
+	std::ostringstream board_format;
+
+	Checker_Board board;
+	board.print_board(board_format);
+
+	REQUIRE(board_format.str() == initial_board);
 }
