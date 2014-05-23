@@ -92,4 +92,7 @@ TEST_CASE( "Checker Board" ) {
 	board.print_board(board_format);
 
 	REQUIRE(board_format.str() == initial_board);
+
+
+	std::vector<coordinate> possible_moves = board.getMoves(std::make_pair('a',0);
 }
