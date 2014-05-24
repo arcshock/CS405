@@ -28,7 +28,7 @@ run:
 
 
 tests:
-	$(CC) $(CFLAGS) $(LFLAGS) $(INCLUDES) $(TEST) $(LAPTOP_OPFLAGS) -o ./build/test/test_suite.out
+	$(CC) $(CFLAGS) $(LFLAGS) $(INCLUDES) $(TEST) -o ./build/test/test_suite.out
 	./build/test/test_suite.out
 
 

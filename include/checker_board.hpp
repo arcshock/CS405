@@ -7,7 +7,7 @@
  * Purpose: A board and functions for playing checkers.
  */
 
-#include <unordered_map>
+#include <map>
 #include <string>
 #include <ostream>
 #include "game_piece.hpp"
@@ -23,23 +23,19 @@ public:
 			for (int board_row = 0; board_row < 8; ++board_row) {
 				if (board_column == 'a' || board_column == 'c') {
 					if (board_row%2 == 0) {
-						std::string location = board_column + std::to_string(board_row);
-						_board_pieces[location] = Game_Piece('r', "pawn", std::make_pair(board_column, board_row));
+						_board_pieces[std::make_pair(board_column, board_row)] = Game_Piece('r', "pawn", std::make_pair(board_column, board_row));
 					}
 				} else if (board_column == 'c') {
 					if (board_row%2 == 1) {
-						std::string location = board_column + std::to_string(board_row);
-						_board_pieces[location] = Game_Piece('r', "pawn", std::make_pair(board_column, board_row));
+						_board_pieces[std::make_pair(board_row, board_column)] = Game_Piece('r', "pawn", std::make_pair(board_column, board_row));
 					}
 				} else if (board_column == 'f' || board_column == 'h') {
 					if (board_row%2 == 1) {
-						std::string location = board_column + std::to_string(board_row);
-						_board_pieces[location] = Game_Piece('b', "pawn", std::make_pair(board_column, board_row));
+						_board_pieces[std::make_pair(board_row, board_column)] = Game_Piece('b', "pawn", std::make_pair(board_column, board_row));
 					}
 				} else if (board_column == 'g') {
 					if (board_row%2 == 0) {
-						std::string location = board_column + std::to_string(board_row);
-						_board_pieces[location] = Game_Piece('b', "pawn", std::make_pair(board_column, board_row));
+						_board_pieces[std::make_pair(board_row, board_column)] = Game_Piece('b', "pawn", std::make_pair(board_column, board_row));
 					}
 				}
 			}
@@ -55,12 +51,24 @@ public:
 
 	std::vector<coordinate> get_moves(coordinate board_coordinate)
 	{
-		// TODO
-		std::vector<coordinate> moves;
-		return moves;
+		// TODO - validate the moves that are returned by the piece.
+		std::vector<coordinate> possible_piece_moves = {};
+		possible_piece_moves.clear();
+
+		try {
+			auto queried_piece = _board_pieces.at(board_coordinate);
+			possible_piece_moves = queried_piece.get_moves();
+
+		} catch (std::out_of_range & range_error) {
+			// No piece was found at this location.
+		}
+
+		for (auto move : possible_piece_moves) {
+		}
+		return possible_piece_moves;
 	}
 private:
-	std::unordered_map<std::string, Game_Piece> _board_pieces;
+	std::map<coordinate, Game_Piece> _board_pieces;
 	std::string _board = "_w_w_w_w\n"
 				"w_w_w_w_\n"
 				"_w_w_w_w\n"
