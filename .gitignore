@@ -10,3 +10,4 @@
 *.gch
 profile.0*
 *.csv
+build/
