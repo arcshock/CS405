@@ -7,7 +7,7 @@
  * Purpose: A board and functions for playing checkers.
  */
 
-#include <unordered_map>
+#include <map>
 #include <string>
 #include <ostream>
 #include "game_piece.hpp"
@@ -55,12 +55,23 @@ public:
 
 	std::vector<coordinate> get_moves(coordinate board_coordinate)
 	{
-		// TODO
-		std::vector<coordinate> moves;
-		return moves;
+		// TODO - validate the moves that are returned by the piece.
+		std::string location = board_coordinate.first + std::to_string(board_coordinate.second);
+		std::vector<coordinate> possible_piece_moves = {};
+		possible_piece_moves.clear();
+
+		try {
+			auto queried_piece = _board_pieces.at(location);
+			possible_piece_moves = queried_piece.get_moves();
+
+		} catch (std::out_of_range & range_error) {
+			// No piece was found at this location.
+		}
+
+		return possible_piece_moves;
 	}
 private:
-	std::unordered_map<std::string, Game_Piece> _board_pieces;
+	std::map<std::string, Game_Piece> _board_pieces;
 	std::string _board = "_w_w_w_w\n"
 				"w_w_w_w_\n"
 				"_w_w_w_w\n"
