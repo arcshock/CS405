@@ -34,11 +34,11 @@ public:
 			}
 
 			if (column - 1 >= 0) {
-				possible_moves.push_back(std::make_pair(row, column - 1));
+				possible_moves.emplace_back(std::make_pair(row, column - 1));
 			}
 
 			if (column + 1 <= 7) {
-				possible_moves.push_back(std::make_pair(row, column + 1));
+				possible_moves.emplace_back(std::make_pair(row, column + 1));
 			}
 
 		} else if (_type == "king") {
@@ -46,24 +46,25 @@ public:
 			++row;
 			
 			if (column - 1 >= 0) {
-				possible_moves.push_back(std::make_pair(row, column - 1));
+				possible_moves.emplace_back(std::make_pair(row, column - 1));
 			}
 
 			if (column + 1 <= 7) {
-				possible_moves.push_back(std::make_pair(row, column + 1));
+				possible_moves.emplace_back(std::make_pair(row, column + 1));
 			}
 
 			row -= 2;
 			
 			if (column - 1 >= 0) {
-				possible_moves.push_back(std::make_pair(row, column - 1));
+				possible_moves.emplace_back(std::make_pair(row, column - 1));
 			}
 
 			if (column + 1 <= 7) {
-				possible_moves.push_back(std::make_pair(row, column + 1));
+				possible_moves.emplace_back(std::make_pair(row, column + 1));
 			}
 
 		}
+		return possible_moves; 
 	}
 private:
 	char _color;
