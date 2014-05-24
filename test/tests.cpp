@@ -1,15 +1,16 @@
-/*
+#ifndef CATCH_CONFIG_MAIN
+#define CATCH_CONFIG_MAIN
+
+/**
  * Author: Bucky Frost
  * File: tests.cpp
  * Purpose: Testing surite for checkers AI.
  */
 
-#define CATCH_CONFIG_MAIN
 
 #include "catch.hpp"
 #include "neural_network.hpp"
 #include "checker_board.hpp"
-#include <ostream>
 
 
 std::vector<double> negative_checker_board(32, -1.0);
@@ -17,6 +18,7 @@ std::vector<double> empty_checker_board(32, 0.0);
 std::vector<double> full_checker_board(32, 1.0);
 
 std::vector<int> standard_network = {32, 40, 10, 1};
+
 
 TEST_CASE( "Default Constructed Neural Network Class" ) {
 
@@ -76,14 +78,14 @@ TEST_CASE( "Network File I/O" ) {
 
 
 TEST_CASE( "Checker Board" ) {
-	std::string initial_board = "_w_w_w_w\n"
-					"w_w_w_w_\n"
-					"_w_w_w_w\n"
-					"________\n"
-					"________\n"
-					"r_r_r_r_\n"
-					"_r_r_r_r\n"
-					"r_r_r_r_\n";
+	std::string initial_board = "_w_w_w_w\n"      // h
+					"w_w_w_w_\n"  // g
+					"_w_w_w_w\n"  // f
+					"________\n"  // e
+					"________\n"  // d
+					"r_r_r_r_\n"  // c
+					"_r_r_r_r\n"  // b
+					"r_r_r_r_\n"; // a
 
 
 	std::ostringstream board_format;
@@ -94,5 +96,12 @@ TEST_CASE( "Checker Board" ) {
 	REQUIRE(board_format.str() == initial_board);
 
 
-	std::vector<coordinate> possible_moves = board.getMoves(std::make_pair('a',0);
+	std::vector<coordinate> possible_moves = board.get_moves(std::make_pair('a', 0));
+	REQUIRE( possible_moves.empty() == true );
+
+	possible_moves = board.get_moves(std::make_pair('c', 2));
+	REQUIRE( possible_moves.size() == 2 );
+	REQUIRE( possible_moves[0] == std::make_pair('d', 1) );
+	REQUIRE( possible_moves[1] == std::make_pair('d', 3) );
 }
+#endif /*CATCH_CONFIG_MAIN*/
