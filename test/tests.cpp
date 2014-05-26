@@ -52,7 +52,7 @@ TEST_CASE( "Network Operators" ) {
 }
 
 
-TEST_CASE( "Network File I/O" ) {
+TEST_CASE( "Neural Netowrk Serialization" ) {
 	Neural_Network saved_network(standard_network);
 
 	std::ofstream ofs("test_network_save.txt");
