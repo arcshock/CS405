@@ -77,7 +77,20 @@ TEST_CASE( "Neural Netowrk Serialization" ) {
 }
 
 
-TEST_CASE( "Checker Board" ) {
+TEST_CASE( "Checker Pieces" ) {
+	Checker_Piece red_pawn('r', std::make_pair('a', 0));
+	std::vector<coordinate> red_pawn_moves = red_pawn.get_moves();
+	REQUIRE( red_pawn_moves.size() == 1 );
+	REQUIRE( red_pawn_moves[0] == std::make_pair('b', 1) );
+
+	Checker_Piece white_king('w', std::make_pair('a', 0));
+	std::vector<coordinate> white_king_moves = white_king.get_moves();
+	REQUIRE( white_king_moves.size() == 1 );
+	REQUIRE( white_king_moves[0] == std::make_pair('b', 1) );
+}
+
+
+TEST_CASE( "Checker Board" ) {				//0 1 2 3 4 5 6 7
 	std::string initial_board = "_w_w_w_w\n"      // h
 					"w_w_w_w_\n"  // g
 					"_w_w_w_w\n"  // f
