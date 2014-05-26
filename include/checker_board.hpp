@@ -62,9 +62,9 @@ public:
 		} catch (std::out_of_range & range_error) {
 			// No piece was found at this location.
 		}
-
-		for (auto move : possible_piece_moves) {
-		}
+		
+		possible_piece_moves.erase(std::remove_if(possible_piece_moves.begin(), possible_piece_moves.end(), [&](coordinate location) {return _board_pieces.count(location);}));
+		
 		return possible_piece_moves;
 	}
 private:
