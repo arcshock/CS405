@@ -18,8 +18,7 @@ class Checker_Board
 public:
 	Checker_Board()
 	{
-		int board_spaces = 32;
-		for (char board_column = 'a'; board_column < 'i'; ++board_column) {
+		for (char board_column = 'h'; board_column >= 'a'; --board_column) {
 			for (int board_row = 0; board_row < 8; ++board_row) {
 				if (board_column == 'a' || board_column == 'c') {
 					if (board_row%2 == 0) {
@@ -27,15 +26,15 @@ public:
 					}
 				} else if (board_column == 'b') {
 					if (board_row%2 == 1) {
-						_board_pieces[std::make_pair(board_row, board_column)] = Checker_Piece('r', std::make_pair(board_column, board_row));
+						_board_pieces[std::make_pair(board_column, board_row)] = Checker_Piece('r', std::make_pair(board_column, board_row));
 					}
 				} else if (board_column == 'f' || board_column == 'h') {
 					if (board_row%2 == 1) {
-						_board_pieces[std::make_pair(board_row, board_column)] = Checker_Piece('w', std::make_pair(board_column, board_row));
+						_board_pieces[std::make_pair(board_column, board_row)] = Checker_Piece('w', std::make_pair(board_column, board_row));
 					}
 				} else if (board_column == 'g') {
 					if (board_row%2 == 0) {
-						_board_pieces[std::make_pair(board_row, board_column)] = Checker_Piece('w', std::make_pair(board_column, board_row));
+						_board_pieces[std::make_pair(board_column, board_row)] = Checker_Piece('w', std::make_pair(board_column, board_row));
 					}
 				}
 			}
@@ -45,7 +44,17 @@ public:
 
 	void print_board(std::ostream & output_stream)
 	{
-		output_stream << _board;
+		for (char board_column = 'h'; board_column >= 'a'; --board_column) {
+			for (int board_row = 0; board_row < 8; ++board_row) {
+				try {
+					auto piece = _board_pieces.at(std::make_pair(board_column, board_row));
+					output_stream << piece.get_type();
+				} catch (std::out_of_range & range_error) {
+					output_stream << "_";
+				}
+			}
+			output_stream << "\n";
+		}
 	}
 	
 
@@ -69,13 +78,5 @@ public:
 	}
 private:
 	std::map<coordinate, Checker_Piece> _board_pieces;
-	std::string _board = "_w_w_w_w\n"
-				"w_w_w_w_\n"
-				"_w_w_w_w\n"
-				"________\n"
-				"________\n"
-				"r_r_r_r_\n"
-				"_r_r_r_r\n"
-				"r_r_r_r_\n";
 };
 #endif /*CHECKER_BOARD_HPP*/
