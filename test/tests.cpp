@@ -229,5 +229,36 @@ TEST_CASE( "Checker Jumps" ) {
 	auto moves = board.get_moves(std::make_pair(0, 5));
 
 	REQUIRE( moves.size() == 1);
+
+	board.move_piece(std::make_pair(0, 5), moves[0]);
+
+	std::ostringstream board_output;
+	board.print_board(board_output);
+
+	std::string jump = "__w_____\n"
+				"___r____\n"
+				"___w_w__\n"
+				"____R___\n"
+				"___w_w__\n"
+				"_______W\n"
+				"_w_w____\n"
+				"__r_____\n"; 
+	REQUIRE( board_output.str() == jump );
+
+	moves = board.get_moves(std::make_pair(0, 2));
+	REQUIRE( moves.size() == 2 );
+	board.move_piece(std::make_pair(0, 2), moves[1]);
+	
+	std::string double_jump = "__w_____\n"
+				"___r____\n"
+				"___w_w__\n"
+				"____R___\n"
+				"___w_w__\n"
+				"____r__W\n"
+				"_w______\n"
+				"________\n"; 
+	board.print_board(board_output);
+	REQUIRE( board_output.str() == double_jump );
+
 }
 #endif /*CATCH_CONFIG_MAIN*/

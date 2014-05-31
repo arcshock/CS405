@@ -56,7 +56,7 @@ public:
 				
 				}
 			}
-			_board_pieces.push_back(temp);
+			_board.push_back(temp);
 			temp.clear();
 		}
 	}
@@ -67,13 +67,13 @@ public:
 			throw std::invalid_argument("Invalid Board");
 
 		for (int board_row = 0; board_row < 8; ++board_row) {
-			_board_pieces.emplace_back(8, '_');
+			_board.emplace_back(8, '_');
 		}
 
 		int string_index = 0;
 		for (char board_row = 7; board_row >= 0; --board_row) {
 			for (int board_column = 0; board_column < 8; ++board_column) {
-				_board_pieces[board_row][board_column] = input_board[string_index++];
+				_board[board_row][board_column] = input_board[string_index++];
 			}
 			++string_index; //get rid of the new line.
 		} 
@@ -84,13 +84,13 @@ public:
 	{
 		for (char board_column = 7; board_column >= 0; --board_column) {
 			for (int board_row = 0; board_row < 8; ++board_row) {
-				output_stream << _board_pieces[board_column][board_row];
+				output_stream << _board[board_column][board_row];
 			}
 			output_stream << "\n";
 		}
 
 /*
-		for (auto row : _board_pieces) {
+		for (auto row : _board) {
 			for (auto board_space : row) {
 				output_stream << board_space;
 			}
@@ -111,29 +111,54 @@ public:
 		if ((0 > column && column > 7) || ( 0 > row && row > 7))
 			throw std::out_of_range ("Invalid board location");
 
-		switch (_board_pieces[row][column]) {
+		switch (_board[row][column]) {
 			case 'r':
-				if ((column - 1 >= 0) && (row + 1 < 8) && _board_pieces[row + 1][column - 1] == '_')
-					moves.emplace_back(std::make_pair(row + 1, column - 1));
-				if ((column + 1 >= 0) && (row + 1 < 8) && _board_pieces[row + 1][column + 1] == '_')
-					moves.emplace_back(std::make_pair(row + 1, column + 1));
+				pawn_jumps('w', board_coordinate, moves);
+				if(moves.empty()) {
+					if (is_valid(std::make_pair(column - 1, row + 1)) && is_empty(std::make_pair(row + 1, column - 1)))
+						moves.emplace_back(std::make_pair(row + 1, column - 1));
+					if (is_valid(std::make_pair(column + 1, row + 1)) && is_empty(std::make_pair(row + 1, column + 1)))
+						moves.emplace_back(std::make_pair(row + 1, column + 1));
+				}
 				break;
 			case 'w':
-				if ((column - 1 >= 0) && (row - 1 >= 0) && _board_pieces[row - 1][column - 1] == '_')
-					moves.emplace_back(std::make_pair(row - 1, column - 1));
-				if ((column + 1 >= 0) && (row - 1 >= 0) && _board_pieces[row - 1][column + 1] == '_')
-					moves.emplace_back(std::make_pair(row - 1, column + 1));
+				if (is_valid(std::make_pair(column - 1, row + 1)) && (_board[row + 1][column - 1] == 'r' || _board[row + 1][column - 1] == 'R')) {
+					if (is_valid(std::make_pair(column - 2, row + 2)) && (_board[row + 2][column - 2] == '_'))
+						moves.emplace_back(std::make_pair(row + 2, column - 2));
+				} if (is_valid(std::make_pair(column + 1, row + 1)) && (_board[row + 1][column + 1] == 'r' || _board[row + 1][column + 1] == 'R')) {
+					if (is_valid(std::make_pair(column + 2, row + 2)) && (_board[row + 2][column + 2] == '_'))
+						moves.emplace_back(std::make_pair(row + 2, column + 2));
+				} else {
+					if (is_valid(std::make_pair(column - 1, row - 1)) && _board[row - 1][column - 1] == '_')
+						moves.emplace_back(std::make_pair(row - 1, column - 1));
+					if (is_valid(std::make_pair(column + 1, row - 1)) && _board[row - 1][column + 1] == '_')
+						moves.emplace_back(std::make_pair(row - 1, column + 1));
+				}
 				break;
 			case 'R':
 			case 'W':
-				if ((column - 1 >= 0) && (row + 1 < 8) && _board_pieces[row + 1][column - 1] == '_')
-					moves.emplace_back(std::make_pair(row + 1, column - 1));
-				if ((column + 1 >= 0) && (row + 1 < 8) && _board_pieces[row + 1][column + 1] == '_')
-					moves.emplace_back(std::make_pair(row + 1, column + 1));
-				if ((column - 1 >= 0) && (row - 1 >= 0) && _board_pieces[row - 1][column - 1] == '_')
-					moves.emplace_back(std::make_pair(row - 1, column - 1));
-				if ((column + 1 >= 0) && (row - 1 >= 0) && _board_pieces[row - 1][column + 1] == '_')
-					moves.emplace_back(std::make_pair(row - 1, column + 1));
+				if (is_valid(std::make_pair(column - 1, row + 1)) && (_board[row + 1][column - 1] == 'r' || _board[row + 1][column - 1] == 'R')) {
+					if (is_valid(std::make_pair(column - 2, row + 2)) && (_board[row + 2][column - 2] == '_'))
+						moves.emplace_back(std::make_pair(row + 2, column - 2));
+				} else if (is_valid(std::make_pair(column + 1, row + 1)) && (_board[row + 1][column + 1] == 'r' || _board[row + 1][column + 1] == 'R')) {
+					if (is_valid(std::make_pair(column + 2, row + 2)) && (_board[row + 2][column + 2] == '_'))
+						moves.emplace_back(std::make_pair(row + 2, column + 2));
+				} else if (is_valid(std::make_pair(column - 1, row + 1)) && (_board[row + 1][column - 1] == 'w' || _board[row + 1][column - 1] == 'W')) {
+					if (is_valid(std::make_pair(column - 2, row + 2)) && (_board[row + 2][column - 2] == '_'))
+						moves.emplace_back(std::make_pair(row + 2, column - 2));
+				} else if (is_valid(std::make_pair(column + 1, row + 1)) && (_board[row + 1][column + 1] == 'w' || _board[row + 1][column + 1] == 'W')) {
+					if (is_valid(std::make_pair(column + 2, row + 2)) && (_board[row + 2][column + 2] == '_'))
+						moves.emplace_back(std::make_pair(row + 2, column + 2));
+				} else {
+					if (is_valid(std::make_pair(column - 1, row + 1)) && _board[row + 1][column - 1] == '_')
+						moves.emplace_back(std::make_pair(row + 1, column - 1));
+					if (is_valid(std::make_pair(column + 1, row + 1)) && _board[row + 1][column + 1] == '_')
+						moves.emplace_back(std::make_pair(row + 1, column + 1));
+					if (is_valid(std::make_pair(column - 1, row - 1)) && _board[row - 1][column - 1] == '_')
+						moves.emplace_back(std::make_pair(row - 1, column - 1));
+					if (is_valid(std::make_pair(column + 1, row - 1)) && _board[row - 1][column + 1] == '_')
+						moves.emplace_back(std::make_pair(row - 1, column + 1));
+				}
 				break;
 			default:
 				break;
@@ -150,24 +175,74 @@ public:
 		int move_row = move.first;
 		int move_column = move.second;
 
-		switch (_board_pieces[row][column]) {
+		if (row + 2 == move_row)
+			if(column + 2 == move_column)
+				_board[row + 1][column + 1] = '_';
+			else
+				_board[row + 1][column - 1] = '_';
+		else if (row - 2 == move_row)
+			if (column + 2 == move_column)
+				_board[row - 1][column + 1] = '_';
+			else
+				_board[row - 1][column - 1] = '_';
+
+		switch (_board[row][column]) {
 			case 'r':
-				if (_board_pieces[move_row][move_column] == '_')
-					std::swap(_board_pieces[row][column], _board_pieces[move_row][move_column]);
+				if (_board[move_row][move_column] == '_')
+					std::swap(_board[row][column], _board[move_row][move_column]);
 				if (move_row == 7)
-					_board_pieces[move_row][move_column] = 'R';
+					_board[move_row][move_column] = 'R';
 			case 'w':
-				if (_board_pieces[move_row][move_column] == '_')
-					std::swap(_board_pieces[row][column], _board_pieces[move_row][move_column]);
+				if (_board[move_row][move_column] == '_')
+					std::swap(_board[row][column], _board[move_row][move_column]);
 				if (move_row == 0)
-					_board_pieces[move_row][move_column] = 'W';
+					_board[move_row][move_column] = 'W';
 			case 'R':
 			case 'W':
-				if (_board_pieces[move_row][move_column] == '_')
-					std::swap(_board_pieces[row][column], _board_pieces[move_row][move_column]);
+				if (_board[move_row][move_column] == '_')
+					std::swap(_board[row][column], _board[move_row][move_column]);
 		}
 	}
 private:
-	std::vector<std::vector<char>> _board_pieces;
+	std::vector<std::vector<char> > _board;
+
+	bool is_valid(coordinate board_location)
+	{
+		int row = board_location.first;
+		int column = board_location.second;
+
+		return (( 0 <= row && row < 8) && (0 <= column && column < 8));
+	}
+
+	bool is_empty(coordinate board_cell)
+	{
+		int row = board_cell.first;
+		int column = board_cell.second;
+
+		return (_board[row][column] == '_');
+	}
+
+
+	void pawn_jumps(char enemy_color, coordinate location, std::vector<coordinate> moves)
+	{
+		int row = location.first;
+		int column = location.second;
+		int row_offset = 0;
+
+		if (enemy_color == 'r')
+			row_offset = -1;
+		else
+			row_offset = 1;
+			
+		for (int col_offset = -1; col_offset < 1; col_offset += 2) {
+			if (is_valid(std::make_pair(column + col_offset, row + row_offset))) {
+				char adjacent_space = std::tolower(_board[row + row_offset][column + col_offset]);
+				if (adjacent_space == std::tolower(enemy_color))
+					if (is_valid(std::make_pair(column + col_offset*2, row + row_offset*2)) && 
+					(is_empty(std::make_pair(row + row_offset*2, column + col_offset*2))))
+						moves.emplace_back(std::make_pair(row + row_offset*2, column + col_offset*2));
+			}
+		}
+	}
 };
 #endif /*CHECKER_BOARD_HPP*/
