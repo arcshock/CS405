@@ -114,10 +114,8 @@ TEST_CASE( "Checker Board" ) {
 
 	possible_moves = board.get_moves(std::make_pair(2, 2));
 	REQUIRE( possible_moves.size() == 2 );
-	REQUIRE( possible_moves[0].first == 3 );
-	REQUIRE( possible_moves[0].second == 1 );
-	REQUIRE( possible_moves[1].first == 3 );
-	REQUIRE( possible_moves[1].second == 3 );
+	REQUIRE( possible_moves[0] == std::make_pair(3, 1) );
+	REQUIRE( possible_moves[1] == std::make_pair(3, 3) );
 
 	board.move_piece(std::make_pair(2,2), possible_moves[0] );
 	possible_moves = board.get_moves(std::make_pair(2, 2) );
@@ -125,10 +123,8 @@ TEST_CASE( "Checker Board" ) {
 
 	possible_moves = board.get_moves(std::make_pair(3, 1) );
 	REQUIRE( possible_moves.size() == 2 );
-	REQUIRE( possible_moves[0].first == 4 );
-	REQUIRE( possible_moves[0].second == 0 );
-	REQUIRE( possible_moves[1].first == 4 );
-	REQUIRE( possible_moves[1].second == 2 );
+	REQUIRE( possible_moves[0] == std::make_pair(4, 0) );
+	REQUIRE( possible_moves[1] == std::make_pair(4, 2) );
 }
 
 
@@ -151,59 +147,45 @@ TEST_CASE( "Checker Board Initialization" ) {
 
 	auto moves = board.get_moves(std::make_pair(6, 3));
 	REQUIRE( moves.size() == 2 );
-	REQUIRE( moves[0].first == 7 );
-	REQUIRE( moves[0].second == 2 );
-	
+	REQUIRE( moves[0] == std::make_pair(7, 2) );
+	REQUIRE( moves[1] == std::make_pair(7, 4) );
+
 	board.move_piece(std::make_pair(6, 3), std::make_pair(7,2));
 	
 	moves = board.get_moves(std::make_pair(7, 2));
 	REQUIRE( moves.size() == 2 );
-	REQUIRE( moves[0].first == 6 );
-	REQUIRE( moves[0].second == 1 );
-	REQUIRE( moves[1].first == 6 );
-	REQUIRE( moves[1].second == 3 );
+	REQUIRE( moves[0] == std::make_pair(6, 1) );
+	REQUIRE( moves[1] == std::make_pair(6, 3) );
 
 	moves = board.get_moves(std::make_pair(1, 4));
 	REQUIRE( moves.size() == 2 );
-	REQUIRE( moves[0].first == 0 );
-	REQUIRE( moves[0].second == 3 );
-	REQUIRE( moves[1].first == 0 );
-	REQUIRE( moves[1].second == 5 );
+	REQUIRE( moves[0] == std::make_pair(0, 3) );
+	REQUIRE( moves[1] == std::make_pair(0, 5) );
 
 	board.move_piece(std::make_pair(1, 4), moves[1]);
 
 	moves = board.get_moves(moves[1]);
 	REQUIRE( moves.size() == 2 );
-	REQUIRE( moves[0].first == 1 );
-	REQUIRE( moves[0].second == 4 );
-	REQUIRE( moves[1].first == 1 );
-	REQUIRE( moves[1].second == 6 );
+	REQUIRE( moves[0] == std::make_pair(1, 4) );
+	REQUIRE( moves[1] == std::make_pair(1, 6) );
 
 
 	moves = board.get_moves(std::make_pair(3, 1));
 
 	REQUIRE( moves.size() == 4 );
-	REQUIRE( moves[0].first == 4 );
-	REQUIRE( moves[0].second == 0 );
-	REQUIRE( moves[1].first == 4 );
-	REQUIRE( moves[1].second == 2 );
-	REQUIRE( moves[2].first == 2 );
-	REQUIRE( moves[2].second == 0 );
-	REQUIRE( moves[3].first == 2 );
-	REQUIRE( moves[3].second == 2 );
-	
+	REQUIRE( moves[0] == std::make_pair(4, 0) );
+	REQUIRE( moves[1] == std::make_pair(4, 2) );
+	REQUIRE( moves[2] == std::make_pair(2, 0) );
+	REQUIRE( moves[3] == std::make_pair(2, 2) );
+
 	
 	moves = board.get_moves(std::make_pair(3, 6));
 
 	REQUIRE( moves.size() == 4 );
-	REQUIRE( moves[0].first == 4 );
-	REQUIRE( moves[0].second == 5 );
-	REQUIRE( moves[1].first == 4 );
-	REQUIRE( moves[1].second == 7 );
-	REQUIRE( moves[2].first == 2 );
-	REQUIRE( moves[2].second == 5 );
-	REQUIRE( moves[3].first == 2 );
-	REQUIRE( moves[3].second == 7 );
+	REQUIRE( moves[0] == std::make_pair(4, 5) );
+	REQUIRE( moves[1] == std::make_pair(4, 7) );
+	REQUIRE( moves[2] == std::make_pair(2, 5) );
+	REQUIRE( moves[3] == std::make_pair(2, 7) );
 
 	board.move_piece(std::make_pair(3, 6), moves[1]);
 }
@@ -255,5 +237,12 @@ TEST_CASE( "Checker Jumps" ) {
 	board.print_board(board_output);
 	REQUIRE( board_output.str() == double_jump );
 
+
+	moves = board.get_moves(std::make_pair(4, 4));
+	REQUIRE( moves.size() == 4 );
+	REQUIRE( moves[0] == std::make_pair(2, 2));
+	REQUIRE( moves[1] == std::make_pair(2, 6));
+	REQUIRE( moves[2] == std::make_pair(6, 2));
+	REQUIRE( moves[3] == std::make_pair(6, 6));
 }
 #endif /*CATCH_CONFIG_MAIN*/
