@@ -18,65 +18,156 @@ class Checker_Board
 public:
 	Checker_Board()
 	{
-		for (char board_column = 'h'; board_column >= 'a'; --board_column) {
-			for (int board_row = 0; board_row < 8; ++board_row) {
-				if (board_column == 'a' || board_column == 'c') {
-					if (board_row%2 == 0) {
-						_board_pieces[std::make_pair(board_column, board_row)] = Checker_Piece('r', std::make_pair(board_column, board_row));
-					}
-				} else if (board_column == 'b') {
-					if (board_row%2 == 1) {
-						_board_pieces[std::make_pair(board_column, board_row)] = Checker_Piece('r', std::make_pair(board_column, board_row));
-					}
-				} else if (board_column == 'f' || board_column == 'h') {
-					if (board_row%2 == 1) {
-						_board_pieces[std::make_pair(board_column, board_row)] = Checker_Piece('w', std::make_pair(board_column, board_row));
-					}
-				} else if (board_column == 'g') {
-					if (board_row%2 == 0) {
-						_board_pieces[std::make_pair(board_column, board_row)] = Checker_Piece('w', std::make_pair(board_column, board_row));
-					}
+		std::vector<char> temp;
+		temp.clear();
+
+		for (int board_row = 0; board_row < 8; ++board_row) {
+			for (int board_column = 0; board_column < 8; ++board_column) {
+				switch (board_row) {
+					case 0:
+					case 2:
+						if (board_column%2 == 0)
+							temp.emplace_back('r');
+						else
+							temp.emplace_back('_');
+						break;
+					case 1:
+						if (board_column%2 == 1)
+							temp.emplace_back('r');
+						else
+							temp.emplace_back('_');
+						break;
+					case 5:
+					case 7:
+						if (board_column%2 == 1)
+							temp.emplace_back('w');
+						else
+							temp.emplace_back('_');
+						break;
+					case 6:
+						if (board_column%2 == 0) 
+							temp.emplace_back('w');
+						else
+							temp.emplace_back('_');
+						break;
+					default:
+						temp.emplace_back('_');
+						break;
+				
 				}
 			}
+			_board_pieces.push_back(temp);
+			temp.clear();
 		}
+	}
+
+	Checker_Board(std::string input_board)
+	{
+		if (input_board.size() != 72)
+			throw std::invalid_argument("Invalid Board");
+
+		for (int board_row = 0; board_row < 8; ++board_row) {
+			_board_pieces.emplace_back(8, '_');
+		}
+
+		int string_index = 0;
+		for (char board_row = 7; board_row >= 0; --board_row) {
+			for (int board_column = 0; board_column < 8; ++board_column) {
+				_board_pieces[board_row][board_column] = input_board[string_index++];
+			}
+			++string_index; //get rid of the new line.
+		} 
 	}
 
 
 	void print_board(std::ostream & output_stream)
 	{
-		for (char board_column = 'h'; board_column >= 'a'; --board_column) {
+		for (char board_column = 7; board_column >= 0; --board_column) {
 			for (int board_row = 0; board_row < 8; ++board_row) {
-				try {
-					auto piece = _board_pieces.at(std::make_pair(board_column, board_row));
-					output_stream << piece.get_type();
-				} catch (std::out_of_range & range_error) {
-					output_stream << "_";
-				}
+				output_stream << _board_pieces[board_column][board_row];
 			}
 			output_stream << "\n";
 		}
+
+/*
+		for (auto row : _board_pieces) {
+			for (auto board_space : row) {
+				output_stream << board_space;
+			}
+			output_stream << "\n";
+		}
+*/
 	}
 	
 
+	// This could be a bad method in that it reports moves of a piece that could be made invalid.
 	std::vector<coordinate> get_moves(coordinate board_coordinate)
 	{
-		// TODO - validate the moves that are returned by the piece.
-		std::vector<coordinate> possible_piece_moves = {};
-		possible_piece_moves.clear();
+		std::vector<coordinate> moves;
 
-		try {
-			auto queried_piece = _board_pieces.at(board_coordinate);
-			possible_piece_moves = queried_piece.get_moves();
+		int row = board_coordinate.first;
+		int column = board_coordinate.second;
 
-		} catch (std::out_of_range & range_error) {
-			// No piece was found at this location.
+		if ((0 > column && column > 7) || ( 0 > row && row > 7))
+			throw std::out_of_range ("Invalid board location");
+
+		switch (_board_pieces[row][column]) {
+			case 'r':
+				if ((column - 1 >= 0) && (row + 1 < 8) && _board_pieces[row + 1][column - 1] == '_')
+					moves.emplace_back(std::make_pair(row + 1, column - 1));
+				if ((column + 1 >= 0) && (row + 1 < 8) && _board_pieces[row + 1][column + 1] == '_')
+					moves.emplace_back(std::make_pair(row + 1, column + 1));
+				break;
+			case 'w':
+				if ((column - 1 >= 0) && (row - 1 >= 0) && _board_pieces[row - 1][column - 1] == '_')
+					moves.emplace_back(std::make_pair(row - 1, column - 1));
+				if ((column + 1 >= 0) && (row - 1 >= 0) && _board_pieces[row - 1][column + 1] == '_')
+					moves.emplace_back(std::make_pair(row - 1, column + 1));
+				break;
+			case 'R':
+			case 'W':
+				if ((column - 1 >= 0) && (row + 1 < 8) && _board_pieces[row + 1][column - 1] == '_')
+					moves.emplace_back(std::make_pair(row + 1, column - 1));
+				if ((column + 1 >= 0) && (row + 1 < 8) && _board_pieces[row + 1][column + 1] == '_')
+					moves.emplace_back(std::make_pair(row + 1, column + 1));
+				if ((column - 1 >= 0) && (row - 1 >= 0) && _board_pieces[row - 1][column - 1] == '_')
+					moves.emplace_back(std::make_pair(row - 1, column - 1));
+				if ((column + 1 >= 0) && (row - 1 >= 0) && _board_pieces[row - 1][column + 1] == '_')
+					moves.emplace_back(std::make_pair(row - 1, column + 1));
+				break;
+			default:
+				break;
 		}
-		
-		possible_piece_moves.erase(std::remove_if(possible_piece_moves.begin(), possible_piece_moves.end(), [&](coordinate location) {return _board_pieces.count(location);}));
-		
-		return possible_piece_moves;
+		return moves;
+	}
+
+
+	void move_piece(coordinate piece_location, coordinate move)
+	{
+		int row = piece_location.first;
+		int column = piece_location.second;
+
+		int move_row = move.first;
+		int move_column = move.second;
+
+		switch (_board_pieces[row][column]) {
+			case 'r':
+				if (_board_pieces[move_row][move_column] == '_')
+					std::swap(_board_pieces[row][column], _board_pieces[move_row][move_column]);
+				if (move_row == 7)
+					_board_pieces[move_row][move_column] = 'R';
+			case 'w':
+				if (_board_pieces[move_row][move_column] == '_')
+					std::swap(_board_pieces[row][column], _board_pieces[move_row][move_column]);
+				if (move_row == 0)
+					_board_pieces[move_row][move_column] = 'W';
+			case 'R':
+			case 'W':
+				if (_board_pieces[move_row][move_column] == '_')
+					std::swap(_board_pieces[row][column], _board_pieces[move_row][move_column]);
+		}
 	}
 private:
-	std::map<coordinate, Checker_Piece> _board_pieces;
+	std::vector<std::vector<char>> _board_pieces;
 };
 #endif /*CHECKER_BOARD_HPP*/
