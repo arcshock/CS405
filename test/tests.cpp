@@ -154,12 +154,8 @@ TEST_CASE( "Checker Board Initialization" ) {
 	REQUIRE( moves[0].first == 7 );
 	REQUIRE( moves[0].second == 2 );
 	
-	board.print_board(std::cout);
-	std::cout << std::endl;
-
 	board.move_piece(std::make_pair(6, 3), std::make_pair(7,2));
 	
-	board.print_board(std::cout);
 	moves = board.get_moves(std::make_pair(7, 2));
 	REQUIRE( moves.size() == 2 );
 	REQUIRE( moves[0].first == 6 );
@@ -209,9 +205,7 @@ TEST_CASE( "Checker Board Initialization" ) {
 	REQUIRE( moves[3].first == 2 );
 	REQUIRE( moves[3].second == 7 );
 
-	std::cout << std::endl;
 	board.move_piece(std::make_pair(3, 6), moves[1]);
-	board.print_board(std::cout);
 }
 
 TEST_CASE( "Checker Jumps" ) {
@@ -234,7 +228,6 @@ TEST_CASE( "Checker Jumps" ) {
 
 	std::ostringstream board_output;
 	board.print_board(board_output);
-
 	std::string jump = "__w_____\n"
 				"___r____\n"
 				"___w_w__\n"
@@ -244,6 +237,8 @@ TEST_CASE( "Checker Jumps" ) {
 				"_w_w____\n"
 				"__r_____\n"; 
 	REQUIRE( board_output.str() == jump );
+	board_output.str("");
+	board_output.clear();
 
 	moves = board.get_moves(std::make_pair(0, 2));
 	REQUIRE( moves.size() == 2 );
