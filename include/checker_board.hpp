@@ -88,15 +88,6 @@ public:
 			}
 			output_stream << "\n";
 		}
-
-/*
-		for (auto row : _board) {
-			for (auto board_space : row) {
-				output_stream << board_space;
-			}
-			output_stream << "\n";
-		}
-*/
 	}
 	
 
@@ -108,7 +99,7 @@ public:
 		int row = board_coordinate.first;
 		int column = board_coordinate.second;
 
-		if (!is_valid(std::make_pair(row, column)))
+		if (!is_valid(board_coordinate))
 			throw std::out_of_range ("Invalid board location");
 
 		switch (_board[row][column]) {
@@ -126,8 +117,7 @@ public:
 				break;
 			case 'R':
 			case 'W':
-				pawn_jumps('R', board_coordinate, moves);
-				pawn_jumps('W', board_coordinate, moves);
+				king_jumps(_board[row][column], board_coordinate, moves);
 				if (moves.empty()) {
 					pawn_moves('r', board_coordinate, moves);
 					pawn_moves('w', board_coordinate, moves);
@@ -161,20 +151,36 @@ public:
 
 		switch (_board[row][column]) {
 			case 'r':
-				if (_board[move_row][move_column] == '_')
+				if (is_empty(move))
 					std::swap(_board[row][column], _board[move_row][move_column]);
 				if (move_row == 7)
 					_board[move_row][move_column] = 'R';
 			case 'w':
-				if (_board[move_row][move_column] == '_')
+				if (is_empty(move))
 					std::swap(_board[row][column], _board[move_row][move_column]);
 				if (move_row == 0)
 					_board[move_row][move_column] = 'W';
 			case 'R':
 			case 'W':
-				if (_board[move_row][move_column] == '_')
+				if (is_empty(move))
 					std::swap(_board[row][column], _board[move_row][move_column]);
 		}
+	}
+
+
+	std::vector<int> get_state()
+	{
+		std::vector<int> state;
+
+		for (int row = 0; row < 8; ++row) {
+			for (int col = 0; col < 8; ++col) {
+				if (row % 2 == 0 && col % 2 == 0)
+					state.emplace_back(_board[row][col]);
+				else if (row % 2 == 1 && col % 2 == 1)
+					state.emplace_back(_board[row][col]);
+			}
+		}
+		return state;
 	}
 private:
 	std::vector<std::vector<char> > _board;
@@ -202,10 +208,7 @@ private:
 		int column = location.second;
 		int row_offset = 0;
 
-		if (std::tolower(piece_color) == 'r')
-			row_offset = 1;
-		else
-			row_offset = -1;
+		(std::tolower(piece_color) == 'r') ? (row_offset = 1) : (row_offset = -1);
 
 		for (int col_offset = -1; col_offset <= 1; col_offset += 2) {
 			if (is_valid(std::make_pair(column + col_offset, row + row_offset)) && is_empty(std::make_pair(row + row_offset, column + col_offset)))
@@ -237,6 +240,31 @@ private:
 						moves.emplace_back(std::make_pair(row + row_offset*2, column + col_offset*2));
 			}
 		}
+	}
+
+	void king_jumps(char piece_color, coordinate location, std::vector<coordinate> & moves)
+	{
+		int row = location.first;
+		int column = location.second;
+		int row_offset = 0;
+		char enemy_color = ' ';
+
+		(std::tolower(piece_color) == 'r') ? (enemy_color = 'w') : (enemy_color = 'r');
+
+		for (int row_offset = -1; row_offset <= 1; row_offset += 2) {
+			for (int col_offset = -1; col_offset <= 1; col_offset += 2) {
+				if (is_valid(std::make_pair(column + col_offset, row + row_offset))) {
+
+					char adjacent_space = std::tolower(_board[row + row_offset][column + col_offset]);
+
+					if (adjacent_space == std::tolower(enemy_color))
+						if (is_valid(std::make_pair(column + col_offset*2, row + row_offset*2)) && 
+						(is_empty(std::make_pair(row + row_offset*2, column + col_offset*2))))
+							moves.emplace_back(std::make_pair(row + row_offset*2, column + col_offset*2));
+				}
+			}
+		}
+
 	}
 };
 #endif /*CHECKER_BOARD_HPP*/

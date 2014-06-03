@@ -20,17 +20,6 @@ std::vector<double> full_checker_board(32, 1.0);
 std::vector<int> standard_network = {32, 40, 10, 1};
 
 
-TEST_CASE( "Default Constructed Neural Network Class" ) {
-
-	Neural_Network first_net;
-
-	double solution1 = (-1.0*32.0)/(1.0 + abs(-1.0*32.0));
-	double solution2 = (0.0*32.0)/(1.0 + abs(0.0*32.0));
-	double solution3 = (1.0*32.0)/(1.0 + abs(1.0*32.0));
-
-}
-
-
 TEST_CASE( "Specified Network Construction" ) {
 	std::vector<double> negative_checker_board(32, -1.0);
 
@@ -76,19 +65,6 @@ TEST_CASE( "Neural Netowrk Serialization" ) {
 	REQUIRE( restored_network == saved_network );	
 }
 
-/*
-TEST_CASE( "Checker Pieces" ) {
-	Checker_Piece red_pawn('r', std::make_pair('a', 0));
-	std::vector<coordinate> red_pawn_moves = red_pawn.get_moves();
-	REQUIRE( red_pawn_moves.size() == 1 );
-	REQUIRE( red_pawn_moves[0] == std::make_pair('b', 1) );
-
-	Checker_Piece white_king('w', std::make_pair('a', 0));
-	std::vector<coordinate> white_king_moves = white_king.get_moves();
-	REQUIRE( white_king_moves.size() == 1 );
-	REQUIRE( white_king_moves[0] == std::make_pair('b', 1) );
-}
-*/
 
 TEST_CASE( "Checker Board" ) {				
 	std::string initial_board = "_w_w_w_w\n"      // 7
@@ -198,7 +174,7 @@ TEST_CASE( "Checker Jumps" ) {
 				"___w_w__\n"
 				"________\n"
 				"_w_w__r_\n"
-				"__r__W__\n"; // size == 72
+				"__r__W__\n";
 
 	Checker_Board board(jump_trial);
 
@@ -244,5 +220,24 @@ TEST_CASE( "Checker Jumps" ) {
 	REQUIRE( moves[1] == std::make_pair(2, 6));
 	REQUIRE( moves[2] == std::make_pair(6, 2));
 	REQUIRE( moves[3] == std::make_pair(6, 6));
+}
+
+
+TEST_CASE( "Minimax" ) {
+	std::vector<int> board_state;
+
+	Neural_Network red_player;
+	Neural_Network white_player;
+
+	Checker_Board board;
+
+	board_state = board.get_state();
+
+	for (int row = 0; row < 8; ++row)
+		for (int col = 0; col < 8; ++col)
+			std::make_pair(row, col);
+	red_player.network_evaluate(board_state);
+
+	minimax(red_player, white_player, board);
 }
 #endif /*CATCH_CONFIG_MAIN*/
