@@ -168,9 +168,21 @@ public:
 	}
 
 
-	std::vector<int> get_state()
+	bool is_red(coordinate location)
 	{
-		std::vector<int> state;
+		return (std::tolower(_board[location.first][location.second]) == 'r');
+	}
+
+
+	bool is_white(coordinate location)
+	{
+		return (std::tolower(_board[location.first][location.second]) == 'w');
+	}
+
+
+	std::vector<double> get_state()
+	{
+		std::vector<double> state;
 
 		for (int row = 0; row < 8; ++row) {
 			for (int col = 0; col < 8; ++col) {
