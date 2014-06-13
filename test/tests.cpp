@@ -11,6 +11,7 @@
 #include "catch.hpp"
 #include "neural_network.hpp"
 #include "checker_board.hpp"
+#include "minimax.hpp"
 
 
 std::vector<double> negative_checker_board(32, -1.0);
@@ -224,10 +225,10 @@ TEST_CASE( "Checker Jumps" ) {
 
 
 TEST_CASE( "Minimax" ) {
-	std::vector<int> board_state;
+	std::vector<double> board_state;
 
-	Neural_Network red_player;
-	Neural_Network white_player;
+	Neural_Network red_player(standard_network);
+	Neural_Network white_player(standard_network);
 
 	Checker_Board board;
 
@@ -238,6 +239,15 @@ TEST_CASE( "Minimax" ) {
 			std::make_pair(row, col);
 	red_player.network_evaluate(board_state);
 
-	minimax(red_player, white_player, board);
+	board.print_board(std::cout);
+
+	board = minimax(red_player, board, 6, 'r');
+
+	std::cout << std::endl;
+	board.print_board(std::cout);
+
+	board = minimax(white_player, board, 6, 'w');
+	std::cout << std::endl;
+	board.print_board(std::cout);
 }
 #endif /*CATCH_CONFIG_MAIN*/
