@@ -4,6 +4,9 @@
  * Purpose: Header file of the minimax search algorithm.
  */
 
+#ifndef MINIMAX_HPP
+#define MINIMAX_HPP
+
 #include "neural_network.hpp"
 #include "checker_board.hpp"
 #include <queue>
@@ -105,3 +108,4 @@ Checker_Board max(Neural_Network & player, Checker_Board board, std::vector<piec
 	}
 	return best_state;
 }
+#endif /*MINIMAX_HPP*/
