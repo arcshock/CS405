@@ -12,6 +12,7 @@
 #include "neural_network.hpp"
 #include "checker_board.hpp"
 #include "minimax.hpp"
+#include "tournament.hpp"
 
 
 std::vector<double> negative_checker_board(32, -1.0);
@@ -249,5 +250,14 @@ TEST_CASE( "Minimax" ) {
 	board = minimax(white_player, board, 6, 'w');
 	std::cout << std::endl;
 	board.print_board(std::cout);
+}
+
+TEST_CASE( "Tournament" ) {
+	Neural_Network red_player(standard_network);
+	Neural_Network white_player(standard_network);
+	
+	Tournament one_on_one;
+
+	one_on_one.start(red_player, white_player);
 }
 #endif /*CATCH_CONFIG_MAIN*/
