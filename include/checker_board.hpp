@@ -180,7 +180,7 @@ public:
 	}
 
 
-	std::vector<double> get_state()
+	const std::vector<double> get_state()
 	{
 		std::vector<double> state;
 
@@ -194,6 +194,7 @@ public:
 		}
 		return state;
 	}
+
 private:
 	std::vector<std::vector<char> > _board;
 
@@ -279,4 +280,9 @@ private:
 
 	}
 };
+	
+bool operator==(Checker_Board & lhs, Checker_Board & rhs)
+{
+	return (lhs.get_state() == rhs.get_state());
+}
 #endif /*CHECKER_BOARD_HPP*/
