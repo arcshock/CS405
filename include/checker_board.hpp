@@ -7,7 +7,6 @@
  * Purpose: A board and functions for playing checkers.
  */
 
-#include <map>
 #include <string>
 #include <ostream>
 #include "game_piece.hpp"
@@ -15,6 +14,9 @@
 
 class Checker_Board
 {
+private:
+	std::vector<std::vector<char> > _board;
+
 public:
 	Checker_Board()
 	{
@@ -82,9 +84,9 @@ public:
 
 	void print_board(std::ostream & output_stream)
 	{
-		for (char board_column = 7; board_column >= 0; --board_column) {
-			for (int board_row = 0; board_row < 8; ++board_row) {
-				output_stream << _board[board_column][board_row];
+		for (auto row : _board) {
+			for (auto element : row) {
+				output_stream << element;
 			}
 			output_stream << "\n";
 		}
@@ -94,49 +96,24 @@ public:
 	// This could be a bad method in that it reports moves of a piece that could be made invalid.
 	std::vector<coordinate> get_moves(coordinate board_coordinate)
 	{
-		std::vector<coordinate> moves;
+		std::vector<coordinate> possible_moves;
 
-		int row = board_coordinate.first;
-		int column = board_coordinate.second;
-
-		if (!is_valid(board_coordinate))
+		if (!is_valid(board_coordinate)) {
 			throw std::out_of_range ("Invalid board location");
-
-		switch (_board[row][column]) {
-			case 'r':
-				pawn_jumps('r', board_coordinate, moves);
-				if(moves.empty()) {
-					pawn_moves('r', board_coordinate, moves);
-				}
-				break;
-			case 'w':
-				pawn_jumps('w', board_coordinate, moves);
-				if (moves.empty()) {
-					pawn_moves('w', board_coordinate, moves);
-				}
-				break;
-			case 'R':
-			case 'W':
-				king_jumps(_board[row][column], board_coordinate, moves);
-				if (moves.empty()) {
-					pawn_moves('r', board_coordinate, moves);
-					pawn_moves('w', board_coordinate, moves);
-				}
-				break;
-			default:
-				break;
 		}
-		return moves;
+
+		piece_jumps(board_coordinate, possible_moves);
+		return possible_moves;
 	}
 
 
-	void move_piece(coordinate piece_location, coordinate move)
+	void move_piece(coordinate piece_location, coordinate move_location)
 	{
 		int row = piece_location.first;
 		int column = piece_location.second;
 
-		int move_row = move.first;
-		int move_column = move.second;
+		int move_row = move_location.first;
+		int move_column = move_location.second;
 
 		if (row + 2 == move_row)
 			if(column + 2 == move_column)
@@ -149,20 +126,20 @@ public:
 			else
 				_board[row - 1][column - 1] = '_';
 
-		switch (_board[row][column]) {
+		switch (cell_info(piece_location)) {
 			case 'r':
-				if (is_empty(move))
+				if (is_empty(move_location))
 					std::swap(_board[row][column], _board[move_row][move_column]);
 				if (move_row == 7)
 					_board[move_row][move_column] = 'R';
 			case 'w':
-				if (is_empty(move))
+				if (is_empty(move_location))
 					std::swap(_board[row][column], _board[move_row][move_column]);
 				if (move_row == 0)
 					_board[move_row][move_column] = 'W';
 			case 'R':
 			case 'W':
-				if (is_empty(move))
+				if (is_empty(move_location))
 					std::swap(_board[row][column], _board[move_row][move_column]);
 		}
 	}
@@ -196,7 +173,16 @@ public:
 	}
 
 private:
-	std::vector<std::vector<char> > _board;
+	char cell_info(coordinate board_location)
+	{
+		if (!is_valid(board_location)) {
+			throw std::out_of_range ("Invalid board location");
+		}
+
+		int row = board_location.first;
+		int col = board_location.second;
+		return _board[row][col];
+	}
 
 	bool is_valid(coordinate board_location)
 	{
@@ -231,40 +217,38 @@ private:
 	}
 
 
-	void pawn_jumps(char piece_color, coordinate location, std::vector<coordinate> & moves)
+	// Make recursive to get the double jumps?
+	void piece_jumps(coordinate location, std::vector<coordinate> & moves)
 	{
 		int row = location.first;
 		int column = location.second;
 		int row_offset = 0;
 		char enemy_color = ' ';
 
-		(std::tolower(piece_color) == 'r') ? (enemy_color = 'w') : (enemy_color = 'r');
+		(std::tolower(cell_info(location)) == 'r') ? (enemy_color = 'w') : (enemy_color = 'r');
 
-		(piece_color == 'r' || piece_color == 'W') ? (row_offset = 1) :	(row_offset = -1);
-			
-		for (int col_offset = -1; col_offset <= 1; col_offset += 2) {
-			if (is_valid(std::make_pair(column + col_offset, row + row_offset))) {
-
-				char adjacent_space = std::tolower(_board[row + row_offset][column + col_offset]);
-
-				if (adjacent_space == std::tolower(enemy_color))
-					if (is_valid(std::make_pair(column + col_offset*2, row + row_offset*2)) && 
-					(is_empty(std::make_pair(row + row_offset*2, column + col_offset*2))))
-						moves.emplace_back(std::make_pair(row + row_offset*2, column + col_offset*2));
-			}
+		switch (cell_info(location)) {
+		case 'r':
+			enemy_color = 'w';
+			++row_offset;
+			break;
+		case 'w':
+			enemy_color = 'r';
+			--row_offset;
+			break;
+		case 'R':
+			enemy_color = 'w';
+			--row_offset;
+			break;
+		case 'W':
+			enemy_color = 'r';
+			--row_offset;
+			break;
+		default:
+			break;
 		}
-	}
 
-	void king_jumps(char piece_color, coordinate location, std::vector<coordinate> & moves)
-	{
-		int row = location.first;
-		int column = location.second;
-		int row_offset = 0;
-		char enemy_color = ' ';
-
-		(std::tolower(piece_color) == 'r') ? (enemy_color = 'w') : (enemy_color = 'r');
-
-		for (int row_offset = -1; row_offset <= 1; row_offset += 2) {
+		for (; row_offset <= 1; row_offset += 2) {
 			for (int col_offset = -1; col_offset <= 1; col_offset += 2) {
 				if (is_valid(std::make_pair(column + col_offset, row + row_offset))) {
 

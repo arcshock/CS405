@@ -17,7 +17,14 @@ typedef std::pair<coordinate, std::vector<coordinate> > piece_moves;
 Checker_Board min(Neural_Network & player, Checker_Board board, std::vector<piece_moves> moves);
 Checker_Board max(Neural_Network & player, Checker_Board board, std::vector<piece_moves> moves);
 Checker_Board minimax(Neural_Network & player, Checker_Board & board, int depth, char player_color);
+Checker_Board * minimax(Player * player, Checker_Board * board, int depth);
 
+
+Checker_Board * minimax(Player * player, Checker_Board * board, int depth)
+{
+	// TODO
+	return board;
+}
 
 // Maybe have the order of the network be the determining factor for maximizing
 Checker_Board minimax(Neural_Network & player, Checker_Board & board, int depth, char player_color)

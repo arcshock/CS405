@@ -9,17 +9,17 @@
 #include <vector>
 #include <fstream>
 #include "network_node.hpp"
+#include "player.hpp"
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/serialization/vector.hpp>
 
-class Neural_Network
+class Neural_Network : public Player
 {
 public:
-	Neural_Network() = default;
 
 
-	Neural_Network(std::vector<int> network_specifications)
+	Neural_Network(std::vector<int> network_specifications): Player(' ', "unknown")
 	{
 		int network_layers = network_specifications.size();
 
@@ -72,6 +72,8 @@ public:
 		return !(*this == other);
 	}
 private:
+	Neural_Network() = default;
+
 	friend class boost::serialization::access;
 	template<class Archive>
 	void serialize(Archive & ar, const unsigned int version)
