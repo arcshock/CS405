@@ -9,7 +9,7 @@
 
 #include <utility>
 
-typedef std::pair<char, int> coordinate;
+typedef std::pair<int, int> coordinate;
 
 class Game_Piece 
 {

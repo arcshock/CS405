@@ -21,7 +21,6 @@ std::vector<double> full_checker_board(32, 1.0);
 
 std::vector<int> standard_network = {32, 40, 10, 1};
 
-
 TEST_CASE( "Specified Network Construction" ) {
 	std::vector<double> negative_checker_board(32, -1.0);
 
@@ -69,15 +68,15 @@ TEST_CASE( "Neural Netowrk Serialization" ) {
 
 
 TEST_CASE( "Checker Board" ) {				
-	std::string initial_board = "_w_w_w_w\n"      // 7
-					"w_w_w_w_\n"  // 6
-					"_w_w_w_w\n"  // 5
-					"________\n"  // 4
-					"________\n"  // 3
-					"r_r_r_r_\n"  // 2
+	std::string initial_board = "r_r_r_r_\n"      // 0 1 2 3 4 5 6 7
 					"_r_r_r_r\n"  // 1
-					"r_r_r_r_\n"; // 0 1 2 3 4 5 6 7
-
+					"r_r_r_r_\n"  // 2
+					"________\n"  // 3
+					"________\n"  // 4
+					"_w_w_w_w\n"  // 5
+					"w_w_w_w_\n"  // 6
+					"_w_w_w_w\n"; // 7
+				
 
 	std::ostringstream board_format;
 
@@ -108,12 +107,12 @@ TEST_CASE( "Checker Board" ) {
 
 TEST_CASE( "Checker Board Initialization" ) {
 	std::string king_trial = "________\n"
-				"___r____\n"
+				"____w___\n"
 				"________\n"
 				"________\n"
 				"_W____R_\n"
 				"________\n"
-				"____w___\n"
+				"___r____\n"
 				"________\n"; // size == 72
 
 	Checker_Board board(king_trial);
@@ -148,47 +147,45 @@ TEST_CASE( "Checker Board Initialization" ) {
 	REQUIRE( moves[1] == std::make_pair(1, 6) );
 
 
-	moves = board.get_moves(std::make_pair(3, 1));
+	moves = board.get_moves(std::make_pair(4, 1));
 
 	REQUIRE( moves.size() == 4 );
-	REQUIRE( moves[0] == std::make_pair(4, 0) );
-	REQUIRE( moves[1] == std::make_pair(4, 2) );
-	REQUIRE( moves[2] == std::make_pair(2, 0) );
-	REQUIRE( moves[3] == std::make_pair(2, 2) );
+	REQUIRE( moves[0] == std::make_pair(3, 0) );
+	REQUIRE( moves[1] == std::make_pair(3, 2) );
+	REQUIRE( moves[2] == std::make_pair(5, 0) );
+	REQUIRE( moves[3] == std::make_pair(5, 2) );
 
 	
-	moves = board.get_moves(std::make_pair(3, 6));
+	moves = board.get_moves(std::make_pair(4, 6));
 
 	REQUIRE( moves.size() == 4 );
-	REQUIRE( moves[0] == std::make_pair(4, 5) );
-	REQUIRE( moves[1] == std::make_pair(4, 7) );
-	REQUIRE( moves[2] == std::make_pair(2, 5) );
-	REQUIRE( moves[3] == std::make_pair(2, 7) );
-
-	board.move_piece(std::make_pair(3, 6), moves[1]);
+	REQUIRE( moves[0] == std::make_pair(3, 5) );
+	REQUIRE( moves[1] == std::make_pair(3, 7) );
+	REQUIRE( moves[2] == std::make_pair(5, 5) );
+	REQUIRE( moves[3] == std::make_pair(5, 7) );
 }
 
 TEST_CASE( "Checker Jumps" ) {
-	std::string jump_trial = "__w_____\n"
-				"___r____\n"
-				"___w_w__\n"
-				"____R___\n"
-				"___w_w__\n"
-				"________\n"
-				"_w_w__r_\n"
-				"__r__W__\n";
+	std::string jump_trial = "__w_____\n" // 0 1 2 3 4 5 6 7
+				 "___r____\n"  // 1
+				 "___w_w__\n"  // 2
+				 "____R___\n"  // 3
+				 "___w_w__\n"  // 4
+				 "________\n"  // 5
+				 "_w_w__r_\n"  // 6
+				 "__r__W__\n"; // 7
 
 	Checker_Board board(jump_trial);
 
-	auto moves = board.get_moves(std::make_pair(0, 5));
+	auto moves = board.get_moves(std::make_pair(7, 5));
 
 	REQUIRE( moves.size() == 1);
 
-	board.move_piece(std::make_pair(0, 5), moves[0]);
+	board.move_piece(std::make_pair(7, 5), moves[0]);
 
 	std::ostringstream board_output;
 	board.print_board(board_output);
-	std::string jump = "__w_____\n"
+	std::string jump = 	"__w_____\n"
 				"___r____\n"
 				"___w_w__\n"
 				"____R___\n"
@@ -201,30 +198,31 @@ TEST_CASE( "Checker Jumps" ) {
 	board_output.clear();
 
 	moves = board.get_moves(std::make_pair(0, 2));
-	REQUIRE( moves.size() == 2 );
-	board.move_piece(std::make_pair(0, 2), moves[1]);
+	REQUIRE( moves.size() == 1 );
+	board.move_piece(std::make_pair(0, 2), moves[0]);
 	
-	std::string double_jump = "__w_____\n"
-				"___r____\n"
-				"___w_w__\n"
-				"____R___\n"
-				"___w_w__\n"
-				"____r__W\n"
-				"_w______\n"
-				"________\n"; 
+	std::string double_jump = "________\n"
+				  "________\n"
+			 	  "___www__\n"
+				  "____R___\n"
+				  "___w_w__\n"
+				  "_______W\n"
+				  "_w_w____\n"
+				  "__r_____\n"; 
 	board.print_board(board_output);
 	REQUIRE( board_output.str() == double_jump );
 
 
-	moves = board.get_moves(std::make_pair(4, 4));
+	moves = board.get_moves(std::make_pair(3, 4));
 	REQUIRE( moves.size() == 4 );
-	REQUIRE( moves[0] == std::make_pair(2, 2));
-	REQUIRE( moves[1] == std::make_pair(2, 6));
-	REQUIRE( moves[2] == std::make_pair(6, 2));
-	REQUIRE( moves[3] == std::make_pair(6, 6));
+	REQUIRE( moves[0] == std::make_pair(1, 2));
+	REQUIRE( moves[1] == std::make_pair(1, 6));
+	REQUIRE( moves[2] == std::make_pair(5, 2));
+	REQUIRE( moves[3] == std::make_pair(5, 6));
 }
 
 
+/*
 TEST_CASE( "Minimax" ) {
 	std::vector<double> board_state;
 
@@ -260,4 +258,5 @@ TEST_CASE( "Tournament" ) {
 
 	one_on_one.start(red_player, white_player);
 }
+*/
 #endif /*CATCH_CONFIG_MAIN*/

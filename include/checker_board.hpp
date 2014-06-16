@@ -73,7 +73,7 @@ public:
 		}
 
 		int string_index = 0;
-		for (char board_row = 7; board_row >= 0; --board_row) {
+		for (char board_row = 0; board_row <= 7; ++board_row) {
 			for (int board_column = 0; board_column < 8; ++board_column) {
 				_board[board_row][board_column] = input_board[string_index++];
 			}
@@ -102,7 +102,14 @@ public:
 			throw std::out_of_range ("Invalid board location");
 		}
 
-		piece_jumps(board_coordinate, possible_moves);
+		if (is_red(board_coordinate) || is_white(board_coordinate)) {
+			piece_jumps(board_coordinate, possible_moves);
+
+			if (!possible_moves.size()) {
+				piece_moves(board_coordinate, possible_moves);	
+			}
+		}
+
 		return possible_moves;
 	}
 
@@ -201,19 +208,35 @@ private:
 	}
 
 
-	void pawn_moves(char piece_color, coordinate location, std::vector<coordinate> & moves)
+	void piece_moves(coordinate location, std::vector<coordinate> & moves)
 	{
 		int row = location.first;
 		int column = location.second;
 		int row_offset = 0;
+		int row_limit = 1;
 
-		(std::tolower(piece_color) == 'r') ? (row_offset = 1) : (row_offset = -1);
-
-		for (int col_offset = -1; col_offset <= 1; col_offset += 2) {
-			if (is_valid(std::make_pair(column + col_offset, row + row_offset)) && is_empty(std::make_pair(row + row_offset, column + col_offset)))
-				moves.emplace_back(std::make_pair(row + row_offset, column + col_offset));
+		switch (cell_info(location)) {
+		case 'r':
+			++row_offset;
+			break;
+		case 'w':
+			--row_offset;
+			--row_limit;
+			break;
+		case 'R':
+		case 'W':
+			--row_offset;
+			break;
+		defautl:
+			break;
 		}
 
+		for (; row_offset <= row_limit; row_offset += 2) {
+			for (int col_offset = -1; col_offset <= 1; col_offset += 2) {
+				if (is_valid(std::make_pair(row + row_offset, column + col_offset)) && is_empty(std::make_pair(row + row_offset, column + col_offset)))
+					moves.emplace_back(std::make_pair(row + row_offset, column + col_offset));
+			}
+		}
 	}
 
 
@@ -229,35 +252,30 @@ private:
 
 		switch (cell_info(location)) {
 		case 'r':
-			enemy_color = 'w';
 			++row_offset;
 			break;
 		case 'w':
-			enemy_color = 'r';
-			--row_offset;
-			break;
 		case 'R':
-			enemy_color = 'w';
-			--row_offset;
-			break;
 		case 'W':
-			enemy_color = 'r';
 			--row_offset;
 			break;
 		default:
 			break;
 		}
 
+		// TODO - clean up
 		for (; row_offset <= 1; row_offset += 2) {
 			for (int col_offset = -1; col_offset <= 1; col_offset += 2) {
 				if (is_valid(std::make_pair(column + col_offset, row + row_offset))) {
 
 					char adjacent_space = std::tolower(_board[row + row_offset][column + col_offset]);
 
-					if (adjacent_space == std::tolower(enemy_color))
+					if (adjacent_space == std::tolower(enemy_color)) {
 						if (is_valid(std::make_pair(column + col_offset*2, row + row_offset*2)) && 
-						(is_empty(std::make_pair(row + row_offset*2, column + col_offset*2))))
+							(is_empty(std::make_pair(row + row_offset*2, column + col_offset*2)))) {
 							moves.emplace_back(std::make_pair(row + row_offset*2, column + col_offset*2));
+						}
+					}
 				}
 			}
 		}
