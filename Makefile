@@ -1,7 +1,7 @@
 # Author: Bucky Frost
 # File: Makefile
-# Purpose: Makefile for CS 405
-# 
+# Purpose: Makefile for checkers AI project
+ 
 CC = g++
 CC_TAU = tau_cxx.sh
 CFLAGS =  -std=c++11 -pipe
@@ -9,11 +9,11 @@ CFLAGS_DEBUG = -Wall -g -pg
 INCLUDES = -I ./include/
 CATCH = -I ./Catch/include/
 LFLAGS = -lboost_serialization
-# LIBS
 
 SRCS = ./src/*.cpp
 TEST = ./test/*
 
+# Optimization flags
 LAPTOP_OPFLAGS = -march=core2 -O2
 LAPTOP_OP = laptopNeuralNet.out
 
@@ -50,10 +50,8 @@ run-laptop-op:
 	./build/release/laptopNeuralNet.out
 
 
-
 build-desktop-op:
 	$(CC) $(CFLAGS) $(DESKTOP_OPFLAGS) $(INCLUDES) $(SRCS) -o ./build/release/desktopNeuralNet.out
-
 
 
 run-desktop-op:
@@ -61,6 +59,8 @@ run-desktop-op:
 
 testMoves:
 	$(CC) $(CFLAGS) $(CFLAGS_DEBUG) $(INCLUDES) $(CATCH) $(SRCS) $(TEST) -o ./build/debug/boardTest.out
+
+
 run-testMoves:
 	./build/debug/boardTest.out
 
@@ -83,7 +83,10 @@ graph:
 # TODO pass in the test cpp files by cli argument?
 #%: %.cpp
 #	$(CC_TAU) -o $@ $< $(CFLAGS) $(INCLUDES)
-	
+
+setup:
+	mkdir -p ./build/{debug,release,profiling,test}
+
 clean:
 	rm -rf ./build/debug/*.*
 	rm -rf ./build/release/*.*
