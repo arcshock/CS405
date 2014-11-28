@@ -7,6 +7,7 @@ CC_TAU = tau_cxx.sh
 CFLAGS =  -std=c++11 -pipe
 CFLAGS_DEBUG = -Wall -g -pg
 INCLUDES = -I ./include/
+CATCH = -I ./Catch/include/
 LFLAGS = -lboost_serialization
 # LIBS
 
@@ -28,12 +29,12 @@ run:
 
 
 tests:
-	$(CC) $(CFLAGS) $(LFLAGS) $(INCLUDES) $(TEST) -o ./build/test/test_suite.out
+	$(CC) $(CFLAGS) $(LFLAGS) $(CATCH) $(INCLUDES) $(TEST) -o ./build/test/test_suite.out
 	./build/test/test_suite.out
 
 
 debug:
-	$(CC) $(CFLAGS) $(CFLAGS_DEBUG) $(LFLAGS) $(INCLUDES) $(TEST) -o ./build/test/test_suite_debug.out
+	$(CC) $(CFLAGS) $(CFLAGS_DEBUG) $(CATCH) $(LFLAGS) $(INCLUDES) $(TEST) -o ./build/test/test_suite_debug.out
 	gdb ./build/test/test_suite_debug.out
 
 
@@ -59,7 +60,7 @@ run-desktop-op:
 	./build/release/desktopNeuralNet.out
 
 testMoves:
-	$(CC) $(CFLAGS) $(CFLAGS_DEBUG) $(INCLUDES) $(SRCS) $(TEST) -o ./build/debug/boardTest.out
+	$(CC) $(CFLAGS) $(CFLAGS_DEBUG) $(INCLUDES) $(CATCH) $(SRCS) $(TEST) -o ./build/debug/boardTest.out
 run-testMoves:
 	./build/debug/boardTest.out
 
