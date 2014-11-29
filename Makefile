@@ -19,13 +19,15 @@ TEST = ./test/*
 # --
 # --
 
+.PHONY: all clean setup build	
+
 # -- default target: print useage message
 all:
 	@grep "# --" Makefile | grep -v "grep Makefile"
 
-# -- make build: create release executable
-build:
-	$(CC) $(CFLAGS) $(INCLUDES) $(SRCS)  -o ./build/release/checker_ai.out
+# -- make comp: create release executable
+comp:
+	$(CC) $(CFLAGS) $(LFLAGS) $(INCLUDES) $(SRCS)  -o ./build/release/checker_ai.out
 
 
 # -- make run: execute release executable
