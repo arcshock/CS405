@@ -3,9 +3,9 @@
 # Purpose: Makefile for checkers AI project
  
 CC = g++
-CC_TAU = tau_cxx.sh
 CFLAGS =  -std=c++11 -pipe
-CFLAGS_DEBUG = -Wall -g -pg
+CFLAGS_DEBUG = -Wall -g 
+CFLAGS_PROFILING = -pg
 INCLUDES = -I ./include/
 CATCH = -I ./Catch/include/
 LFLAGS = -lboost_serialization
@@ -13,80 +13,49 @@ LFLAGS = -lboost_serialization
 SRCS = ./src/*.cpp
 TEST = ./test/*
 
-# Optimization flags
-LAPTOP_OPFLAGS = -march=core2 -O2
-LAPTOP_OP = laptopNeuralNet.out
+# -- Usage message of Makefile
+# --
+# -- Ensure have directory structure created with the setup target
+# --
+# --
 
-DESKTOP_OPFLAGS = -march=corei7 -O2
-DESKTOP_OP = desktopNeuralNet.out
-
+# -- default target: print useage message
 all:
-	$(CC) $(CFLAGS) $(INCLUDES) $(SRCS)  -o ./build/debug/test-build.out
+	@grep "# --" Makefile | grep -v "grep Makefile"
+
+# -- make build: create release executable
+build:
+	$(CC) $(CFLAGS) $(INCLUDES) $(SRCS)  -o ./build/release/checker_ai.out
 
 
+# -- make run: execute release executable
 run:
-	./build/debug/test-build.out
+	./build/release/checker_ai.out
 
 
+# -- make tests: build and run tests
 tests:
 	$(CC) $(CFLAGS) $(LFLAGS) $(CATCH) $(INCLUDES) $(TEST) -o ./build/test/test_suite.out
 	./build/test/test_suite.out
 
 
-debug:
+# -- make debug-test: starts up gdb for the test executable
+debug-test:
 	$(CC) $(CFLAGS) $(CFLAGS_DEBUG) $(CATCH) $(LFLAGS) $(INCLUDES) $(TEST) -o ./build/test/test_suite_debug.out
 	gdb ./build/test/test_suite_debug.out
 
 
+# -- make build-db: build the debugging version of program
 build-db:
-	$(CC) $(CFLAGS) $(CFLAGS_DEBUG) $(INCLUDES) $(SRCS) -o ./build/debug/neuralNetDebug.out
+	$(CC) $(CFLAGS) $(CFLAGS_DEBUG) $(INCLUDES) $(SRCS) -o ./build/debug/checker_ai.out
 
 
-build-laptop-op:
-	$(CC) $(CFLAGS) $(LAPTOP_OPFLAGS) $(INCLUDES) $(SRCS) -o ./build/release/laptopNeuralNet.out
-
-
-run-laptop-op:
-	./build/release/laptopNeuralNet.out
-
-
-build-desktop-op:
-	$(CC) $(CFLAGS) $(DESKTOP_OPFLAGS) $(INCLUDES) $(SRCS) -o ./build/release/desktopNeuralNet.out
-
-
-run-desktop-op:
-	./build/release/desktopNeuralNet.out
-
-testMoves:
-	$(CC) $(CFLAGS) $(CFLAGS_DEBUG) $(INCLUDES) $(CATCH) $(SRCS) $(TEST) -o ./build/debug/boardTest.out
-
-
-run-testMoves:
-	./build/debug/boardTest.out
-
-
-tau:
-	$(CC_TAU) $(CFLAGS) $(INCLUDES) $(SRCS)	-o ./build/profiling/tau_build.out
-	./build/profiling/tau_build.out
-	mv main.* ./build/profiling/	# Need to read doc on handling object files
-	mv profile.* ./build/profiling/
-
-tau-feedforward:
-	$(CC_TAU) $(CFLAGS) $(INCLUDES) ./test/feedforward.cpp -o ./build/profiling/tau_feedForward.out #need to read on passing a filename
-	./build/profiling/tau_feedForward.out
-	mv feedforward.* ./build/profiling/	# Need to read doc on handling object files
-	mv profile.* ./build/profiling/
-
-graph:	
-	$(CC) $(CFLAGS) $(INCLUDES) ./test/graphFeedforward.cpp -o ./build/debug/graphing.out
-	
-# TODO pass in the test cpp files by cli argument?
-#%: %.cpp
-#	$(CC_TAU) -o $@ $< $(CFLAGS) $(INCLUDES)
-
+# -- make setup: create directory structure for building project
 setup:
 	mkdir -p ./build/{debug,release,profiling,test}
 
+
+# -- make clean: remove all files from build directories
 clean:
 	rm -rf ./build/debug/*.*
 	rm -rf ./build/release/*.*
