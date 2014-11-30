@@ -222,7 +222,6 @@ TEST_CASE( "Checker Jumps" ) {
 }
 
 
-/*
 TEST_CASE( "Minimax" ) {
 	std::vector<double> board_state;
 
@@ -250,6 +249,7 @@ TEST_CASE( "Minimax" ) {
 	board.print_board(std::cout);
 }
 
+/*
 TEST_CASE( "Tournament" ) {
 	Neural_Network red_player(standard_network);
 	Neural_Network white_player(standard_network);
