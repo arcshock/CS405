@@ -7,6 +7,7 @@
 #include <iostream>
 #include <vector>
 #include "neural_network.hpp"
+#include "g_neural_network.hpp"
 #include "minimax.hpp"
 
 int main(int argc, char* argv[])
@@ -25,10 +26,16 @@ int main(int argc, char* argv[])
 	for (int row = 0; row < 8; ++row)
 		for (int col = 0; col < 8; ++col)
 			std::make_pair(row, col);
+        // Timing
 	red_player.network_evaluate(board_state);
+        // end timing
 
-	board.print_board(std::cout);
+        // GPU Timing
+        // end GPU timing
 
+	//board.print_board(std::cout);
+
+        /*
 	while (1) {
 		board = minimax(red_player, board, 6, 'r');
 
@@ -39,5 +46,6 @@ int main(int argc, char* argv[])
 		std::cout << std::endl;
 		board.print_board(std::cout);
 	}
+        */
 	return 0;
 }
