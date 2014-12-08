@@ -4,7 +4,7 @@
 /**
  * Author: Bucky Frost
  * File: tests.cpp
- * Purpose: Testing surite for checkers AI.
+ * Purpose: Testing suite for checkers AI.
  */
 
 
@@ -42,7 +42,7 @@ TEST_CASE( "Network Operators" ) {
 }
 
 
-TEST_CASE( "Neural Netowrk Serialization" ) {
+TEST_CASE( "Neural Network Serialization" ) {
 	Neural_Network saved_network(standard_network);
 
 	std::ofstream ofs("test_network_save.txt");
@@ -68,14 +68,14 @@ TEST_CASE( "Neural Netowrk Serialization" ) {
 
 
 TEST_CASE( "Checker Board" ) {				
-	std::string initial_board = "r_r_r_r_\n"      // 0 1 2 3 4 5 6 7
-					"_r_r_r_r\n"  // 1
-					"r_r_r_r_\n"  // 2
-					"________\n"  // 3
-					"________\n"  // 4
-					"_w_w_w_w\n"  // 5
-					"w_w_w_w_\n"  // 6
-					"_w_w_w_w\n"; // 7
+	std::string initial_board = "r_r_r_r_\n"    // 0 1 2 3 4 5 6 7
+				    "_r_r_r_r\n"    // 1
+				    "r_r_r_r_\n"    // 2
+				    "________\n"    // 3
+				    "________\n"    // 4
+				    "_w_w_w_w\n"    // 5
+				    "w_w_w_w_\n"    // 6
+				    "_w_w_w_w\n";   // 7
 				
 
 	std::ostringstream board_format;
@@ -107,13 +107,13 @@ TEST_CASE( "Checker Board" ) {
 
 TEST_CASE( "Checker Board Initialization" ) {
 	std::string king_trial = "________\n"
-				"____w___\n"
-				"________\n"
-				"________\n"
-				"_W____R_\n"
-				"________\n"
-				"___r____\n"
-				"________\n"; // size == 72
+				 "____w___\n"
+				 "________\n"
+				 "________\n"
+				 "_W____R_\n"
+				 "________\n"
+				 "___r____\n"
+				 "________\n"; // size == 72
 
 	Checker_Board board(king_trial);
 
@@ -166,7 +166,7 @@ TEST_CASE( "Checker Board Initialization" ) {
 }
 
 TEST_CASE( "Checker Jumps" ) {
-	std::string jump_trial = "__w_____\n" // 0 1 2 3 4 5 6 7
+	std::string jump_trial = "__w_____\n"  // 0 1 2 3 4 5 6 7
 				 "___r____\n"  // 1
 				 "___w_w__\n"  // 2
 				 "____R___\n"  // 3
