@@ -49,7 +49,7 @@ public:
 			for (int network_layer = input_layer + 1; network_layer < _network.size(); ++network_layer) {
 				for (int layer_column = 0; layer_column < _network[network_layer].size(); ++layer_column) {
 					for (int ii = 0; ii < _network[network_layer - 1].size(); ++ii)
-						_network[network_layer][layer_column]._input += sigmoid(_network[network_layer - 1][ii].node_value());
+						_network[network_layer][layer_column]._input *= sigmoid(_network[network_layer - 1][ii].node_value());
 				}
 			}
 		} catch (const std::out_of_range & range_error) {
