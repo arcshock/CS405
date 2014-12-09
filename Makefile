@@ -3,6 +3,7 @@
 # Purpose: Makefile for checkers AI project
  
 CC = g++
+NVCC = nvcc -ccbin $(CC) 
 CFLAGS =  -std=c++11 -pipe
 CFLAGS_DEBUG = -Wall -g 
 CFLAGS_PROFILING = -pg
@@ -22,12 +23,12 @@ TEST = ./test/*
 .PHONY: all clean setup build	
 
 # -- default target: print useage message
-all:
-	@grep "# --" Makefile | grep -v "grep Makefile"
+all: comp
+#	@grep "# --" Makefile | grep -v "grep Makefile"
 
 # -- make comp: create release executable
 comp:
-	$(CC) $(CFLAGS) $(LFLAGS) $(INCLUDES) $(SRCS)  -o ./build/release/checker_ai.out
+	$(NVCC) $(CFLAGS) $(LFLAGS) $(INCLUDES) $(SRCS)  -o ./build/release/checker_ai.out
 
 
 # -- make run: execute release executable
