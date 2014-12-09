@@ -38,16 +38,28 @@ int main(int argc, char* argv[])
 
         // GPU Timing
         auto start_gpu = std::chrono::high_resolution_clock::now();
+
+        // Allocate Space shared between cpu and gpu
+        int n=32*40*8; // size of network... total number of floats
+        G_Neural_Network * whitey = new G_Neural_Network[n];
+
+        // Run gpu stuff on shared space
+        int nBlocks = 1;    // GPU thread blocks to run
+        int blockDim = n;   // threads per block, should be 256 for best performance
+        evaluate<<<nBlocks, blockDim>>>(whitey);    // evaluate on gpu
+
+        cudaDeviceSynchronize();    // wait to finish evaluation
+        //white_player.network_evaluate(board_state);
+
         auto end_gpu = std::chrono::high_resolution_clock::now();
-        white_player.network_evaluate(board_state);
         cout << "White Player: " <<
         std::chrono::duration<double, std::nano> (end_gpu - start_gpu).count() << "ns" << endl;
         // end GPU timing
 
-	//board.print_board(std::cout);
-
 
         /*
+	board.print_board(std::cout);
+
 	while (1) {
 		board = minimax(red_player, board, 6, 'r');
 
