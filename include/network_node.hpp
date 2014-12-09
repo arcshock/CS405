@@ -27,6 +27,11 @@ struct network_node
 		_weight = uniform_distribution(random_value);
 	}
 
+        void set_input(float val)
+        {
+            _input = val;
+        }
+
 	float node_value()
 	{
 		return _input*_weight;
