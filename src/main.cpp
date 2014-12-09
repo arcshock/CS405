@@ -29,23 +29,23 @@ int main(int argc, char* argv[])
 		for (int col = 0; col < 8; ++col)
 			std::make_pair(row, col);
         // Timing
-        //auto start_cpu = std::chrono::high_resolution_clock::now();
-        auto start_cpu = std::chrono::steady_clock::now();
+        auto start_cpu = std::chrono::high_resolution_clock::now();
 	red_player.network_evaluate(board_state);
-        auto end_cpu = std::chrono::steady_clock::now();
-        auto diff_cpu = end_cpu - start_cpu;
-        cout << std::chrono::duration<float, std::nano> (diff_cpu).count() << "ns" << endl;
+        auto end_cpu = std::chrono::high_resolution_clock::now();
+        cout << "Red Player: " <<
+        std::chrono::duration<double, std::nano> (end_cpu - start_cpu).count() << "ns" << endl;
         // end timing
 
         // GPU Timing
-        auto start_gpu = std::chrono::steady_clock::now();
-        auto end_gpu = std::chrono::steady_clock::now();
-        // GPU NN!!!
-        auto diff_gpu = end_gpu - start_gpu;
-        cout << std::chrono::duration<float, std::nano> (diff_gpu).count() << "ns" << endl;
+        auto start_gpu = std::chrono::high_resolution_clock::now();
+        auto end_gpu = std::chrono::high_resolution_clock::now();
+        white_player.network_evaluate(board_state);
+        cout << "White Player: " <<
+        std::chrono::duration<double, std::nano> (end_gpu - start_gpu).count() << "ns" << endl;
         // end GPU timing
 
 	//board.print_board(std::cout);
+
 
         /*
 	while (1) {
