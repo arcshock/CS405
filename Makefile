@@ -4,7 +4,7 @@
  
 CC = g++
 NVCC = nvcc -ccbin $(CC) 
-CFLAGS =  -std=c++11 -pipe
+CFLAGS =  -std=c++11 #-pipe
 CFLAGS_DEBUG = -Wall -g 
 CFLAGS_PROFILING = -pg
 INCLUDES = -I ./include/
