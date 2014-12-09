@@ -6,15 +6,17 @@
 
 #include <iostream>
 #include <vector>
+#include <chrono>
 #include "neural_network.hpp"
 #include "g_neural_network.hpp"
 #include "minimax.hpp"
+using std::cout;
+using std::endl;
 
 int main(int argc, char* argv[])
 {
-		
 	std::vector<int> standard_network = {32, 40, 10, 1};
-	std::vector<double> board_state;
+	std::vector<float> board_state;
 
 	Neural_Network red_player(standard_network);
 	Neural_Network white_player(standard_network);
@@ -27,10 +29,20 @@ int main(int argc, char* argv[])
 		for (int col = 0; col < 8; ++col)
 			std::make_pair(row, col);
         // Timing
+        //auto start_cpu = std::chrono::high_resolution_clock::now();
+        auto start_cpu = std::chrono::steady_clock::now();
 	red_player.network_evaluate(board_state);
+        auto end_cpu = std::chrono::steady_clock::now();
+        auto diff_cpu = end_cpu - start_cpu;
+        cout << std::chrono::duration<float, std::nano> (diff_cpu).count() << "ns" << endl;
         // end timing
 
         // GPU Timing
+        auto start_gpu = std::chrono::steady_clock::now();
+        auto end_gpu = std::chrono::steady_clock::now();
+        // GPU NN!!!
+        auto diff_gpu = end_gpu - start_gpu;
+        cout << std::chrono::duration<float, std::nano> (diff_gpu).count() << "ns" << endl;
         // end GPU timing
 
 	//board.print_board(std::cout);
