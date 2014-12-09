@@ -8,6 +8,7 @@
 
 #include <vector>
 #include <fstream>
+#include <cuda.h>
 #include "network_node.hpp"
 #include "player.hpp"
 #include <boost/archive/text_oarchive.hpp>
@@ -30,9 +31,9 @@ public:
 
 
 	// Feed forward the network to evaluate the checker board.
-	double network_evaluate(std::vector<double> & board_input)
+	float network_evaluate(std::vector<float> & board_input)
 	{
-		double evaluation_value = 0.0;
+		float evaluation_value = 0.0;
 
 		int network_input_size = _network[0].size();
 		int input_layer = 0;
@@ -82,12 +83,12 @@ private:
 	}
 
 
-	double sigmoid(double input)
+	float sigmoid(float input)
 	{
 		return input/(1.0 + abs(input));
 	}
 	
 
-	std::vector<std::vector<network_node>> _network;
+	std::vector<std::vector<float>> _network;
 };
 #endif /*NEURAL_NETWORK_HPP*/
