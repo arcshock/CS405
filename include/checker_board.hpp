@@ -3,7 +3,7 @@
 
 /**
  * Author: Bucky Frost
- * File: checker_baord.hpp
+ * File: checker_board.hpp
  * Purpose: A board and functions for playing checkers.
  */
 
@@ -164,9 +164,9 @@ public:
 	}
 
 
-	const std::vector<double> get_state()
+	const std::vector<float> get_state()
 	{
-		std::vector<double> state;
+		std::vector<float> state;
 
 		for (int row = 0; row < 8; ++row) {
 			for (int col = 0; col < 8; ++col) {
@@ -240,7 +240,7 @@ private:
 	}
 
 
-	// Make recursive to get the double jumps?
+	// Make recursive to get the float jumps?
 	void piece_jumps(coordinate location, std::vector<coordinate> & moves)
 	{
 		int row = location.first;

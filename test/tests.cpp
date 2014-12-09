@@ -15,14 +15,14 @@
 #include "tournament.hpp"
 
 
-std::vector<double> negative_checker_board(32, -1.0);
-std::vector<double> empty_checker_board(32, 0.0);
-std::vector<double> full_checker_board(32, 1.0);
+std::vector<float> negative_checker_board(32, -1.0);
+std::vector<float> empty_checker_board(32, 0.0);
+std::vector<float> full_checker_board(32, 1.0);
 
 std::vector<int> standard_network = {32, 40, 10, 1};
 
 TEST_CASE( "Specified Network Construction" ) {
-	std::vector<double> negative_checker_board(32, -1.0);
+	std::vector<float> negative_checker_board(32, -1.0);
 
 	std::vector<int> network_layout = {32, 1, 1, 1};
 
@@ -223,7 +223,7 @@ TEST_CASE( "Checker Jumps" ) {
 
 
 TEST_CASE( "Minimax" ) {
-	std::vector<double> board_state;
+	std::vector<float> board_state;
 
 	Neural_Network red_player(standard_network);
 	Neural_Network white_player(standard_network);

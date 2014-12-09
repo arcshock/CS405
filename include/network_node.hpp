@@ -18,8 +18,8 @@ static std::uniform_real_distribution<> uniform_distribution(-1, 1);
 
 struct network_node
 {
-	double _input;
-	double _weight;
+	float _input;
+	float _weight;
 
 	network_node()
 	{
@@ -27,7 +27,7 @@ struct network_node
 		_weight = uniform_distribution(random_value);
 	}
 
-	double node_value()
+	float node_value()
 	{
 		return _input*_weight;
 	}
