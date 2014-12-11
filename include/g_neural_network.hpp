@@ -8,9 +8,12 @@
 #include <vector>
 using std::vector;
 #include <fstream>
+#include <ostream>
 #include </opt/nvidia/cuda/include/cuda.h>
 #include "network_node.hpp"
 #include "player.hpp"
+#include <iostream>
+using std::cout;
 
 class G_Neural_Network : public Player
 {
@@ -72,6 +75,7 @@ public:
 	bool operator==(const G_Neural_Network & other) const { return other._network == _network; }
 	bool operator!=(const G_Neural_Network & other) const { return !(*this == other); }
 
+	friend std::ostream& operator<<(std::ostream& os, G_Neural_Network& ob);
 private:
 	vector<vector<network_node>> _network;
 
@@ -84,6 +88,11 @@ private:
 	template<class Archive>
 	void serialize(Archive & ar, const unsigned int version) { ar & _network; }
 };
+
+std::ostream& operator<<(std::ostream& os, G_Neural_Network& ob)
+{
+	return os << ob._network[0][0]._input << " " << ob._network[0][0]._weight;		
+}
 
 __global__ void evaluate(G_Neural_Network * data)
 {
