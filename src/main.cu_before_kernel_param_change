@@ -1,0 +1,186 @@
+/**
+ * File: neural_network.hpp
+ * Purpose: Header file for the neural network.
+ */
+
+#include <vector>
+using std::vector;
+#include <fstream>
+#include </opt/nvidia/cuda/include/cuda.h>
+#include "network_node.hpp"
+#include "player.hpp"
+#include "checker_board.hpp"
+#include <thrust/host_vector.h>
+#include <thrust/device_vector.h>
+
+class Unified 
+{
+    public:
+        // Allocate instances in CPU/GPU unified memory. Needs Kepler Architecture.
+        void *operator new(size_t len)
+        {
+            void *ptr;
+            cudaMallocManaged(&ptr, len);
+            return ptr;
+        }
+        void *operator new[](size_t size)
+        {
+            void *ptr;
+            cudaMallocManaged(&ptr, size);
+            return ptr;
+        }
+        void operator delete(void *ptr) { cudaFree(ptr); }
+        void operator delete[](void *ptr) { cudaFree(ptr); }
+
+};
+
+typedef vector<vector<network_node>> Network;
+class G_Neural_Network : public Unified
+{
+public:
+
+         __host__ __device__ G_Neural_Network(vector<int> network_specs) 
+	{
+		int network_layers = network_specs.size();
+
+		for (int ii = 0; ii < network_layers; ++ii) 
+                {
+			_network.emplace_back(vector<network_node>(network_specs[ii]));
+		}
+	}
+
+
+	// Feed forward the network to evaluate the checker board.
+         __host__ __device__ float network_evaluate(thrust::device_vector<float> * board_input)
+	{
+		float evaluation_value = 0.0;
+		int network_input_size = _network[0].size();
+		int input_layer = 0;
+
+                for (int ii = 0; ii < network_input_size; ++ii) 
+                {
+                    _network[input_layer][ii].set_input(board_input[ii]);
+                }
+
+                for (int layer = input_layer + 1; layer < _network.size(); ++layer) 
+                {
+                    for (int column = 0; column < _network[layer].size(); ++column) 
+                    {
+                        for (int ii = 0; ii < _network[layer - 1].size(); ++ii)
+                            _network[layer][column]._input *=
+                                    sigmoid(_network[layer - 1][ii].node_value());
+                    }
+                }
+
+		auto network_output = _network.back();
+		evaluation_value = _network.back().back().node_value();
+		return sigmoid(evaluation_value);
+	}
+
+	__host__ __device__  bool operator==(const G_Neural_Network & other) const 
+        { return other._network == _network; }
+	__host__ __device__  bool operator!=(const G_Neural_Network & other) const 
+        { return !(*this == other); }
+
+private:
+	Network _network;
+
+	__host__ __device__  G_Neural_Network() = default;
+	__host__ __device__  float sigmoid(float input) { return input/(1.0 + abs(input)); }
+#if 0
+	friend class boost::serialization::access;
+	template<class Archive>
+	 void serialize(Archive & ar, const unsigned int version) 
+        { ar & _network; }
+#endif
+};
+
+/**
+ * Author: Bucky Frost
+ * File: main.cpp
+ * Purpose: main function for checkers AI.
+ */
+
+#include <iostream>
+#include <vector>
+#include <chrono>
+//#include "g_neural_network.hpp"
+#include "minimax.hpp"
+#include "checker_board.hpp"
+
+using std::cout;
+using std::endl;
+
+__global__ void evaluate(thrust::device_vector<float> * network_input)
+{
+	// use alls threads	
+	int idx = threadIdx.x + threadIdx.y * blockDim.x + threadIdx.z * blockDim.x * blockDim.y;
+	network_evaluate(& network_input); 
+}
+
+// Precondition - It doesn't make sense to have less than 32 as first layer
+// for checkers evaluations. It doesn't make sense to have more than 1 as
+// final layer. Thus, those will automatically be set for any non-default
+// arg parameters passed into main.
+std::vector<int> argparse(int argc, char* argv[])
+{
+    std::vector<int> layer_sizes{32, 40, 10, 1};
+    if (argc > 1)
+    {
+        layer_sizes.resize(argc + 1);
+        layer_sizes.push_back(32);
+        for (unsigned int count = 1; count < argc; ++count)
+        {
+            layer_sizes[count] = std::stoi(argv[count]);
+        }
+        layer_sizes.push_back(1);
+
+    }
+    return layer_sizes;
+}
+
+
+void create_NN(std::vector<int>);
+void timing(std::vector<int>);
+
+int main(int argc, char* argv[])
+{
+        std::vector<int> neural_network_layers = argparse(argc, argv);
+     //   timing(neural_network_layers);
+	return 0;
+}
+
+#if 0
+void create_NN(std::vector<int> layers)
+{
+        G_Neural_Network * base_case_network = new G_Neural_Network(layers);
+
+	std::ofstream ofs("test_network_save.txt");
+
+	boost::archive::text_oarchive oa(ofs);
+
+	oa << base_case_network;
+	ofs.close();
+
+}
+
+void timing(std::vector<int> layers)
+{
+        G_Neural_Network * player = new G_Neural_Network(layers);
+        int n = 0;
+        for (auto i : layers) { n += i; } // sum of NN nodes.
+
+        // Run gpu stuff on shared space
+        int nBlocks = 1;    // GPU thread blocks to run
+        int blockDim = n;   // threads per block, should be 256 for best performance
+	for (int ii = 0; ii < 100; ++ii) {
+        	auto start_gpu = std::chrono::high_resolution_clock::now();
+		evaluate<<<nBlocks, blockDim>>>(player);    // evaluate on gpu
+		cudaDeviceSynchronize();    // wait to finish evaluation
+        	auto end_gpu = std::chrono::high_resolution_clock::now();
+        	cout << std::chrono::duration<double, std::nano> (end_gpu - start_gpu).count() << endl;
+	}
+
+
+}
+#endif
