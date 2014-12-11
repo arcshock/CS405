@@ -38,7 +38,7 @@ class G_Neural_Network : public Unified
 {
 public:
 
-        __host__ __device__ G_Neural_Network(vector<int> network_specs) 
+         G_Neural_Network(vector<int> network_specs) 
 	{
 		int network_layers = network_specs.size();
 
@@ -50,7 +50,7 @@ public:
 
 
 	// Feed forward the network to evaluate the checker board.
-        __host__ __device__ float network_evaluate(vector<float> & board_input)
+         float network_evaluate(vector<float> & board_input)
 	{
 		float evaluation_value = 0.0;
 		int network_input_size = _network[0].size();
@@ -76,20 +76,20 @@ public:
 		return sigmoid(evaluation_value);
 	}
 
-	__host__ __device__ bool operator==(const G_Neural_Network & other) const 
+	 bool operator==(const G_Neural_Network & other) const 
         { return other._network == _network; }
-	__host__ __device__ bool operator!=(const G_Neural_Network & other) const 
+	 bool operator!=(const G_Neural_Network & other) const 
         { return !(*this == other); }
 
 private:
 	Network _network;
 
-	__host__ __device__ G_Neural_Network() = default;
-	__host__ __device__ float sigmoid(float input) { return input/(1.0 + abs(input)); }
+	 G_Neural_Network() = default;
+	 float sigmoid(float input) { return input/(1.0 + abs(input)); }
 
 	friend class boost::serialization::access;
 	template<class Archive>
-	__host__ __device__ void serialize(Archive & ar, const unsigned int version) 
+	 void serialize(Archive & ar, const unsigned int version) 
         { ar & _network; }
 };
 
