@@ -4,17 +4,41 @@
  * Purpose: main function for checkers AI.
  */
 
+
 #include <iostream>
 #include <vector>
 #include <chrono>
 #include "neural_network.hpp"
-#include "g_neural_network.hpp"
+#include "g_neural_network.cu"
 #include "minimax.hpp"
 using std::cout;
 using std::endl;
+extern evaluate;
+
+std::vector<int> argparse(int argc, char* argv[])
+{
+    std::vector<int> node_size{32, 40, 10, 1};
+    if (argc > 1)
+    {
+        node_size.resize(argc + 1);
+        node_size.push_back(32);
+        for (unsigned int count = 1; count < argc; ++count)
+        {
+            node_size[count] = std::stoi(argv[count]);
+        }
+        node_size.push_back(1);
+
+    }
+    return node_size;
+}
+
+
 
 int main(int argc, char* argv[])
 {
+
+    argparse(argc, argv);
+
 	std::vector<int> standard_network = {32, 40, 10, 1};
 	std::vector<float> board_state;
 
@@ -25,9 +49,6 @@ int main(int argc, char* argv[])
 
 	board_state = board.get_state();
 
-	for (int row = 0; row < 8; ++row)
-		for (int col = 0; col < 8; ++col)
-			std::make_pair(row, col);
         // Timing
         auto start_cpu = std::chrono::high_resolution_clock::now();
 	red_player.network_evaluate(board_state);
@@ -55,7 +76,6 @@ int main(int argc, char* argv[])
         cout << "White Player: " <<
         std::chrono::duration<double, std::nano> (end_gpu - start_gpu).count() << "ns" << endl;
         // end GPU timing
-
 
         /*
 	board.print_board(std::cout);
