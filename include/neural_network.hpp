@@ -63,7 +63,7 @@ public:
                                             _network[network_layer][layer_column]._input *= sigmoid(_network[network_layer - 1][ii].node_value());
                                             qq = _network[network_layer][layer_column]._input;
                                         }
-                                        if (qq != talvinator[network_layer-1])
+                                        if (qq == talvinator[network_layer-1])
                                         {
                                             cout << "Fuhhhhh" << endl;
                                         }
