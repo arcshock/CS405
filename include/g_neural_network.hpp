@@ -12,38 +12,45 @@ using std::vector;
 #include "network_node.hpp"
 #include "player.hpp"
 
-class G_Neural_Network : public Player
+class Unified 
 {
-public:
-
-	G_Neural_Network(vector<int> network_specifications): Player(' ', "unknown")
-	{
-		int network_layers = network_specifications.size();
-
-		for (int ii = 0; ii < network_layers; ++ii) 
-                {
-			_network.emplace_back(vector<network_node>(network_specifications[ii]));
-		}
-	}
-
-        // Allocate instances in unified memory
-        void *operator new(size_t len) 
+    public:
+        // Allocate instances in CPU/GPU unified memory. Needs Kepler Architecture.
+        __host__ __device__ void *operator new(size_t len)
         {
             void *ptr;
             cudaMallocManaged(&ptr, len);
             return ptr;
         }
-        void *operator new[](size_t size)
+        __host__ __device__ void *operator new[](size_t size)
         {
             void *ptr;
             cudaMallocManaged(&ptr, size);
             return ptr;
         }
-        void operator delete(void *ptr) { cudaFree(ptr); }
-        void operator delete[](void *ptr) { cudaFree(ptr); }
+        __host__ __device__ void operator delete(void *ptr) { cudaFree(ptr); }
+        __host__ __device__ void operator delete[](void *ptr) { cudaFree(ptr); }
+
+};
+
+typedef vector<vector<network_node>> Network;
+class G_Neural_Network : public Unified
+{
+public:
+
+        __host__ __device__ G_Neural_Network(vector<int> network_specs): Player(' ', "unknown")
+	{
+		int network_layers = network_specs.size();
+
+		for (int ii = 0; ii < network_layers; ++ii) 
+                {
+			_network.emplace_back(vector<network_node>(network_specs[ii]));
+		}
+	}
+
 
 	// Feed forward the network to evaluate the checker board.
-	float network_evaluate(vector<float> & board_input)
+        __host__ __device__ float network_evaluate(vector<float> & board_input)
 	{
 		float evaluation_value = 0.0;
 		int network_input_size = _network[0].size();
@@ -69,20 +76,22 @@ public:
 		return sigmoid(evaluation_value);
 	}
 
-	bool operator==(const G_Neural_Network & other) const { return other._network == _network; }
-	bool operator!=(const G_Neural_Network & other) const { return !(*this == other); }
+	__host__ __device__ bool operator==(const G_Neural_Network & other) const 
+        { return other._network == _network; }
+	__host__ __device__ bool operator!=(const G_Neural_Network & other) const 
+        { return !(*this == other); }
 
 private:
-	vector<vector<network_node>> _network;
+	__host__ __device__ Network _network;
 
-	G_Neural_Network() = default;
+	__host__ __device__ G_Neural_Network() = default;
 
-	float sigmoid(float input) { return input/(1.0 + abs(input)); }
+	__host__ __device__ float sigmoid(float input) { return input/(1.0 + abs(input)); }
 
-
-	friend class boost::serialization::access;
+	__host__ __device__ friend class boost::serialization::access;
 	template<class Archive>
-	void serialize(Archive & ar, const unsigned int version) { ar & _network; }
+	__host__ __device__ void serialize(Archive & ar, const unsigned int version) 
+        { ar & _network; }
 };
 
 __global__ void evaluate(G_Neural_Network * data)
