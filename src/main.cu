@@ -5,6 +5,11 @@
  */
 
 #include <iostream>
+#include <fstream>
+using std::ifstream;
+using std::ofstream;
+#include <boost/archive/text_iarchive.hpp>
+#include <boost/archive/text_oarchive.hpp>
 #include <vector>
 #include <chrono>
 #include "neural_network.hpp"
@@ -17,17 +22,37 @@ std::vector<int> standard_network = {32, 40, 10, 1};
 
 void create_NN();
 void timing();
+void load_NN();
 
 int main(int argc, char* argv[])
 {
+	create_NN();
+	load_NN();
+
 	return 0;
+}
+
+void load_NN()
+{
+	G_Neural_Network * test_case_network = new G_Neural_Network(standard_network);
+	
+	try {
+		ifstream ifs("base_network_save.txt");
+		int state = ifs.rdstate();
+		cout << "FILE STATE: " << state << endl;
+		boost::archive::text_iarchive ia(ifs);
+		//ia >> test_case_network;
+		ifs.close();
+	} catch (const boost::archive::archive_exception& e) {
+		cout << e.what();
+	}
 }
 
 void create_NN()
 {
         G_Neural_Network * base_case_network = new G_Neural_Network(standard_network);
 
-	std::ofstream ofs("test_network_save.txt");
+	std::ofstream ofs("base_network_save.txt");
 
 	boost::archive::text_oarchive oa(ofs);
 
