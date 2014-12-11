@@ -16,20 +16,20 @@ class Unified
 {
     public:
         // Allocate instances in CPU/GPU unified memory. Needs Kepler Architecture.
-        __host__ __device__ void *operator new(size_t len)
+        void *operator new(size_t len)
         {
             void *ptr;
             cudaMallocManaged(&ptr, len);
             return ptr;
         }
-        __host__ __device__ void *operator new[](size_t size)
+        void *operator new[](size_t size)
         {
             void *ptr;
             cudaMallocManaged(&ptr, size);
             return ptr;
         }
-        __host__ __device__ void operator delete(void *ptr) { cudaFree(ptr); }
-        __host__ __device__ void operator delete[](void *ptr) { cudaFree(ptr); }
+        void operator delete(void *ptr) { cudaFree(ptr); }
+        void operator delete[](void *ptr) { cudaFree(ptr); }
 
 };
 
