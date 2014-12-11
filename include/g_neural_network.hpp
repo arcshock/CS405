@@ -38,7 +38,7 @@ class G_Neural_Network : public Unified
 {
 public:
 
-        __host__ __device__ G_Neural_Network(vector<int> network_specs): Player(' ', "unknown")
+        __host__ __device__ G_Neural_Network(vector<int> network_specs) 
 	{
 		int network_layers = network_specs.size();
 
@@ -82,21 +82,21 @@ public:
         { return !(*this == other); }
 
 private:
-	__host__ __device__ Network _network;
+	Network _network;
 
 	__host__ __device__ G_Neural_Network() = default;
-
 	__host__ __device__ float sigmoid(float input) { return input/(1.0 + abs(input)); }
 
-	__host__ __device__ friend class boost::serialization::access;
+	friend class boost::serialization::access;
 	template<class Archive>
 	__host__ __device__ void serialize(Archive & ar, const unsigned int version) 
         { ar & _network; }
 };
 
-__global__ void evaluate(G_Neural_Network * data)
+__global__ void evaluate(G_Neural_Network *net)
 {
     int idx = threadIdx.x;
+    
 }
 
 #endif /*NEURAL_NETWORK_HPP*/
