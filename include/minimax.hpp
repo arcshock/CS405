@@ -54,25 +54,18 @@ Checker_Board minimax(Neural_Network & player, Checker_Board & board, int depth,
 		switch (player_color) {
 		case 'r':
 			return max(player, board, red_moves);
-			break;
 		case 'w':
 			return max(player, board, white_moves);
-			break;
-		default:
-			break;
 		}
 	} else { // Oponent's turn, min
 		switch (player_color) {
 		case 'r':
 			return min(player, board, red_moves);
-			break;
 		case 'w':
 			return min(player, board, white_moves);
-			break;
-		default:
-			break;
 		}
 	}
+	return board;
 }
 
 Checker_Board min(Neural_Network & player, Checker_Board board, std::vector<piece_moves> moves) 
