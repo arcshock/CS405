@@ -227,7 +227,7 @@ private:
 		case 'W':
 			--row_offset;
 			break;
-		defautl:
+		default:
 			break;
 		}
 
