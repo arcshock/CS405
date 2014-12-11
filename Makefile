@@ -11,7 +11,7 @@ INCLUDES = -I ./include/
 CATCH = -I ./Catch/include/
 LFLAGS = -lboost_serialization
 
-SRCS = ./src/*.cu
+SRCS = ./src/*.cpp
 TEST = ./test/*
 
 # -- Usage message of Makefile

@@ -13,6 +13,9 @@
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/serialization/vector.hpp>
+#include <iostream>
+using std::cout;
+using std::endl;
 
 class Neural_Network : public Player
 {
@@ -37,6 +40,7 @@ public:
 		int network_input_size = _network[0].size();
 		int input_layer = 0;
 
+                float talvinator []= {0,0,0};
 		try {
 			for (int ii = 0; ii < network_input_size; ++ii) {
 					_network[input_layer][ii]._input = board_input[ii];
@@ -45,11 +49,25 @@ public:
 			std::cerr << "Out of Range error loading input to network: " << range_error.what() << '\n';
 		}
 
+                for (int network_layer = input_layer + 1; network_layer < _network.size(); ++network_layer) {
+				for (int layer_column = 0; layer_column < _network[network_layer].size(); ++layer_column) {
+                                    talvinator[network_layer] *= sigmoid(_network[network_layer-1][layer_column].node_value());
+                                            }
+                                            }
 		try { 
 			for (int network_layer = input_layer + 1; network_layer < _network.size(); ++network_layer) {
 				for (int layer_column = 0; layer_column < _network[network_layer].size(); ++layer_column) {
+                                    float qq = 0.;
 					for (int ii = 0; ii < _network[network_layer - 1].size(); ++ii)
-						_network[network_layer][layer_column]._input *= sigmoid(_network[network_layer - 1][ii].node_value());
+                                        {
+                                            _network[network_layer][layer_column]._input *= sigmoid(_network[network_layer - 1][ii].node_value());
+                                            qq = _network[network_layer][layer_column]._input;
+                                        }
+                                        if (qq != talvinator[network_layer-1])
+                                        {
+                                            cout << network_layer - 1 << "  Fuhhhhh" << endl;
+                                        }
+
 				}
 			}
 		} catch (const std::out_of_range & range_error) {
