@@ -26,8 +26,36 @@ void load_NN();
 
 int main(int argc, char* argv[])
 {
-	create_NN();
-	load_NN();
+        G_Neural_Network * base_case_network = new G_Neural_Network(standard_network);
+
+	std::ofstream ofs("base_network_save.txt");
+
+	boost::archive::text_oarchive oa(ofs);
+
+	oa << base_case_network;
+	ofs.close();
+
+//	create_NN();
+//	load_NN();
+	G_Neural_Network * test_case_network = new G_Neural_Network(standard_network);
+	
+	try {
+		ifstream ifs("base_network_save.txt");
+		int state = ifs.rdstate();
+		cout << "FILE STATE: " << state << endl;
+		boost::archive::text_iarchive ia(ifs);
+		ia >> test_case_network;
+		ifs.close();
+	} catch (const boost::archive::archive_exception& e) {
+		cout << e.what();
+	}
+	cout << *  base_case_network << " "  << * test_case_network << endl;	
+	cout << (* base_case_network == * test_case_network) << endl;
+	if ( * base_case_network ==  * test_case_network) {
+		cout << "SUCCESS" << endl;
+	} else {
+		cout << "UNCOOL!" << endl;
+	}
 
 	return 0;
 }
