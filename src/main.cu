@@ -7,19 +7,40 @@
 #include <iostream>
 #include <vector>
 #include <chrono>
-#include "neural_network.hpp"
 #include "g_neural_network.hpp"
 #include "minimax.hpp"
 using std::cout;
 using std::endl;
 
-std::vector<int> standard_network = {32, 40, 10, 1};
+// Precondition - It doesn't make sense to have less than 32 as first layer
+// for checkers evaluations. It doesn't make sense to have more than 1 as
+// final layer. Thus, those will automatically be set for any non-default
+// arg parameters passed into main.
+std::vector<int> argparse(int argc, char* argv[])
+{
+    std::vector<int> layer_sizes{32, 40, 10, 1};
+    if (argc > 1)
+    {
+        layer_sizes.resize(argc + 1);
+        layer_sizes.push_back(32);
+        for (unsigned int count = 1; count < argc; ++count)
+        {
+            layer_sizes[count] = std::stoi(argv[count]);
+        }
+        layer_sizes.push_back(1);
+
+    }
+    return layer_sizes;
+}
+
 
 void create_NN();
 void timing();
 
 int main(int argc, char* argv[])
 {
+        std::vector<int> neural_network_layers = argparse(argc, argv);
+        timing(neural_network_layers);
 	return 0;
 }
 
@@ -36,10 +57,11 @@ void create_NN()
 
 }
 
-void timing()
+void timing(std::vector<int> neural_network_layers)
 {
-        int n=32*40*8; // size of network... total number of floats
-        G_Neural_Network * whitey = new G_Neural_Network(standard_network);
+        G_Neural_Network * whitey = new G_Neural_Network(neural_network_layers);
+        int n = 0;
+        for (auto i : neural_network_layers) { n += i; } // sum of NN nodes.
 
         // Run gpu stuff on shared space
         int nBlocks = 1;    // GPU thread blocks to run
