@@ -52,6 +52,8 @@ public:
                 for (int network_layer = input_layer + 1; network_layer < _network.size(); ++network_layer) {
 				for (int layer_column = 0; layer_column < _network[network_layer].size(); ++layer_column) {
                                     talvinator[network_layer] *= sigmoid(_network[network_layer-1][layer_column].node_value();
+                                            }
+                                            }
 		try { 
 			for (int network_layer = input_layer + 1; network_layer < _network.size(); ++network_layer) {
 				for (int layer_column = 0; layer_column < _network[network_layer].size(); ++layer_column) {
