@@ -1,7 +1,6 @@
 #ifndef G_NEURAL_NETWORK_HPP
 #define G_NEURAL_NETWORK_HPP
-/*
- * Author: Bucky Frost
+/**
  * File: neural_network.hpp
  * Purpose: Header file for the neural network.
  */
@@ -77,17 +76,18 @@ private:
 	vector<vector<network_node>> _network;
 
 	G_Neural_Network() = default;
-	friend class boost::serialization::access;
+
 	float sigmoid(float input) { return input/(1.0 + abs(input)); }
+
+
+	friend class boost::serialization::access;
+	template<class Archive>
+	void serialize(Archive & ar, const unsigned int version) { ar & _network; }
 };
 
 __global__ void evaluate(G_Neural_Network * data)
 {
     int idx = threadIdx.x;
-    //data[idx] = sigmoid(stuff, stuff);
 }
 
 #endif /*NEURAL_NETWORK_HPP*/
-
-
-
