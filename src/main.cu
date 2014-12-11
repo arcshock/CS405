@@ -34,8 +34,8 @@ std::vector<int> argparse(int argc, char* argv[])
 }
 
 
-void create_NN();
-void timing();
+void create_NN(std::vector<int>);
+void timing(std::vector<int>);
 
 int main(int argc, char* argv[])
 {
@@ -44,9 +44,9 @@ int main(int argc, char* argv[])
 	return 0;
 }
 
-void create_NN()
+void create_NN(std::vector<int> layers)
 {
-        G_Neural_Network * base_case_network = new G_Neural_Network(standard_network);
+        G_Neural_Network * base_case_network = new G_Neural_Network(layers);
 
 	std::ofstream ofs("test_network_save.txt");
 
@@ -57,18 +57,18 @@ void create_NN()
 
 }
 
-void timing(std::vector<int> neural_network_layers)
+void timing(std::vector<int> layers)
 {
-        G_Neural_Network * whitey = new G_Neural_Network(neural_network_layers);
+        G_Neural_Network * player = new G_Neural_Network(layers);
         int n = 0;
-        for (auto i : neural_network_layers) { n += i; } // sum of NN nodes.
+        for (auto i : layers) { n += i; } // sum of NN nodes.
 
         // Run gpu stuff on shared space
         int nBlocks = 1;    // GPU thread blocks to run
         int blockDim = n;   // threads per block, should be 256 for best performance
 	for (int ii = 0; ii < 100; ++ii) {
         	auto start_gpu = std::chrono::high_resolution_clock::now();
-		evaluate<<<nBlocks, blockDim>>>(whitey);    // evaluate on gpu
+		evaluate<<<nBlocks, blockDim>>>(player);    // evaluate on gpu
 		cudaDeviceSynchronize();    // wait to finish evaluation
         	auto end_gpu = std::chrono::high_resolution_clock::now();
         	cout << std::chrono::duration<double, std::nano> (end_gpu - start_gpu).count() << endl;
