@@ -9,7 +9,7 @@
 #include <vector>
 using std::vector;
 #include <fstream>
-#include </usr/include/linux/cuda.h>
+#include </opt/nvidia/cuda/include/cuda.h>
 #include "network_node.hpp"
 #include "player.hpp"
 
@@ -81,10 +81,10 @@ private:
 	float sigmoid(float input) { return input/(1.0 + abs(input)); }
 };
 
-__global__ void evaluate(float * data)
+__global__ void evaluate(G_Neural_Network * data)
 {
     int idx = threadIdx.x;
-    data[idx] = sigmoid(stuff, stuff);
+    //data[idx] = sigmoid(stuff, stuff);
 }
 
 #endif /*NEURAL_NETWORK_HPP*/
