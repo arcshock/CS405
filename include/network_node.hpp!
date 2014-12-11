@@ -20,7 +20,7 @@ struct network_node
 	float _input;
 	float _weight;
 
-	network_node() : _input(1.0)
+	__host__ __device__ network_node() : _input(1.0)
 	{
 		_weight = uniform_distribution(random_value);
 	}

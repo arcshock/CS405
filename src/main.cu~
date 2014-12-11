@@ -9,8 +9,17 @@
 #include <chrono>
 #include "g_neural_network.hpp"
 #include "minimax.hpp"
+#include "checker_board.hpp"
+
 using std::cout;
 using std::endl;
+
+__global__ void evaluate(Check_Board * network_input)
+{
+	// use alls threads	
+	int idx = threadIdx.x + threadIdx.y * blockDim.x + threadIdx.z * blockDim.x * blockDim.y;
+	network_evaluate(& network_input); 
+}
 
 // Precondition - It doesn't make sense to have less than 32 as first layer
 // for checkers evaluations. It doesn't make sense to have more than 1 as

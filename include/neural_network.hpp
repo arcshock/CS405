@@ -8,7 +8,6 @@
 
 #include <vector>
 #include <fstream>
-#include "network_node.hpp"
 #include "player.hpp"
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>

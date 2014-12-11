@@ -11,6 +11,7 @@ using std::vector;
 #include </opt/nvidia/cuda/include/cuda.h>
 #include "network_node.hpp"
 #include "player.hpp"
+#include "checker_board.hpp"
 
 class Unified 
 {
@@ -50,7 +51,7 @@ public:
 
 
 	// Feed forward the network to evaluate the checker board.
-         float network_evaluate(vector<float> & board_input)
+         __device__ float network_evaluate(vector<float> & board_input)
 	{
 		float evaluation_value = 0.0;
 		int network_input_size = _network[0].size();
@@ -92,11 +93,5 @@ private:
 	 void serialize(Archive & ar, const unsigned int version) 
         { ar & _network; }
 };
-
-__global__ void evaluate(G_Neural_Network *net)
-{
-    int idx = threadIdx.x;
-    
-}
 
 #endif /*NEURAL_NETWORK_HPP*/
