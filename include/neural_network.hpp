@@ -7,6 +7,7 @@
  */
 
 #include <vector>
+using std::vector;
 #include <fstream>
 #include <iostream>
 #include <boost/archive/text_oarchive.hpp>
@@ -17,6 +18,7 @@
 using std::cout;
 using std::endl;
 
+typedef vector<vector<network_node>> network;
 class Neural_Network : public Player
 {
 private:
@@ -29,14 +31,12 @@ private:
 		ar & _network;
 	}
 
-
 	float sigmoid(float input)
 	{
 		return input/(1.0 + abs(input));
 	}
-	
 
-	std::vector<std::vector<network_node>> _network;
+	network _network;
 public:
 
 
