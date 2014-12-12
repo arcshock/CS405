@@ -12,32 +12,33 @@ INCLUDES = -I ./include/
 CATCH = -I ./Catch/include/
 LFLAGS = -lboost_serialization
 
-LDFLAGS=-g $(shell root-config --ldflags)
-LDLIBS=$(shell root-config --libs)
+LDFLAGS = -g $(shell root-config --ldflags)
+LDLIBS = $(shell root-config --libs)
 SRCS = ./src/main.cpp
-TEST = ./test/*
+TESTS = ./test/unit-tests.cpp
 
-OBJS=$(SRCS:.cpp=.o)
+OBJS = $(SRCS:.cpp=.o)
+OBJS_TESTS = $(TESTS:.cpp=.o)
 
-RELEASE ="./build/release/"
-
+RELEASE = "./build/release/"
+TEST_OUT = "./build/test/"
 
 .PHONY: depend setup
 
-all:setup main
+all: setup main
 
 main: $(OBJS)
-	$(CXX) $(CXXFLAGS) $(INCLUDES) -o $(RELEASE)ai $(OBJS) $(LFLAGS)
+	$(CXX) $(CXXFLAGS) $(INCLUDES) $(OBJS) $(LFLAGS) -o $(RELEASE)ai 
+
+tests: $(OBJS_TESTS)
+	$(CXX) $(CXXFLAGS) $(INCLUDES) $(OBJS_TESTS) $(LFLAGS) $(CATCH) -o $(TEST_OUT)test_suite
+	$(TEST_OUT)test_suite
+
 .cpp.o:
-	$(CXX) $(CXXFLAGS) $(INCLUDES) -c $<  -o $@
+	$(CXX) $(CXXFLAGS) $(INCLUDES) $(CATCH) -c $< -o $@
 
 run:
-	./build/release/checker_ai.out
-
-
-unit-tests:
-	$(CC) $(CFLAGS) $(LFLAGS) $(CATCH) $(INCLUDES) $(TEST) -o ./build/test/test_suite.out
-	./build/test/test_suite.out
+	$(RELEASE)ai
 
 setup:
 	@mkdir -p ./build/{debug,release,profiling,test}
@@ -49,7 +50,7 @@ clean:
 	rm -rf ./includes/*.gch
 	rm -rf *.o *~
 
-depend: $(SRCS)
-	makedepend $(INCLUDES) $^
+depend: $(SRCS) $(TESTS)
+	makedepend $(INCLUDES) $(CATCH) $^
 
 # DO NOT DELETE THIS LINE -- make depend needs it
