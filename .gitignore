@@ -11,3 +11,4 @@
 profile.0*
 *.csv
 build/
+.depend
