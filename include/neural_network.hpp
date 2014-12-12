@@ -8,16 +8,35 @@
 
 #include <vector>
 #include <fstream>
-#include "player.hpp"
+#include <iostream>
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/serialization/vector.hpp>
-#include <iostream>
+#include "player.hpp"
+#include "network_node.hpp"
 using std::cout;
 using std::endl;
 
 class Neural_Network : public Player
 {
+private:
+	Neural_Network() = default;
+
+	friend class boost::serialization::access;
+	template<class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		ar & _network;
+	}
+
+
+	float sigmoid(float input)
+	{
+		return input/(1.0 + abs(input));
+	}
+	
+
+	std::vector<std::vector<network_node>> _network;
 public:
 
 
@@ -88,23 +107,5 @@ public:
 	{
 		return !(*this == other);
 	}
-private:
-	Neural_Network() = default;
-
-	friend class boost::serialization::access;
-	template<class Archive>
-	void serialize(Archive & ar, const unsigned int version)
-	{
-		ar & _network;
-	}
-
-
-	float sigmoid(float input)
-	{
-		return input/(1.0 + abs(input));
-	}
-	
-
-	std::vector<std::vector<network_node>> _network;
 };
 #endif /*NEURAL_NETWORK_HPP*/
