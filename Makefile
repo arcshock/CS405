@@ -1,66 +1,55 @@
-# Author: Bucky Frost
 # File: Makefile
 # Purpose: Makefile for checkers AI project
  
-CC = g++
-NVCC = nvcc -ccbin $(CC) 
-CFLAGS =  -std=c++11 #-pipe
+CC = gcc
+CXX = g++
+NVCC = nvcc -ccbin $(CXX) 
+CXXFLAGS = -std=c++11
+CPPFLAGS = -pipe
 CFLAGS_DEBUG = -Wall -g 
 CFLAGS_PROFILING = -pg
 INCLUDES = -I ./include/
 CATCH = -I ./Catch/include/
 LFLAGS = -lboost_serialization
 
-SRCS = ./src/*.cu
+LDFLAGS=-g $(shell root-config --ldflags)
+LDLIBS=$(shell root-config --libs)
+SRCS = ./src/main.cpp
 TEST = ./test/*
 
-# -- Usage message of Makefile
-# --
-# -- Ensure have directory structure created with the setup target
-# --
-# --
+OBJS=$(SRCS:.cpp=.o)
 
-.PHONY: all clean setup build	
-
-# -- default target: print useage message
-all: comp
-#	@grep "# --" Makefile | grep -v "grep Makefile"
-
-# -- make comp: create release executable
-comp:
-	$(NVCC) $(CFLAGS) $(LFLAGS) $(INCLUDES) $(SRCS)  -o ./build/release/checker_ai.out
+RELEASE ="./build/release/"
 
 
-# -- make run: execute release executable
+.PHONY: depend setup
+
+all:setup main
+
+main: $(OBJS)
+	$(CXX) $(CXXFLAGS) $(INCLUDES) -o $(RELEASE)ai $(OBJS) $(LFLAGS)
+.cpp.o:
+	$(CXX) $(CXXFLAGS) $(INCLUDES) -c $<  -o $@
+
 run:
 	./build/release/checker_ai.out
 
 
-# -- make tests: build and run tests
-tests:
+unit-tests:
 	$(CC) $(CFLAGS) $(LFLAGS) $(CATCH) $(INCLUDES) $(TEST) -o ./build/test/test_suite.out
 	./build/test/test_suite.out
 
-
-# -- make debug-test: starts up gdb for the test executable
-debug-test:
-	$(CC) $(CFLAGS) $(CFLAGS_DEBUG) $(CATCH) $(LFLAGS) $(INCLUDES) $(TEST) -o ./build/test/test_suite_debug.out
-	gdb ./build/test/test_suite_debug.out
-
-
-# -- make build-db: build the debugging version of program
-build-db:
-	$(CC) $(CFLAGS) $(CFLAGS_DEBUG) $(INCLUDES) $(SRCS) -o ./build/debug/checker_ai.out
-
-
-# -- make setup: create directory structure for building project
 setup:
-	mkdir -p ./build/{debug,release,profiling,test}
+	@mkdir -p ./build/{debug,release,profiling,test}
 
-
-# -- make clean: remove all files from build directories
 clean:
 	rm -rf ./build/debug/*.*
 	rm -rf ./build/release/*.*
 	rm -rf ./build/profiling/*.*
 	rm -rf ./includes/*.gch
+	rm -rf *.o *~
+
+depend: $(SRCS)
+	makedepend $(INCLUDES) $^
+
+# DO NOT DELETE THIS LINE -- make depend needs it
