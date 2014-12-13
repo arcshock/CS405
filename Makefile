@@ -14,8 +14,9 @@ LFLAGS = -lboost_serialization
 
 LDFLAGS = -g $(shell root-config --ldflags)
 LDLIBS = $(shell root-config --libs)
+
 SRCS = ./src/main.cpp
-TESTS = ./test/unit-tests.cpp
+TESTS = ./test/unit_tests.cpp
 
 OBJS = $(SRCS:.cpp=.o)
 OBJS_TESTS = $(TESTS:.cpp=.o)
@@ -51,6 +52,6 @@ clean:
 	rm -rf *.o *~
 
 depend: $(SRCS) $(TESTS)
-	makedepend $(INCLUDES) $(CATCH) $^
+	makedepend $(INCLUDES) $^
 
 # DO NOT DELETE THIS LINE -- make depend needs it
