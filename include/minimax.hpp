@@ -36,7 +36,7 @@ Checker_Board minimax(Neural_Network & player, Checker_Board & board, int depth,
 	std::vector<piece_moves> red_moves;
 	std::vector<piece_moves> white_moves;
 
-	//float best_value = std::numeric_limits<float>::max();
+	//double best_value = std::numeric_limits<double>::max();
 
 	// Get the moves of current board
 	for (int row = 0; row < 8; ++row) {
@@ -70,7 +70,7 @@ Checker_Board minimax(Neural_Network & player, Checker_Board & board, int depth,
 
 Checker_Board min(Neural_Network & player, Checker_Board board, std::vector<piece_moves> moves) 
 {
-	float best_value = std::numeric_limits<float>::max();
+	double best_value = std::numeric_limits<double>::max();
 	auto eval_board = board;
 	Checker_Board best_state;
 
@@ -91,7 +91,7 @@ Checker_Board min(Neural_Network & player, Checker_Board board, std::vector<piec
 
 Checker_Board max(Neural_Network & player, Checker_Board board, std::vector<piece_moves> moves)
 {
-	float best_value = std::numeric_limits<float>::lowest();
+	double best_value = std::numeric_limits<double>::lowest();
 	auto eval_board = board;
 	Checker_Board best_state;
 
