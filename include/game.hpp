@@ -1,5 +1,4 @@
 /**
- * Author: Bucky Frost
  * File: game.hpp
  * Purpose: Header file for the game class.
  */
@@ -7,13 +6,16 @@
 #ifndef GAME_HPP
 #define GAME_HPP
 
-#include "player.hpp"
+#include <list>
+using std::list;
 #include <vector>
+using std::vector;
+#include "player.hpp"
 
 class Game
 {
 private:
-	std::vector<Player *> _players;
+	vector<Player *> _players;
 	Checker_Board * _board;
 
 	Game();
@@ -25,25 +27,24 @@ public:
 	}
 
 
-	void pause()
-	{
-		// TODO
-	}
-
-
 	Player * begin()
 	{
+		std::cout << "In the begin funct" << std::endl;	
 		int counter = 0;
 		int num_of_red = 0;
 		int num_of_white = 0;
-		std::list<Checker_Board> board_history;
+		list<Checker_Board> board_history;
 
 		do {
 			num_of_red = 0;
 			num_of_white = 0;
 
-			
+			cout << "BEFORE MINIMAX \n";
+			_board->print_board(cout);
 			_board = minimax(*_players.begin(), _board, 6);
+			cout << "AFTER MINIMAX \n";
+			_board->print_board(cout);
+			_board->print_board(cout);
 			std::swap(_players[0], _players[1]);
 
 			for (int row = 0; row < 8; ++row) {
@@ -56,7 +57,7 @@ public:
 				}
 			}
 
-/* // TODO Cycle detection!
+/*// TODO Cycle detection!
 			if (board_history.size() < 3) {
 				board_history.push_back(board);
 			} else {
@@ -73,9 +74,10 @@ public:
 			}
 */
 
+			std::cout << "looping" << std::endl;
 		} while (num_of_red && num_of_white);
 
-/* //DEBUGGING
+//DEBUGGING
 		if (num_of_red > num_of_white) {
 			std::cout << "\n"
 					"#######\n"
@@ -86,11 +88,9 @@ public:
 					"#########\n"
 					"WHITE WON\n"
 					"#########\n";
-
 		}
-*/
+
 		return _players[0];
 	}
 };
-
 #endif /*GAME_HPP*/
