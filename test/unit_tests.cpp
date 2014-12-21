@@ -15,16 +15,16 @@
 #include "tournament.hpp"
 
 
-std::vector<float> negative_checker_board(32, -1.0);
-std::vector<float> empty_checker_board(32, 0.0);
-std::vector<float> full_checker_board(32, 1.0);
+vector<double> negative_checker_board(32, -1.0);
+vector<double> empty_checker_board(32, 0.0);
+vector<double> full_checker_board(32, 1.0);
 
-std::vector<int> standard_network = {32, 40, 10, 1};
+vector<int> standard_network = {32, 40, 10, 1};
 
 TEST_CASE( "Specified Network Construction" ) {
-	std::vector<float> negative_checker_board(32, -1.0);
+	vector<double> negative_checker_board(32, -1.0);
 
-	std::vector<int> network_layout = {32, 1, 1, 1};
+	vector<int> network_layout = {32, 1, 1, 1};
 
 	Neural_Network constructed_network(network_layout);
 
@@ -86,7 +86,7 @@ TEST_CASE( "Checker Board" ) {
 	REQUIRE(board_format.str() == initial_board);
 
 
-	std::vector<coordinate> possible_moves = board.get_moves(std::make_pair(0, 0));
+	vector<coordinate> possible_moves = board.get_moves(std::make_pair(0, 0));
 	REQUIRE( possible_moves.empty() == true );
 
 	possible_moves = board.get_moves(std::make_pair(2, 2));
@@ -223,7 +223,7 @@ TEST_CASE( "Checker Jumps" ) {
 
 
 TEST_CASE( "Minimax" ) {
-	std::vector<float> board_state;
+	vector<double> board_state;
 
 	Neural_Network red_player(standard_network);
 	Neural_Network white_player(standard_network);
@@ -248,6 +248,24 @@ TEST_CASE( "Minimax" ) {
 	std::cout << std::endl;
 	board.print_board(std::cout);
 }
+
+/*
+TEST_CASE( "Game" ) {
+
+	cout << "GAME" << endl;
+
+	vector<double> board_state;
+
+	Neural_Network red_player(standard_network);
+	Neural_Network white_player(standard_network);
+
+	Checker_Board board;
+
+	Game trial_game(&red_player, &white_player, &board);
+	auto winner = trial_game.begin();
+
+}
+*/
 
 /*
 TEST_CASE( "Tournament" ) {
