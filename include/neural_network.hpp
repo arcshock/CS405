@@ -1,7 +1,6 @@
 #ifndef NEURAL_NETWORK_HPP
 #define NEURAL_NETWORK_HPP
-/*
- * Author: Bucky Frost
+/**
  * File: neural_network.hpp
  * Purpose: Header file for the neural network.
  */
@@ -10,13 +9,13 @@
 using std::vector;
 #include <fstream>
 #include <iostream>
+using std::cout;
+using std::endl;
+#include "player.hpp"
+#include "network_node.hpp"
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/serialization/vector.hpp>
-#include "player.hpp"
-#include "network_node.hpp"
-using std::cout;
-using std::endl;
 
 typedef vector<vector<network_node>> network;
 class Neural_Network : public Player
@@ -31,59 +30,45 @@ private:
 		ar & _network;
 	}
 
-	float sigmoid(float input)
+	double sigmoid(double input)
 	{
 		return input/(1.0 + abs(input));
 	}
 
 	network _network;
+
 public:
-
-
-	Neural_Network(std::vector<int> network_specifications): Player(' ', "unknown")
+	Neural_Network(std::vector<int> network_specifications) : Player(' ', "unknown")
 	{
 		int network_layers = network_specifications.size();
 
-		for (int ii = 0; ii < network_layers; ++ii) {
-			_network.emplace_back(std::vector<network_node>(network_specifications[ii]));
+		for (int layer_info = 0; layer_info < network_layers; ++layer_info) {
+			_network.emplace_back(std::vector<network_node>(network_specifications[layer_info]));
 		}
 	}
 
 
 	// Feed forward the network to evaluate the checker board.
-	float network_evaluate(std::vector<float> & board_input)
+	double network_evaluate(std::vector<double> & board_input)
 	{
-		float evaluation_value = 0.0;
+		double evaluation_value = 0.0;
 
 		int network_input_size = _network[0].size();
-		int input_layer = 0;
+		int input_layer = 0; // Remove this value and integrate the for loops for simplification
 
-                float talvinator []= {0,0,0};
 		try {
-			for (int ii = 0; ii < network_input_size; ++ii) {
-					_network[input_layer][ii]._input = board_input[ii];
+			for (int inputIdx = 0; inputIdx < network_input_size; ++inputIdx) {
+				_network[input_layer][inputIdx]._input = board_input[inputIdx];
 			}
 		} catch (const std::out_of_range & range_error) {
 			std::cerr << "Out of Range error loading input to network: " << range_error.what() << '\n';
 		}
 
-                for (int network_layer = input_layer + 1; network_layer < _network.size(); ++network_layer) {
-				for (int layer_column = 0; layer_column < _network[network_layer].size(); ++layer_column) {
-                                    talvinator[network_layer] *= sigmoid(_network[network_layer-1][layer_column].node_value());
-                                            }
-                                            }
 		try { 
 			for (int network_layer = input_layer + 1; network_layer < _network.size(); ++network_layer) {
 				for (int layer_column = 0; layer_column < _network[network_layer].size(); ++layer_column) {
-                                    float qq = 0.;
-					for (int ii = 0; ii < _network[network_layer - 1].size(); ++ii)
-                                        {
-                                            _network[network_layer][layer_column]._input *= sigmoid(_network[network_layer - 1][ii].node_value());
-                                            qq = _network[network_layer][layer_column]._input;
-                                        }
-                                        if (qq != talvinator[network_layer-1])
-                                        {
-                                            cout << network_layer - 1 << "  Fuhhhhh" << endl;
+					for (int ii = 0; ii < _network[network_layer - 1].size(); ++ii) {
+						_network[network_layer][layer_column]._input += sigmoid(_network[network_layer - 1][ii].node_value());
                                         }
 
 				}
