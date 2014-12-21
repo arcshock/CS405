@@ -164,9 +164,9 @@ public:
 	}
 
 
-	const std::vector<float> get_state()
+	const std::vector<double> get_state()
 	{
-		std::vector<float> state;
+		std::vector<double> state;
 
 		for (int row = 0; row < 8; ++row) {
 			for (int col = 0; col < 8; ++col) {
@@ -240,7 +240,7 @@ private:
 	}
 
 
-	// Make recursive to get the float jumps?
+	// Make recursive to get the double jumps?
 	void piece_jumps(coordinate location, std::vector<coordinate> & moves)
 	{
 		int row = location.first;
