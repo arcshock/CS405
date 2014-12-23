@@ -9,13 +9,13 @@
 
 #include <memory>
 #include <string>
-
+using std::string;
 
 class Player
 {
 protected:
+	string _name;
 	char _color;
-	std::string _name;
 	
 
 	Player() = default;
