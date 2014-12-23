@@ -22,6 +22,7 @@ OBJS = $(SRCS:.cpp=.o)
 OBJS_TESTS = $(TESTS:.cpp=.o)
 
 RELEASE = "./build/release/"
+DEBUG = "./build/debug/"
 TEST_OUT = "./build/test/"
 
 .PHONY: depend setup
@@ -30,6 +31,9 @@ all: setup main
 
 main: $(OBJS)
 	$(CXX) $(CXXFLAGS) $(INCLUDES) $(OBJS) $(LFLAGS) -o $(RELEASE)ai 
+
+debug:
+	$(CXX) $(CXXFLAGS) $(INCLUDES) $(CFLAGS_DEBUG) $(TESTS) $(LFLAGS) $(CATCH) -o $(DEBUG)test_suite
 
 tests: $(OBJS_TESTS)
 	$(CXX) $(CXXFLAGS) $(INCLUDES) $(OBJS_TESTS) $(LFLAGS) $(CATCH) -o $(TEST_OUT)test_suite
