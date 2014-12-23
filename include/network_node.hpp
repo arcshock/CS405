@@ -25,7 +25,8 @@ struct network_node
 	}
 
         void set_input(float val) { _input = val; }
-	float node_value() { return _input*_weight; }
+
+	float node_value() { return sigmoid(_input*_weight); }
 
 	friend class boost::serialization::access;
 	template<class Archive>
@@ -39,5 +40,11 @@ struct network_node
 	{
 		return (other._input == _input && other._weight == _weight);
 	}
+
+	double sigmoid(double input)
+	{
+		return input/(1.0 + abs(input));
+	}
+
 };
 #endif /*NETWORK_NODE_HPP*/
