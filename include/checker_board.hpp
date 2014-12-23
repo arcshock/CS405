@@ -122,17 +122,19 @@ public:
 		int move_row = move_location.first;
 		int move_column = move_location.second;
 
-		if (row + 2 == move_row)
-			if(column + 2 == move_column)
+		if (row + 2 == move_row) {
+			if(column + 2 == move_column) {
 				_board[row + 1][column + 1] = '_';
-			else
+			} else {
 				_board[row + 1][column - 1] = '_';
-		else if (row - 2 == move_row)
-			if (column + 2 == move_column)
+			}
+		} else if (row - 2 == move_row) {
+			if (column + 2 == move_column) {
 				_board[row - 1][column + 1] = '_';
-			else
+			} else {
 				_board[row - 1][column - 1] = '_';
-
+			}
+		}
 		switch (cell_info(piece_location)) {
 			case 'r':
 				if (is_empty(move_location))
