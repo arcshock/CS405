@@ -11,14 +11,13 @@ using std::vector;
 #include <iostream>
 using std::cout;
 using std::endl;
-#include "player.hpp"
 #include "network_node.hpp"
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/serialization/vector.hpp>
 
 typedef vector<vector<network_node>> network;
-class Neural_Network : public Player
+class Neural_Network 
 {
 private:
 	Neural_Network() = default;
@@ -32,7 +31,7 @@ private:
 
 	network _network;
 public:
-	Neural_Network(std::vector<int> network_specifications) : Player(' ', "unknown")
+	Neural_Network(std::vector<int> network_specifications)
 	{
 		int network_layers = network_specifications.size();
 
