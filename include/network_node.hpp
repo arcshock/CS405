@@ -10,41 +10,52 @@
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
 
-static std::random_device randomDevice;
-static std::mt19937 random_value(randomDevice());
+
+static std::random_device random_dev;
+static std::mt19937 random_value(random_dev());
 static std::uniform_real_distribution<> uniform_distribution(-1, 1);
 
-struct network_node
+
+class Network_Node
 {
-	float _input;
-	float _weight;
+private:
+	double input;
+	double weight;
 
-	network_node() : _input(1.0)
+
+public:
+	Network_Node() : input(1.0), weight(uniform_distribution(random_value)) {}
+
+
+	void set_input(double new_input)
 	{
-		_weight = uniform_distribution(random_value);
+		input = new_input;
 	}
 
-        void set_input(float val) { _input = val; }
 
-	float node_value() { return sigmoid(_input*_weight); }
-
-	friend class boost::serialization::access;
-	template<class Archive>
-	void serialize(Archive & ar, const unsigned int version)
+	double node_value()
 	{
-		ar & _input;
-		ar & _weight;
+		return sigmoid(input*weight);
 	}
 
-	bool operator==(const network_node & other) const
-	{
-		return (other._input == _input && other._weight == _weight);
-	}
 
 	double sigmoid(double input)
 	{
 		return input/(1.0 + abs(input));
 	}
 
+	bool operator==(const Network_Node & other) const
+	{
+		return (other.input == input && other.weight == weight);
+	}
+
+
+	friend class boost::serialization::access;
+	template<class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		ar & input;
+		ar & weight;
+	}
 };
 #endif /*NETWORK_NODE_HPP*/
