@@ -15,8 +15,8 @@ LFLAGS = -lboost_serialization
 LDFLAGS = -g $(shell root-config --ldflags)
 LDLIBS = $(shell root-config --libs)
 
-SRCS = ./src/main.cpp
-TESTS = ./test/unit_tests.cpp
+SRCS = ./src/*.cpp
+TESTS = ./test/neural_network_tests.cpp
 
 OBJS = $(SRCS:.cpp=.o)
 OBJS_TESTS = $(TESTS:.cpp=.o)
@@ -33,14 +33,16 @@ main: $(OBJS)
 	$(CXX) $(CXXFLAGS) $(INCLUDES) $(OBJS) $(LFLAGS) -o $(RELEASE)ai 
 
 debug:
-	$(CXX) $(CXXFLAGS) $(INCLUDES) $(CFLAGS_DEBUG) $(TESTS) $(LFLAGS) $(CATCH) -o $(DEBUG)test_suite
+	$(CXX) $(CXXFLAGS) $(INCLUDES) $(CFLAGS_DEBUG) $(SRC) $(LFLAGS) -o $(DEBUG)test_suite
+	$(DEBUG)test_suite
+
 
 tests: $(OBJS_TESTS)
-	$(CXX) $(CXXFLAGS) $(INCLUDES) $(OBJS_TESTS) $(LFLAGS) $(CATCH) -o $(TEST_OUT)test_suite
+	$(CXX) $(CXXFLAGS) $(INCLUDES) $(CATCH) $(OBJS_TESTS) $(SRC) $(LFLAGS) -o $(TEST_OUT)test_suite
 	$(TEST_OUT)test_suite
 
 .cpp.o:
-	$(CXX) $(CXXFLAGS) $(INCLUDES) $(CATCH) -c $< -o $@
+	$(CXX) $(CXXFLAGS) $(INCLUDES) $(CATCH) $(SRC) -c $< -o $@
 
 run:
 	$(RELEASE)ai
@@ -52,7 +54,9 @@ clean:
 	rm -rf ./build/debug/*.*
 	rm -rf ./build/release/*.*
 	rm -rf ./build/profiling/*.*
+	rm -rf ./build/test/*.*
 	rm -rf ./includes/*.gch
+	rm -rf ./test/*.o
 	rm -rf *.o *~
 
 depend: $(SRCS) $(TESTS)
