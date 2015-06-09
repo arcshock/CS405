@@ -87,7 +87,7 @@ double Neural_Network::network_evaluate(std::vector<double>::iterator begin_inpu
 {
 	auto network_input_element = network.begin()->begin();
 
-	for (begin_input; begin_input != end_input; ++begin_input) {
+	for (; begin_input != end_input; ++begin_input) {
 		network_input_element->set_input(*begin_input);
 		++network_input_element;
 	}
