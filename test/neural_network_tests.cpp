@@ -5,7 +5,7 @@
 #include <string>
 #include <sstream>
 #include <iostream>
-#include "catch_main.cpp"
+#include "catch.hpp"
 #include "neural_network.hpp"
 #include "network_spec.hpp"
 
