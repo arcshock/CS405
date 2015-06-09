@@ -91,5 +91,7 @@ double Neural_Network::network_evaluate(std::vector<double>::iterator begin_inpu
 		network_input_element->set_input(*begin_input);
 		++network_input_element;
 	}
+	double dummy = 0.0;
+	return dummy;
 }
 #endif /*NEURAL_NETWORK_HPP*/
