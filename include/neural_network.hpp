@@ -44,7 +44,7 @@ public:
 
 
 	// Feed forward the network to evaluate the checker board.
-	double network_evaluate(std::vector<double>::iterator begin_input, std::vector<double>::iterator end_input);
+	double start(std::vector<double>::iterator begin_input, std::vector<double>::iterator end_input);
 /*
 
 	bool operator==(const Neural_Network & other) const
@@ -83,7 +83,7 @@ Neural_Network::Neural_Network(Network_Spec network_specifications)
 
 // Feed forward the network to evaluate the checker board.
 //old header: double Neural_Network::network_evaluate(std::vector<double> & board_input)
-double Neural_Network::network_evaluate(std::vector<double>::iterator begin_input, std::vector<double>::iterator end_input)
+double Neural_Network::start(std::vector<double>::iterator begin_input, std::vector<double>::iterator end_input)
 {
 	auto network_input_element = network.begin()->begin();
 
