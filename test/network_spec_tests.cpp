@@ -7,11 +7,12 @@
 #include <iostream>
 #include "catch.hpp"
 #include "network_spec.hpp"
+#include "neural_network.hpp"
 
 const std::string standard_network_topography("32 40 10 1");
 
 TEST_CASE ("Network Specification") {
-	SECTION ("construction from string") {
+	SECTION ("construction from String") {
 		Network_Spec network_spec_ctor_test(standard_network_topography);
 
 		std::istringstream buffer(standard_network_topography);
@@ -23,6 +24,13 @@ TEST_CASE ("Network Specification") {
 			}
 			REQUIRE( *it == tmp );
 		}
+	}
+}
+
+TEST_CASE ("Neural Network") {
+	SECTION ("Construction from Specification") {
+		Network_Spec net_spec(standard_network_topography);
+		Neural_Network spec_constructed(net_spec);
 	}
 }
 #endif /*NETWORK_SPEC_TEST*/
