@@ -20,7 +20,7 @@ class Neural_Network
 private:
 	Neural_Network() = default;
 
-	network_type network; /**< Testing of the Doxygen markup for member variables. */
+	network_type network;
 
 	friend class boost::serialization::access;
 	template<class Archive>
@@ -43,23 +43,8 @@ public:
 	Neural_Network(Network_Spec network_specifications);
 
 
-	// Feed forward the network to evaluate the checker board.
 	double start(std::vector<double>::iterator begin_input, std::vector<double>::iterator end_input);
-/*
-
-	bool operator==(const Neural_Network & other) const
-	{
-		return other._network == _network;
-	}
-
-
-	bool operator!=(const Neural_Network & other) const
-	{
-		return !(*this == other);
-	}
-*/
 };
-
 
 Neural_Network::Neural_Network(std::string network_specification)
 {
@@ -81,17 +66,38 @@ Neural_Network::Neural_Network(Network_Spec network_specifications)
 	}
 }
 
-// Feed forward the network to evaluate the checker board.
-//old header: double Neural_Network::network_evaluate(std::vector<double> & board_input)
+
 double Neural_Network::start(std::vector<double>::iterator begin_input, std::vector<double>::iterator end_input)
 {
-	auto network_input_element = network.begin()->begin();
-
-	for (; begin_input != end_input; ++begin_input) {
-		network_input_element->set_input(*begin_input);
-		++network_input_element;
+	//Load up the inputs into the network
+	auto input_layer = network.begin();
+	for (auto input_node = input_layer->begin(); input_node != input_layer->end(); ++input_node) {
+		input_node->input(*begin_input);
+		++begin_input;
 	}
-	double dummy = 0.0;
-	return dummy;
+
+	//Input layer value
+	double layer_summation = 0.0;
+	input_layer = network.begin();
+
+	for (auto node = input_layer->begin(); node != input_layer->end(); ++node) {
+		layer_summation =+ node->node_value(); //current summation of the input layer on 1st iteration 
+	}
+
+	//Propergate the values through the network
+	double network_value = 0.0;
+	for (auto layer = network.begin() + 1; layer != network.end(); ++layer) { //start on 2nd lay
+		//Load the values from the previous layer.
+		for (auto node = layer->begin(); node != layer->end(); ++node) {
+			node->input(layer_summation);
+		}
+		//Update the layer summation value
+		for (auto node = layer->begin(); node != layer->end(); ++node) {
+			layer_summation =+ node->node_value();
+			network_value = node->node_value();	
+		}
+	}
+
+	return network_value;
 }
 #endif /*NEURAL_NETWORK_HPP*/
