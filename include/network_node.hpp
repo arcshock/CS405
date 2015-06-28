@@ -19,34 +19,32 @@ static std::uniform_real_distribution<> uniform_distribution(-1, 1);
 class Network_Node
 {
 private:
-	double input;
+	double value;
 	double weight;
-
-
-public:
-	Network_Node() : input(1.0), weight(uniform_distribution(random_value)) {}
-
-
-	void set_input(double new_input)
-	{
-		input = new_input;
-	}
-
-
-	double node_value()
-	{
-		return sigmoid(input*weight);
-	}
-
 
 	double sigmoid(double input)
 	{
 		return input/(1.0 + abs(input));
 	}
+public:
+	Network_Node(): value(1.0), weight(uniform_distribution(random_value)) {}
+
+
+	void input(double input)
+	{
+		value =+ input*weight;
+	}
+
+
+	double node_value()
+	{
+		return sigmoid(value);
+	}
+
 
 	bool operator==(const Network_Node & other) const
 	{
-		return (other.input == input && other.weight == weight);
+		return (other.value == value && other.weight == weight);
 	}
 
 
@@ -54,7 +52,6 @@ public:
 	template<class Archive>
 	void serialize(Archive & ar, const unsigned int version)
 	{
-		ar & input;
 		ar & weight;
 	}
 };
