@@ -72,7 +72,6 @@ public:
 	{
 		for(auto iter = board_state.begin(); iter != board_state.end(); ++iter) {
 			if (*iter == 'r' || *iter == 'R' || *iter == 'w' || *iter == 'W') {
-				pieces_m[]
 			}
 		}
 
@@ -83,44 +82,11 @@ public:
 		}
 	}
 
-	string get_moves(string location)
+	char space_state(string location)
 	{
-		if (location == "A2") {
-			return "B3";
-		} else if ( location == "B2" ) {
-			return "";
-		} else if ( location == "C2" ) {
-			return "B3 D3";
-		} else if ( location == "D2" ) {
-			return "";
-		} else if ( location == "E2" ) {
-			return "D3 F3";
-		} else if ( location == "F2" ) {
-			return "";
-		} else if ( location == "G2" ) {
-			return "F3 H3";
-		} else if ( location == "H2" ) {
-			return "";
-		} else if ( location == "A5" ) {
-			return "";
-		} else if ( location == "B5" ) {
-			return "A4 C4";
-		} else if ( location == "C5" ) {
-			return "";
-		} else if ( location == "D5" ) {
-			return "C4 E4";
-		} else if ( location == "E5" ) {
-			return "";
-		} else if ( location == "F5" ) {
-			return "E4 G4";
-		} else if ( location == "G5" ) {
-			return "";
-		} else if ( location == "H5" ) {
-			return "G4";
-		} else {
-			return "";
-		}
+		return pieces_m[location];
 	}
+
 
 	void print()
 	{
