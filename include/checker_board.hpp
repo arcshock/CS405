@@ -45,7 +45,6 @@ public:
 				}
 			}
 		}
-
 	
 		for (int row = 5; row < 8; ++row) {
 			for (char column = 'A'; column != 'I'; ++column) {
@@ -123,21 +122,4 @@ public:
 		}
 	}
 };
-/*	
-bool operator==(Checker_Board & lhs, Checker_Board & rhs)
-{
-	return false;//(lhs.get_state() == rhs.get_state());
-}
-*/
 #endif /*CHECKER_BOARD_HPP*/
-
-/*
-REQUIRE( board.get_moves("A2") == "B3" );
-				REQUIRE( board.get_moves("B2") == "" );
-				REQUIRE( board.get_moves("C2") == "B3 D3" );
-				REQUIRE( board.get_moves("D2") == "" );
-				REQUIRE( board.get_moves("E2") == "D3 F3" );
-				REQUIRE( board.get_moves("F2") == "" );
-				REQUIRE( board.get_moves("G2") == "F3 H3" );
-				REQUIRE( board.get_moves("H2") == "" );
-*/
