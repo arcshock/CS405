@@ -2,7 +2,6 @@
 #define CHECKER_BOARD_HPP
 
 /**
- * Author: Bucky Frost
  * File: checker_board.hpp
  * Purpose: A board and functions for playing checkers.
  */
