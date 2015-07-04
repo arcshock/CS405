@@ -16,7 +16,9 @@ catch: ./test/catch_main.o
 
 spec: ./test/network_spec_tests.o
 
-tests: spec 
+checkers: ./test/checker_tests.o
+
+tests: spec checkers
 	$(CXX) $(LFLAGS) ./test/*.o -o ./build/test/test_suite
 	./build/test/test_suite
 
