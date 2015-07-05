@@ -83,7 +83,15 @@ public:
 
 	char space_state(string location)
 	{
-		return pieces_m[location];
+		char state = ' ';
+
+		try {
+			state =  pieces_m.at(location);
+		} catch (std::out_of_range &e) {
+			state = '_';
+		}
+
+		return state;
 	}
 
 
