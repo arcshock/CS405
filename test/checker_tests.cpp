@@ -9,8 +9,8 @@
 #include "catch.hpp"
 #include "checker_board.hpp"
 
-TEST_CASE ("Checker Moves") {
-	SECTION ("Pawn Moves") {
+TEST_CASE ("Checker Board") {
+	SECTION ("Board Construction") {
 		Checker_Board test_board;
 		char expected = ' ';
 		std::string location = "";
@@ -79,6 +79,16 @@ TEST_CASE ("Checker Moves") {
 				}
 			}
 		}
+	}
+
+	SECTION ("First Red Row Pawn Moves") {
+		Checker_Board board;
+		int move_count = 0;
+		auto available_moves = board.get_moves("A2");
+		for (auto it = available_moves.begin(); it != available_moves.end(); ++it) {
+			++move_count;
+		}
+		REQUIRE ( move_count == 2 );
 	}
 }
 #endif /*CHECKER_TEST*/
