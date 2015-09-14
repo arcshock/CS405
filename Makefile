@@ -12,7 +12,7 @@ all: setup
 	@echo "Run 'make tests' to build and run test suite."
 
 catch: ./test/catch_main.o
-	$(CXX) $(LFLAGS) $(CATCH) ./test/catch_main.cpp -o ./test/catch_main.o
+	$(CXX) $(LFLAGS) $(CXXFLAGS) ./test/catch_main.cpp -o ./test/catch_main.o
 
 spec: ./test/network_spec_tests.o
 
